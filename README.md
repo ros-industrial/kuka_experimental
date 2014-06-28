@@ -14,4 +14,4 @@ and / or functional.
 
 
 [ROS-Industrial]: http://wiki.ros.org/Industrial
-[ROS wiki]: http://wiki.ros.org/fanuc_experimental
+[ROS wiki]: http://wiki.ros.org/kuka_experimental
