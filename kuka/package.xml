@@ -1,0 +1,17 @@
+<package>
+  <name>kuka</name>
+  <version>0.0.1</version>
+  <description>The kuka stack constains libraries, configuration files, and ROS nodes for controlling a kuka robot from ROS-Industrial</description>
+  <maintainer email="sedwards@swri.org">Shaun Edwards</maintainer>
+  <license>BSD</license>
+  <url type="website">http://ros.org/wiki/kuka</url>
+  <author email="sedwards@swri.org">Shaun Edwards</author>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  
+  <run_depend>kuka_kr210_support</run_depend>
+
+  <export>
+    <metapackage/>
+  </export>
+</package>

@@ -1,0 +1,4 @@
+
+<launch>
+	<param name="robot_description" command="$(find xacro)/xacro.py '$(find kuka_kr210_support)/urdf/kr210.xacro'" />
+</launch>
