@@ -1,16 +1,18 @@
 <package>
   <name>kuka_experimental</name>
   <version>0.0.1</version>
-  <description>The KUKA stack constains libraries, configuration files, and ROS nodes for controlling a KUKA robot from ROS-Industrial</description>
+  <description>Experimental packages for KUKA manipulators within ROS-Industrial.</description>
   <maintainer email="sedwards@swri.org">Shaun Edwards</maintainer>
-  <license>BSD</license>
-  <url type="website">http://ros.org/wiki/kuka</url>
-  <url type="bugtracker">https://github.com/ros-industrial/kuka/issues</url>
-  <url type="repository">https://github.com/ros-industrial/kuka</url>
   <author email="sedwards@swri.org">Shaun Edwards</author>
+  <license>BSD</license>
+
+  <url type="website">http://ros.org/wiki/kuka_experimental</url>
+  <url type="bugtracker">https://github.com/ros-industrial/kuka_experimental/issues</url>
+  <url type="repository">https://github.com/ros-industrial/kuka_experimental</url>
 
   <buildtool_depend>catkin</buildtool_depend>
-  
+
+  <run_depend>kuka_kr120_support</run_depend>
   <run_depend>kuka_kr210_support</run_depend>
 
   <export>
