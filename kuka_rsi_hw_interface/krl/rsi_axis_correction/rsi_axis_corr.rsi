@@ -1,0 +1,112 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<rSIModel dslVersion="1.0.0.0" name="" xmlns="http://schemas.microsoft.com/dsltools/RSIVisual">
+  <rSIObjects>
+    <rSIElement name="AXISCORR1" objType="AXISCORR" objTypeID="33" maxInputs="0" maxOutputs="0">
+      <rSIInPorts>
+        <rSIInPort name="CorrA1" mandatory="false">
+          <source>
+            <rSIOutPortMoniker name="//ETHERNET1/Out1" />
+          </source>
+        </rSIInPort>
+        <rSIInPort name="CorrA2" mandatory="false">
+          <source>
+            <rSIOutPortMoniker name="//ETHERNET1/Out2" />
+          </source>
+        </rSIInPort>
+        <rSIInPort name="CorrA3" mandatory="false">
+          <source>
+            <rSIOutPortMoniker name="//ETHERNET1/Out3" />
+          </source>
+        </rSIInPort>
+        <rSIInPort name="CorrA4" mandatory="false">
+          <source>
+            <rSIOutPortMoniker name="//ETHERNET1/Out4" />
+          </source>
+        </rSIInPort>
+        <rSIInPort name="CorrA5" mandatory="false">
+          <source>
+            <rSIOutPortMoniker name="//ETHERNET1/Out5" />
+          </source>
+        </rSIInPort>
+        <rSIInPort name="CorrA6" mandatory="false">
+          <source>
+            <rSIOutPortMoniker name="//ETHERNET1/Out6" />
+          </source>
+        </rSIInPort>
+      </rSIInPorts>
+      <rSIOutPorts>
+        <rSIOutPort name="Stat" signalType="Int" />
+        <rSIOutPort name="A1" />
+        <rSIOutPort name="A2" />
+        <rSIOutPort name="A3" />
+        <rSIOutPort name="A4" />
+        <rSIOutPort name="A5" />
+        <rSIOutPort name="A6" />
+      </rSIOutPorts>
+      <rSIParameters>
+        <rSIParameter name="LowerLimA1" value="-90.0" paramType="System.Double" minVal="-2147483648" maxVal="2147483647" isEnum="false" index="1" />
+        <rSIParameter name="LowerLimA2" value="-90.0" paramType="System.Double" minVal="-2147483648" maxVal="2147483647" isEnum="false" index="2" />
+        <rSIParameter name="LowerLimA3" value="-90.0" paramType="System.Double" minVal="-2147483648" maxVal="2147483647" isEnum="false" index="3" />
+        <rSIParameter name="LowerLimA4" value="-90.0" paramType="System.Double" minVal="-2147483648" maxVal="2147483647" isEnum="false" index="4" />
+        <rSIParameter name="LowerLimA5" value="-90.0" paramType="System.Double" minVal="-2147483648" maxVal="2147483647" isEnum="false" index="5" />
+        <rSIParameter name="LowerLimA6" value="-90.0" paramType="System.Double" minVal="-2147483648" maxVal="2147483647" isEnum="false" index="6" />
+        <rSIParameter name="UpperLimA1" value="90.0" paramType="System.Double" minVal="-2147483648" maxVal="2147483647" isEnum="false" index="13" />
+        <rSIParameter name="UpperLimA2" value="90.0" paramType="System.Double" minVal="-2147483648" maxVal="2147483647" isEnum="false" index="14" />
+        <rSIParameter name="UpperLimA3" value="90.0" paramType="System.Double" minVal="-2147483648" maxVal="2147483647" isEnum="false" index="15" />
+        <rSIParameter name="UpperLimA4" value="90.0" paramType="System.Double" minVal="-2147483648" maxVal="2147483647" isEnum="false" index="16" />
+        <rSIParameter name="UpperLimA5" value="90.0" paramType="System.Double" minVal="-2147483648" maxVal="2147483647" isEnum="false" index="17" />
+        <rSIParameter name="UpperLimA6" value="90.0" paramType="System.Double" minVal="-2147483648" maxVal="2147483647" isEnum="false" index="18" />
+      </rSIParameters>
+    </rSIElement>
+    <rSIElement name="ETHERNET1" objType="ETHERNET" objTypeID="64" maxInputs="64" maxOutputs="64">
+      <rSIInPorts>
+        <rSIInPort name="In1" mandatory="false" />
+      </rSIInPorts>
+      <rSIOutPorts>
+        <rSIOutPort name="Out1" />
+        <rSIOutPort name="Out2" />
+        <rSIOutPort name="Out3" />
+        <rSIOutPort name="Out4" />
+        <rSIOutPort name="Out5" />
+        <rSIOutPort name="Out6" />
+        <rSIOutPort name="Out7" />
+      </rSIOutPorts>
+      <rSIParameters>
+        <rSIParameter name="ConfigFile" value="rsi_axis_correction_ethernet_config.xml" paramType="System.FileName" minVal="-2147483648" maxVal="2147483647" isEnum="false" isRuntime="false" index="1" />
+        <rSIParameter name="Timeout" value="100" paramType="System.Int32" minVal="0" maxVal="2147483647" isEnum="false" index="1" />
+        <rSIParameter name="Flag" value="1" paramType="System.Int32" minVal="-1" maxVal="999" isEnum="false" index="4" />
+        <rSIParameter name="Precision" value="4" paramType="System.Int32" minVal="1" maxVal="32" isEnum="false" index="8" />
+      </rSIParameters>
+    </rSIElement>
+    <rSIElement name="AXISCORRMON1" objType="AXISCORRMON" objTypeID="82" maxInputs="0" maxOutputs="0">
+      <rSIOutPorts>
+        <rSIOutPort name="A1" />
+        <rSIOutPort name="A2" />
+        <rSIOutPort name="A3" />
+        <rSIOutPort name="A4" />
+        <rSIOutPort name="A5" />
+        <rSIOutPort name="A6" />
+        <rSIOutPort name="E1" />
+        <rSIOutPort name="E2" />
+        <rSIOutPort name="E3" />
+        <rSIOutPort name="E4" />
+        <rSIOutPort name="E5" />
+        <rSIOutPort name="E6" />
+      </rSIOutPorts>
+      <rSIParameters>
+        <rSIParameter name="MaxA1" value="90.0" paramType="System.Double" minVal="0" maxVal="2147483647" isEnum="false" index="1" />
+        <rSIParameter name="MaxA2" value="90.0" paramType="System.Double" minVal="0" maxVal="2147483647" isEnum="false" index="2" />
+        <rSIParameter name="MaxA3" value="90.0" paramType="System.Double" minVal="0" maxVal="2147483647" isEnum="false" index="3" />
+        <rSIParameter name="MaxA4" value="90.0" paramType="System.Double" minVal="0" maxVal="2147483647" isEnum="false" index="4" />
+        <rSIParameter name="MaxA5" value="90.0" paramType="System.Double" minVal="0" maxVal="2147483647" isEnum="false" index="5" />
+        <rSIParameter name="MaxA6" value="90.0" paramType="System.Double" minVal="0" maxVal="2147483647" isEnum="false" index="6" />
+        <rSIParameter name="MaxE1" value="6.0" paramType="System.Double" minVal="0" maxVal="2147483647" isEnum="false" index="7" />
+        <rSIParameter name="MaxE2" value="6.0" paramType="System.Double" minVal="0" maxVal="2147483647" isEnum="false" index="8" />
+        <rSIParameter name="MaxE3" value="6.0" paramType="System.Double" minVal="0" maxVal="2147483647" isEnum="false" index="9" />
+        <rSIParameter name="MaxE4" value="6.0" paramType="System.Double" minVal="0" maxVal="2147483647" isEnum="false" index="10" />
+        <rSIParameter name="MaxE5" value="6.0" paramType="System.Double" minVal="0" maxVal="2147483647" isEnum="false" index="11" />
+        <rSIParameter name="MaxE6" value="6.0" paramType="System.Double" minVal="0" maxVal="2147483647" isEnum="false" index="12" />
+      </rSIParameters>
+    </rSIElement>
+  </rSIObjects>
+</rSIModel>
