@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- Load robot description to parameter server -->
+  <param name="robot_description" command="$(find xacro)/xacro.py '$(find kuka_kr16_support)/urdf/kr16_2.xacro'"/>
+</launch>
