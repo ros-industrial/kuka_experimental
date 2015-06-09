@@ -22,11 +22,13 @@
 
    <!-- run the robot simulator and action interface nodes -->
    <group if="$(arg sim)">
-     <include file="$(find kuka_kr16_gazebo)/launch/test_kr16_2_gazebo.launch" if="$(arg gazebo)" />
+
+
    </group>
 
    <!-- run the "real robot" interface nodes -->
    <group unless="$(arg sim)">
+
 
    </group>
 

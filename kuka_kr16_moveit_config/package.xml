@@ -24,9 +24,11 @@
   <run_depend>xacro</run_depend>
 
   <run_depend>kuka_kr16_support</run_depend>
+  <run_depend>kuka_kr16_gazebo</run_depend>
+  <run_depend>kuka_rsi_hw_interface</run_depend>
+  <run_depend>kuka_rsi_simulator</run_depend>
 
   <export>
     <architecture_independent />
   </export>
-
 </package>
