@@ -13,6 +13,7 @@
   <buildtool_depend>catkin</buildtool_depend>
 
   <run_depend>kuka_kr120_support</run_depend>
+  <run_depend>kuka_kr16_support</run_depend>
   <run_depend>kuka_kr210_support</run_depend>
   <run_depend>kuka_lbr_iiwa_support</run_depend>
 
