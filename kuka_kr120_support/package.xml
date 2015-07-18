@@ -30,6 +30,7 @@
   </description>
   <author>Lars Tingelstad</author>
   <maintainer email="lars.tingelstad@ntnu.no">Lars Tingelstad</maintainer>
+  <maintainer email="g.a.vanderhoorn@tudelft.nl">G.A. vd. Hoorn (TU Delft Robotics Institute)</maintainer>
   <license>BSD</license>
 
   <url type="website">http://ros.org/wiki/kuka_kr120_support</url>
