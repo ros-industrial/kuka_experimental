@@ -16,8 +16,7 @@
     </ul>
     <p>
       Joint limits and maximum joint velocities are based on the information
-      found in the online
-      http://www.kuka-robotics.com/res/sps/e6c77545-9030-49b1-93f5-4d17c92173aa_Spez_KR_QUANTEC_extra_en.pdf
+      found in the online <a href="http://www.kuka-robotics.com/res/sps/e6c77545-9030-49b1-93f5-4d17c92173aa_Spez_KR_QUANTEC_extra_en.pdf">datasheet</a>.
       All urdfs are based on the default motion and joint velocity limits,
       unless noted otherwise.
     </p>
@@ -25,6 +24,9 @@
       Before using any of the configuration files and / or meshes included
       in this package, be sure to check they are correct for the particular
       robot model and configuration you intend to use them with.
+    </p>
+    <p>
+      <b>NB</b>: this package currently uses non-valid inertia parameters.
     </p>
   </description>
   <author>Shaun Edwards</author>
