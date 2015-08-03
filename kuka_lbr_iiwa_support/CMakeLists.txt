@@ -5,7 +5,7 @@ find_package(catkin REQUIRED)
 
 catkin_package()
 
-foreach(dir config launch meshes/lbr_iiwa_14_r820/collision meshes/lbr_iiwa_14_r820/visual urdf) 
+foreach(dir config launch meshes urdf) 
    install(DIRECTORY ${dir}/
       DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/${dir})
 endforeach()
