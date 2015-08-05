@@ -1,0 +1,16 @@
+<launch>
+
+  <!--
+    This launch file provides a simulated KUKA robot running RSI
+    Usage:
+      kuka_rsi_simulator.launch
+  -->
+
+  <!-- robot_ip: IP-address of the robot's socket-messaging server -->
+  <arg name="rsi_hw_iface_ip" default="127.0.0.1"/>
+  <arg name="rsi_hw_iface_port" default="49152"/>
+
+
+  <node pkg="kuka_rsi_simulator" type="kuka_rsi_simulator" name="kuka_rsi_simulator" args="$(arg rsi_hw_iface_ip) $(arg rsi_hw_iface_port)"/>
+
+</launch>

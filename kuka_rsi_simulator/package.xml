@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<package>
+  <name>kuka_rsi_simulator</name>
+  <version>0.1.0</version>
+  <description>The kuka_rsi_simulator package</description>
+  <author>Lars Tingelstad</author>
+  <maintainer email="lars.tingelstad@ntnu.no">Lars Tingelstad</maintainer>
+  <license>BSD</license>
+
+  <url type="website">http://wiki.ros.org/kuka_rsi_simulator</url>
+  <url type="bugtracker">https://github.com/ros-industrial/kuka_experimental/issues</url>
+  <url type="repository">https://github.com/ros-industrial/kuka_experimental</url>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <run_depend>rospy</run_depend>
+  <run_depend>std_msgs</run_depend>
+
+  <build_depend>rospy</build_depend>
+  <build_depend>std_msgs</build_depend>
+</package>

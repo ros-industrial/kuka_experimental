@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<launch>
+
+  <group ns="ag1">
+    <param name="robot_description" command="$(find xacro)/xacro.py '$(find kuka_agilus_support)/urdf/agilus.xacro'"/>
+    <!-- Load RSI parameters -->
+    <rosparam file="$(find kuka_rsi_hw_interface)/test/ag1_params.yaml" command="load" />
+    <!-- Start node -->
+    <node name="kuka_hardware_interface" pkg="kuka_rsi_hw_interface"
+      type="kuka_hardware_interface_node" respawn="false"
+      output="screen"
+      required="true"/>
+    <!-- Load joint controller configurations from YAML file to parameter server -->
+    <rosparam file="$(find kuka_rsi_hw_interface)/test/ag1_hw_controllers.yaml" command="load"/>
+    <!-- Load standard kuka controller joint names from YAML file to parameter server -->
+    <rosparam file="$(find kuka_rsi_hw_interface)/test/ag1_controller_joint_names.yaml" command="load"/>
+    <!-- Load controllers -->
+    <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen"
+        args="position_trajectory_controller joint_state_controller --shutdown-timeout 1"/>
+    <!-- Load robot state publisher -->
+    <!--<node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />-->
+    </group>
+
+  <group ns="ag2">
+    <param name="robot_description" command="$(find xacro)/xacro.py '$(find kuka_agilus_support)/urdf/agilus.xacro'"/>
+    <!-- Load RSI parameters -->
+    <rosparam file="$(find kuka_rsi_hw_interface)/test/ag2_params.yaml" command="load" />
+    <!-- Start node -->
+    <node name="kuka_hardware_interface" pkg="kuka_rsi_hw_interface"
+      type="kuka_hardware_interface_node" respawn="false"
+      output="screen"
+      required="true"/>
+    <!-- Load joint controller configurations from YAML file to parameter server -->
+    <rosparam file="$(find kuka_rsi_hw_interface)/test/ag2_hw_controllers.yaml" command="load"/>
+    <!-- Load standard kuka controller joint names from YAML file to parameter server -->
+    <rosparam file="$(find kuka_rsi_hw_interface)/test/ag2_controller_joint_names.yaml" command="load"/>
+    <!-- Load controllers -->
+    <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen"
+        args="position_trajectory_controller joint_state_controller --shutdown-timeout 1"/>
+    <!-- Load robot state publisher -->
+    <!--<node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />-->
+    </group>
+
+
+</launch>
