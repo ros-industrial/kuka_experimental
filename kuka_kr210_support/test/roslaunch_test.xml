@@ -1,9 +1,9 @@
 <launch>
   <group ns="load_kr210l150__">
-    <include file="$(find kuka_kr210_support)/launch/load_kr210.launch"/>
+    <include file="$(find kuka_kr210_support)/launch/load_kr210l150.launch"/>
   </group>
 
   <group ns="test_kr210l150__">
-    <include file="$(find kuka_kr210_support)/launch/test_kr210.launch"/>
+    <include file="$(find kuka_kr210_support)/launch/test_kr210l150.launch"/>
   </group>
 </launch>
