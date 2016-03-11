@@ -5,7 +5,19 @@ find_package(catkin REQUIRED)
 
 catkin_package()
 
-foreach(dir config launch meshes/lbr_iiwa_14_r820/collision meshes/lbr_iiwa_14_r820/visual urdf) 
-   install(DIRECTORY ${dir}/
-      DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/${dir})
-endforeach()
+install(DIRECTORY config launch urdf
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
+
+# temporarily: until sources are moved to other org/rep
+install(
+  DIRECTORY
+    meshes/lbr_iiwa_14_r820/collision
+  DESTINATION
+    ${CATKIN_PACKAGE_SHARE_DESTINATION}/meshes/lbr_iiwa_14_r820/)
+
+# temporarily: until sources are moved to other org/rep
+install(
+  DIRECTORY
+    meshes/lbr_iiwa_14_r820/visual
+  DESTINATION
+    ${CATKIN_PACKAGE_SHARE_DESTINATION}/meshes/lbr_iiwa_14_r820/)

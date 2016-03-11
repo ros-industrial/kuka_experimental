@@ -57,3 +57,11 @@ add_executable(kuka_hardware_interface_node
 target_link_libraries(kuka_hardware_interface_node
   kuka_hardware_interface
 )
+
+install(
+  TARGETS
+    kuka_hardware_interface
+    kuka_hardware_interface_node
+  ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  RUNTIME DESTINATION ${CATKIN_GLOBAL_BIN_DESTINATION})
