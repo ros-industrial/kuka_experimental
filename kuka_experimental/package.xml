@@ -16,6 +16,9 @@
   <run_depend>kuka_kr16_support</run_depend>
   <run_depend>kuka_kr210_support</run_depend>
   <run_depend>kuka_lbr_iiwa_support</run_depend>
+  <run_depend>kuka_resources</run_depend>
+  <run_depend>kuka_rsi_hw_interface</run_depend>
+  <run_depend>kuka_rsi_simulator</run_depend>
 
   <export>
     <metapackage/>
