@@ -40,8 +40,9 @@
   <buildtool_depend>catkin</buildtool_depend>
   <test_depend version_gte="1.9.55">roslaunch</test_depend>
 
-  <exec_depend>robot_state_publisher</exec_depend>
+  <exec_depend>industrial_robot_client</exec_depend>
   <exec_depend>joint_state_publisher</exec_depend>
+  <exec_depend>robot_state_publisher</exec_depend>
   <exec_depend>rviz</exec_depend>
   <exec_depend>xacro</exec_depend>
 
