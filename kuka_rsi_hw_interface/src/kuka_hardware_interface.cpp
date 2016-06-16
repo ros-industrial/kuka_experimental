@@ -145,12 +145,10 @@ void KukaHardwareInterface::start()
 
 void KukaHardwareInterface::configure()
 {
-  std::string port;
-  if (nh_.getParam("rsi/address", local_host_) && nh_.getParam("rsi/port", port))
+  if (nh_.getParam("rsi/address", local_host_) && nh_.getParam("rsi/port", local_port_))
   {
     ROS_INFO_STREAM_NAMED("kuka_hardware_interface",
-                          "Setting up RSI server on: (" << local_host_ << ", " << port << ")");
-    local_port_ = std::stoi(port);
+                          "Setting up RSI server on: (" << local_host_ << ", " << local_port_ << ")");
   }
   else
   {
