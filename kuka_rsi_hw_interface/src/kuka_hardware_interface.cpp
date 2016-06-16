@@ -39,6 +39,9 @@
 
 #include <kuka_rsi_hw_interface/kuka_hardware_interface.h>
 
+#include <stdexcept>
+
+
 namespace kuka_rsi_hw_interface
 {
 
@@ -152,7 +155,8 @@ void KukaHardwareInterface::configure()
   }
   else
   {
-    ROS_ERROR("Failed to get RSI address and port from parameters server!");
+    ROS_ERROR("Failed to get RSI address or port from parameter server!");
+    throw std::runtime_error("Failed to get RSI address or port from parameter server.");
   }
   rt_rsi_pub_.reset(new realtime_tools::RealtimePublisher<std_msgs::String>(nh_, "rsi_xml_doc", 3));
 }
