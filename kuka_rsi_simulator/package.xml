@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
-<package>
+<package format="2">
   <name>kuka_rsi_simulator</name>
   <version>0.1.0</version>
-  <description>The kuka_rsi_simulator package</description>
+  <description>Python node that implements a minimal RSI interface simulator.</description>
   <author>Lars Tingelstad</author>
   <maintainer email="lars.tingelstad@ntnu.no">Lars Tingelstad</maintainer>
   <maintainer email="g.a.vanderhoorn@tudelft.nl">G.A. vd. Hoorn (TU Delft Robotics Institute)</maintainer>
@@ -14,6 +14,6 @@
 
   <buildtool_depend>catkin</buildtool_depend>
 
-  <run_depend>rospy</run_depend>
-  <run_depend>std_msgs</run_depend>
+  <exec_depend>rospy</exec_depend>
+  <exec_depend>std_msgs</exec_depend>
 </package>

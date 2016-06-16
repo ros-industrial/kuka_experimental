@@ -1,8 +1,10 @@
-<package>
+<?xml version="1.0"?>
+<package format="2">
   <name>kuka_experimental</name>
-  <version>0.0.1</version>
+  <version>0.1.0</version>
   <description>Experimental packages for KUKA manipulators within ROS-Industrial.</description>
   <maintainer email="sedwards@swri.org">Shaun Edwards</maintainer>
+  <maintainer email="g.a.vanderhoorn@tudelft.nl">G.A. vd. Hoorn (TU Delft Robotics Institute)</maintainer>
   <author email="sedwards@swri.org">Shaun Edwards</author>
   <license>BSD</license>
 
@@ -12,13 +14,13 @@
 
   <buildtool_depend>catkin</buildtool_depend>
 
-  <run_depend>kuka_kr120_support</run_depend>
-  <run_depend>kuka_kr16_support</run_depend>
-  <run_depend>kuka_kr210_support</run_depend>
-  <run_depend>kuka_lbr_iiwa_support</run_depend>
-  <run_depend>kuka_resources</run_depend>
-  <run_depend>kuka_rsi_hw_interface</run_depend>
-  <run_depend>kuka_rsi_simulator</run_depend>
+  <exec_depend>kuka_kr120_support</exec_depend>
+  <exec_depend>kuka_kr16_support</exec_depend>
+  <exec_depend>kuka_kr210_support</exec_depend>
+  <exec_depend>kuka_lbr_iiwa_support</exec_depend>
+  <exec_depend>kuka_resources</exec_depend>
+  <exec_depend>kuka_rsi_hw_interface</exec_depend>
+  <exec_depend>kuka_rsi_simulator</exec_depend>
 
   <export>
     <metapackage/>

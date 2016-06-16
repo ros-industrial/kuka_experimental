@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
-<package>
+<package format="2">
   <name>kuka_kr210_support</name>
-  <version>0.0.1</version>
+  <version>0.1.0</version>
   <description>
     <p>
       ROS-Industrial support for the KUKA KR 210 (and variants).
@@ -39,13 +39,13 @@
 
   <buildtool_depend>catkin</buildtool_depend>
 
-  <build_depend>roslaunch</build_depend>
+  <test_depend>roslaunch</test_depend>
 
-  <run_depend>industrial_robot_client</run_depend>
-  <run_depend>joint_state_publisher</run_depend>
-  <run_depend>robot_state_publisher</run_depend>
-  <run_depend>rviz</run_depend>
-  <run_depend>xacro</run_depend>
+  <exec_depend>industrial_robot_client</exec_depend>
+  <exec_depend>joint_state_publisher</exec_depend>
+  <exec_depend>robot_state_publisher</exec_depend>
+  <exec_depend>rviz</exec_depend>
+  <exec_depend>xacro</exec_depend>
 
   <export>
     <architecture_independent/>
