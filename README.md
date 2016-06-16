@@ -1,5 +1,7 @@
 # Kuka experimental
 
+[![Build Status](http://build.ros.org/job/Idev__kuka_experimental__ubuntu_trusty_amd64/badge/icon)](http://build.ros.org/job/Idev__kuka_experimental__ubuntu_trusty_amd64)
+
 Experimental packages for Kuka manipulators within [ROS-Industrial][].
 See the [ROS wiki][] page for more information.
 
