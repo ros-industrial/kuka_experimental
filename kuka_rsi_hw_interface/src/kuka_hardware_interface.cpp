@@ -55,7 +55,14 @@ KukaHardwareInterface::KukaHardwareInterface() :
   remote_host_.resize(1024);
   remote_port_.resize(1024);
 
-  nh_.getParam("controller_joint_names", joint_names_);
+  if (!nh_.getParam("controller_joint_names", joint_names_))
+  {
+    ROS_ERROR("Cannot find required parameter 'controller_joint_names' "
+      "on the parameter server.");
+    throw std::runtime_error("Cannot find required parameter "
+      "'controller_joint_names' on the parameter server.");
+  }
+
   //Create ros_control interfaces
   for (std::size_t i = 0; i < n_dof_; ++i)
   {
