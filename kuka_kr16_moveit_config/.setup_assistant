@@ -1,0 +1,8 @@
+moveit_setup_assistant_config:
+  URDF:
+    package: kuka_kr16_support
+    relative_path: urdf/kr16_2.xacro
+  SRDF:
+    relative_path: config/kuka_kr16_2.srdf
+  CONFIG:
+    generated_timestamp: 1433854666

@@ -1,0 +1,51 @@
+<launch>
+
+  <!-- The planning and execution components of MoveIt! -->
+
+   <rosparam command="load" file="$(find kuka_kr16_moveit_config)/config/joint_names.yaml"/>
+
+   <!-- the "sim" argument controls whether we connect to a Simulated or Real robot -->
+   <!--  - if sim=false, a robot_ip argument is required -->
+   <arg name="sim" default="true" />
+   <arg name="robot_ip" unless="$(arg sim)" />
+
+  <!-- By default, we do not start a database (it can be large) -->
+  <arg name="db" default="false" />
+  <!-- Allow user to specify database location -->
+  <arg name="db_path" default="$(find kuka_kr16_moveit_config)/default_warehouse_mongo_db" />
+
+
+   <!-- load the robot_description parameter before launching ROS-I nodes -->
+   <include file="$(find kuka_kr16_moveit_config)/launch/planning_context.launch" >
+       <arg name="load_robot_description" value="true" />
+   </include>
+
+   <!-- run the robot simulator and action interface nodes -->
+   <group if="$(arg sim)">
+
+
+   </group>
+
+   <!-- run the "real robot" interface nodes -->
+   <group unless="$(arg sim)">
+
+
+   </group>
+
+   <!-- publish the robot state (tf transforms) -->
+   <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
+
+   <include file="$(find kuka_kr16_moveit_config)/launch/move_group.launch">
+       <arg name="publish_monitored_planning_scene" value="true" />
+   </include>
+
+   <include file="$(find kuka_kr16_moveit_config)/launch/moveit_rviz.launch">
+       <arg name="config" value="true"/>
+   </include>
+
+  <!-- If database loading was enabled, start mongodb as well -->
+  <include file="$(find kuka_kr16_moveit_config)/launch/default_warehouse_db.launch" if="$(arg db)">
+    <arg name="moveit_warehouse_database_path" value="$(arg db_path)"/>
+  </include>
+
+</launch>
