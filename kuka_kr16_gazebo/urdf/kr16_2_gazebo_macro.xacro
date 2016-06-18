@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!--Generates a urdf from the macro in kr16_2_macro.xacro -->
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <xacro:include filename="$(find kuka_kr16_support)/urdf/kr16_2_macro.xacro" />
+  <xacro:include filename="$(find kuka_kr16_gazebo)/urdf/kr16_2_transmission_macro.xacro" />
+  <xacro:include filename="$(find kuka_kr16_gazebo)/urdf/gazebo.xacro" />
+
+  <xacro:macro name="kuka_kr16_2_gazebo" params="prefix" >
+
+    <xacro:kuka_kr16_2 prefix=""/>
+    <xacro:kr16_2_transmission prefix=""/>
+
+    <link name="world" />
+    <joint name="world_joint" type="fixed">
+      <parent link="world" />
+      <child link = "base_link" />
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+    </joint>
+
+  </xacro:macro>
+</robot>
