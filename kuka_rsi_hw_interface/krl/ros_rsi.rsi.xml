@@ -26,7 +26,7 @@
   </RSIObject>
   <RSIObject ObjType="ETHERNET" ObjTypeID="64" ObjID="ETHERNET1">
     <Parameters>
-      <Parameter Name="ConfigFile" ParamID="1" ParamValue="rsi_axis_correction_ethernet_config.xml" IsRuntime="false" />
+      <Parameter Name="ConfigFile" ParamID="1" ParamValue="ros_rsi_ethernet.xml" IsRuntime="false" />
       <Parameter Name="Timeout" ParamID="1" ParamValue="100" />
       <Parameter Name="Flag" ParamID="4" ParamValue="1" />
       <Parameter Name="Precision" ParamID="8" ParamValue="4" />
