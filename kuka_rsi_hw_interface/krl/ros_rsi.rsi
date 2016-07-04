@@ -72,7 +72,7 @@
         <rSIOutPort name="Out7" />
       </rSIOutPorts>
       <rSIParameters>
-        <rSIParameter name="ConfigFile" value="rsi_axis_correction_ethernet_config.xml" paramType="System.FileName" minVal="-2147483648" maxVal="2147483647" isEnum="false" isRuntime="false" index="1" />
+        <rSIParameter name="ConfigFile" value="ros_rsi_ethernet.xml" paramType="System.FileName" minVal="-2147483648" maxVal="2147483647" isEnum="false" isRuntime="false" index="1" />
         <rSIParameter name="Timeout" value="100" paramType="System.Int32" minVal="0" maxVal="2147483647" isEnum="false" index="1" />
         <rSIParameter name="Flag" value="1" paramType="System.Int32" minVal="-1" maxVal="999" isEnum="false" index="4" />
         <rSIParameter name="Precision" value="4" paramType="System.Int32" minVal="1" maxVal="32" isEnum="false" index="8" />
