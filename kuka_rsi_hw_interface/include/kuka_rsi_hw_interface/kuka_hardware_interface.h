@@ -57,11 +57,7 @@
 #include <hardware_interface/robot_hw.h>
 
 // Timers
-//#include <stdlib.h>
-#include <signal.h>
-#include <time.h>
-#include <sched.h>
-#include <sys/mman.h>
+#include <chrono>
 
 // UDP server
 #include <kuka_rsi_hw_interface/udp_server.h>
