@@ -45,7 +45,8 @@ Notice the RSIObject of type `ETHERNET`. Within this object is a parameter calle
 This should only be edited if the start position specified within the file is not desirable for your application.
 
 ##### Copy files to controller
-The files **ros_rsi.rsi** and **ros_rsi.rsi.diagram** should not be edited. All files should now be ready to be copied to the Kuka controller.
+The files **ros_rsi.rsi** and **ros_rsi.rsi.diagram** should not be edited. All files should now be ready to be copied to the Kuka controller:
+
 1. Copy the files to a USB-stick.
 2. Plug it into the teach pad or controller.
 3. Log in as **Expert** or **Administrator**.
@@ -56,28 +57,37 @@ The files **ros_rsi.rsi** and **ros_rsi.rsi.diagram** should not be edited. All 
 Inside `/kuka_rsi_hw_interface/test` in this repository is a set of `*.yaml` files. Ensure that these files have the correct **joint names** corresponding to the robot description (URDF or .xacro) and correct **IP address** and **port** corresponding to the RSI setup specified in **ros_rsi_ethernet.xml**.
 
 ## 4. Testing
-At this point you are ready to test the RSI interface. Inside `/kuka_rsi_hw_interface/test` is a launch-file called `test_hardware_interface.launch` and a file called `test_params.yaml`. The latter file should have been updated with the correct IP address and port in the last step. In order to successfully launch the **kuka_rsi_hardware_interface** a parameter `robot_description` needs to be present on the ROS parameter server. This parameter can be set manually or by adding this line inside the launch file:
+At this point you are ready to test the RSI interface. Inside `/kuka_rsi_hw_interface/test` is a launch-file called `test_hardware_interface.launch` and a file called `test_params.yaml`. The latter file should have been updated with the correct IP address and port in the last step. In order to successfully launch the **kuka_rsi_hardware_interface** a parameter `robot_description` needs to be present on the ROS parameter server. This parameter can be set manually or by adding this line inside the launch file (replace support package and .xacro to match your application):
+
 ```
 <param name="robot_description" command="$(find xacro)/xacro.py '$(find kuka_kr6_support)/urdf/kr6r900sixx.xacro'"/>
 ```
-The next steps describes how to test the interface:
 
-1. In a new terminal:
+The next steps describe how to launch the test file:
+
+* In a new terminal:
+
 ```
 $ roscore
 ```
-2. Open new terminal and run:
+
+* Open new terminal and run:
+
 ```
 $ roslaunch kuka_rsi_hw_interface test_hardware_interface.launch sim:=false
 ```
-The **kuka_rsi_hardware_interface** is now spinning and waiting for the robot controller to connect.
-3. On the teach pad, enter mode **T1** for testing purposes.
-4. Navigate to `KRC:\R1\Program` and select `ros_rsi.src`.
-5. Press and hold the run/play-button and the robot will first move to the start position.
-6. Press and hold again. This time the terminal where the **kuka_rsi_hardware_interface** is running should output *Got connection from robot*. The RSI connection is now up and running.
-7. In a new terminal:
+
+The **kuka_rsi_hardware_interface** is now spinning and waiting for the robot controller to connect. Follow the next steps to connect RSI:
+
+1. On the teach pad, enter mode **T1** for testing purposes.
+2. Navigate to `KRC:\R1\Program` and select `ros_rsi.src`.
+3. Press and hold the run/play-button and the robot will first move to the start position.
+4. Press and hold again. This time the terminal where the **kuka_rsi_hardware_interface** is running should output *Got connection from robot*. The RSI connection is now up and running.
+5. In a new terminal:
+
 ```
 $ rosrun rqt_joint_trajectory_controller rqt_joint_trajectory_controller
 ```
-8. Choose **controller manager ns** and **controller** and you should be able to move each robot joint.
+
+* Choose **controller manager ns** and **controller** and you should be able to move each robot joint.
 
