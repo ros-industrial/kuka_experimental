@@ -54,62 +54,43 @@ int main(int argc, char** argv)
   kuka_rsi_hw_interface.configure();
 
   // Set up timers
-  struct timespec ts = {0, 0};
-  if (clock_gettime(CLOCK_MONOTONIC, &ts) != 0)
-  {
-    ROS_FATAL("Failed to poll clock!");
-  }
-  ros::Time last(ts.tv_sec, ts.tv_nsec);
-  ros::Time now(ts.tv_sec, ts.tv_nsec);
-  ros::Duration period(1.0);
+  ros::Time timestamp;
+  ros::Duration period;
+  auto stopwatch_last = std::chrono::steady_clock::now();
+  auto stopwatch_now = stopwatch_last;
 
   controller_manager::ControllerManager controller_manager(&kuka_rsi_hw_interface, nh);
 
   kuka_rsi_hw_interface.start();
 
   // Get current time and elapsed time since last read
-  if (!clock_gettime(CLOCK_MONOTONIC, &ts))
-  {
-    now.sec = ts.tv_sec;
-    now.nsec = ts.tv_nsec;
-    period = now - last;
-    last = now;
-  }
-  else
-  {
-    ROS_FATAL("Failed to poll clock!");
-  }
+  timestamp = ros::Time::now();
+  stopwatch_now = std::chrono::steady_clock::now();
+  period.fromSec(std::chrono::duration_cast<std::chrono::duration<double>>(stopwatch_now - stopwatch_last).count());
+  stopwatch_last = stopwatch_now;
 
   // Run as fast as possible
   while (ros::ok())
   //while (!g_quit)
   {
     // Receive current state from robot
-    if (!kuka_rsi_hw_interface.read(now, period))
+    if (!kuka_rsi_hw_interface.read(timestamp, period))
     {
       ROS_FATAL_NAMED("kuka_hardware_interface", "Failed to read state from robot. Shutting down!");
       ros::shutdown();
     }
 
     // Get current time and elapsed time since last read
-    if (!clock_gettime(CLOCK_MONOTONIC, &ts))
-    {
-      now.sec = ts.tv_sec;
-      now.nsec = ts.tv_nsec;
-      period = now - last;
-      last = now;
-    }
-    else
-    {
-      ROS_FATAL_NAMED("kuka_hardware_interface", "Failed to poll clock. Shutting Down!");
-      ros::shutdown();
-    }
+    timestamp = ros::Time::now();
+    stopwatch_now = std::chrono::steady_clock::now();
+    period.fromSec(std::chrono::duration_cast<std::chrono::duration<double>>(stopwatch_now - stopwatch_last).count());
+    stopwatch_last = stopwatch_now;
 
     // Update the controllers
-    controller_manager.update(now, period);
+    controller_manager.update(timestamp, period);
 
     // Send new setpoint to robot
-    kuka_rsi_hw_interface.write(now, period);
+    kuka_rsi_hw_interface.write(timestamp, period);
   }
 
   spinner.stop();
