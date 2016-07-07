@@ -30,14 +30,16 @@ The files included in this folder specifies the data transferred via RSI. Some o
 
 ##### ros_rsi_ethernet.xml
 1. Edit the `IP_NUMBER` tag so that it corresponds to the IP address (192.168.1.xx) previously added for your PC.
-2. Keep the `PORT` tag as it is (49152) or change it if you want.
+2. Keep the `PORT` tag as it is (49152) or change it if you want. If you choose to change the port, remember that the `rsi/port` parameter of the configuration files inside `/kuka_rsi_hw_interface/test` should correspond to the chosen port.
 
 ##### ros_rsi.rsi.xml
 This file may be edited with application specific joint limits.
 * Edit the parameters within the RSIObject `AXISCORR` to specify joint limits such as **LowerLimA1, UpperLimA1** etc.
 * Edit the parameters within `AXISCORRMON` to specify the amount of degrees in which the robot should have reached its goal. The values of **MaxA1, MaxA2** etc. may be large to allow free movement within the specified joint limits in `AXISCORR`.
 
-Notice the RSIObject of type `ETHERNET`. Within this object is a parameter called **Timeout**. This parameter is set to **100** by default. The RSI interface operates at 250 Hz and expects new data every 4ms. If the connected **PC with ROS** does not fulfill this, a message is missed and a counter is incremented. When this counter hits **100**, the RSI connection will shut down. If you have problems with the connection to RSI shutting down now and then while moving the robot it is suggested to:
+Notice the RSIObject of type `ETHERNET`. Within this object is a parameter called **Timeout**. This parameter is set to **100** by default. The RSI interface operates at `250 Hz` (4ms cycle). The **kuka_rsi_hardware_interface** does not have a period configured and is completely driven by the controller's output. Every controller RSI output has a IPOC timestamp which increments for every cycle. The **kuka_rsi_hardware_interface** will answer as quickly as possible. The answer includes the last IPOC received. If the connected **PC with ROS** did not manage to answer within the RSI cycle of **4ms**, the IPOC timestamp of RSI has incremented. The IPOC included in the answer is not matched and the controller will increment a counter. When this counter hits the **Timeout** parameter (**100**), the RSI connection will shut down. If this parameter is lowered, the demand for real-time computation will increase.
+
+If you have problems with the connection to RSI shutting down now and then while moving the robot it is suggested to:
 * Compile and install a [RT-Preempt](https://rt.wiki.kernel.org/index.php/RT_PREEMPT_HOWTO) kernel for your PC.
 * Give **kuka_rsi_hardware_interface** on your PC real-time priority when the RSI connection is established.
 
@@ -53,15 +55,25 @@ The files **ros_rsi.rsi** and **ros_rsi.rsi.diagram** should not be edited. All 
 4. Copy the `ros_rsi.src` file to `KRC:\R1\Program`.
 5. Copy the rest of the files to `C:\KRC\ROBOTER\Config\User\Common\SensorInterface`.
 
-## 3. Edit kuka_rsi_hw_interface configuration files
-Inside `/kuka_rsi_hw_interface/test` in this repository is a set of `*.yaml` files. Ensure that these files have the correct **joint names** corresponding to the robot description (URDF or .xacro) and correct **IP address** and **port** corresponding to the RSI setup specified in **ros_rsi_ethernet.xml**.
+## 3. Configure the kuka_rsi_hw_interface
+The **kuka_rsi_hardware_interface** needs to be configured in order to successfully communicate with RSI. Inside `/kuka_rsi_hw_interface/test` and `/kuka_rsi_hw_interface/config` in this repository is a set of `*.yaml` files. These configuration files may be loaded into a launch-file used to start the **kuka_rsi_hardware_interface** with correct parameters, such as:
 
-## 4. Testing
-At this point you are ready to test the RSI interface. Inside `/kuka_rsi_hw_interface/test` is a launch-file called `test_hardware_interface.launch` and a file called `test_params.yaml`. The latter file should have been updated with the correct IP address and port in the last step. In order to successfully launch the **kuka_rsi_hardware_interface** a parameter `robot_description` needs to be present on the ROS parameter server. This parameter can be set manually or by adding this line inside the launch file (replace support package and .xacro to match your application):
+* **Joint names** corresponding to the robot description (URDF or .xacro).
+* **IP address** and **port** corresponding to the RSI setup specified in **ros_rsi_ethernet.xml**.
+
+We recommend that you copy the configuration files, edit the copies for your needs and use these files to create your own launch file. A template will be provided at a later time. However, at this time, have a look at `test_hardware_interface.launch`, `test_params.yaml`, `controller_joint_names.yaml` and `hardware_controllers.yaml` to achieve a working test-launch.
+
+In order to successfully launch the **kuka_rsi_hardware_interface** a parameter `robot_description` needs to be present on the ROS parameter server. This parameter can be set manually or by adding this line inside the launch file (replace support package and .xacro to match your application):
 
 ```
 <param name="robot_description" command="$(find xacro)/xacro.py '$(find kuka_kr6_support)/urdf/kr6r900sixx.xacro'"/>
 ```
+
+## 4. Testing
+At this point you are ready to test the RSI interface. Before the test, check that:
+
+* You have a file based on `test_params.yaml` specifying the correct IP address and port as explained in the previous step.
+* You have a launch-file based on `test_hardware_interface.launch` loading the correct joint names, hardware controller and network parameters.
 
 The next steps describe how to launch the test file:
 
