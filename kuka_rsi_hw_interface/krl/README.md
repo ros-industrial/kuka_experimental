@@ -6,19 +6,21 @@ This guide highlights the steps needed in order to successfully configure the **
 
 Windows runs behind the SmartHMI on the teach pad. Make sure that the **Windows interface** of the controller and the **PC with ROS** is connected to the same subnet.
 
-1. Log in as **Administrator** on the teach pad and navigate to **Network configuration** (Main menu -> Start-up -> Network configuration -> Activate advanced configuration).
-2. There should already be an interface checked out as the **Windows interface**.
-   * **IP**: e.g. 192.168.250.20
+1. Log in as **Expert** or **Administrator** on the teach pad and navigate to **Network configuration** (**Start-up > Network configuration > Activate advanced configuration**).
+2. There should already be an interface checked out as the **Windows interface**. For example:
+   * **IP**: 192.168.250.20
    * **Subnet mask**: 255.255.255.0
    * **Default gateway**: 192.168.250.20
    * **Windows interface checkbox** should be checked.
-3. Minimize the SmartHMI (Main menu -> Start-up -> Service -> Minimize HMI).
-4. Run the application called **RSI-Network** from the Windows desktop environment on the teach pad.
+3. Minimize the SmartHMI (**Start-up > Service > Minimize HMI**).
+4. Run **RSI-Network** from the Windows Start menu (**All Programs > RSI-Network**).
 5. Check that the **Network - Kuka User Interface** show the Windows interface with the specified IP address.
 6. Add a new IP address on another subnet (e.g. 192.168.1.20) for the **RSI interface**.
-   * This should be possible within **RSI-Network**, if not, then do it within the SmartHMI at **Network configuration**.
-7. Reboot the controller (Main menu -> Shutdown -> Check **Force cold start** and **Reload files** -> Reboot control PC).
-8. After reboot, minimize the SmartHMI (Main menu -> Start-up -> Service -> Minimize HMI).
+   * Select the entry **New** under **RSI Ethernet** in the tree structure and press **Edit**.
+   * Enter the IP address and confirm with **OK**.
+   * Close **RSI-Network** and maximize the SmartHMI.
+7. Reboot the controller with a cold restart (**Shutdown > Check *Force cold start* and *Reload files* > Reboot control PC**).
+8. After reboot, minimize the SmartHMI (**Start-up > Service > Minimize HMI**).
 9. Run **cmd.exe** and ping the PC you want to communicate with on the same subnet (e.g. 192.168.250.xx).
 
 If your **PC** has an IP address on the same subnet as the **Windows interface** on the controller, the controller should receive answers from the PC:
@@ -30,12 +32,14 @@ The files included in this folder specifies the data transferred via RSI. Some o
 
 ##### ros_rsi_ethernet.xml
 1. Edit the `IP_NUMBER` tag so that it corresponds to the IP address (192.168.1.xx) previously added for your PC.
-2. Keep the `PORT` tag as it is (49152) or change it if you want. If you choose to change the port, remember that the `rsi/port` parameter of the configuration files inside `/kuka_rsi_hw_interface/test` should correspond to the chosen port.
+2. Keep the `PORT` tag as it is (49152) or change it if you want to use another port.
+
+Note that the `rsi/address` and `rsi/port` parameters of the `kuka_rsi_hw_interface` must correspond to the `IP_NUMBER`and `PORT` set in these KRL files.
 
 ##### ros_rsi.rsi.xml
-This file may be edited with application specific joint limits.
-* Edit the parameters within the RSIObject `AXISCORR` to specify joint limits such as **LowerLimA1, UpperLimA1** etc.
-* Edit the parameters within `AXISCORRMON` to specify the amount of degrees in which the robot should have reached its goal. The values of **MaxA1, MaxA2** etc. may be large to allow free movement within the specified joint limits in `AXISCORR`.
+This file may be edited with application specific joint limits in degrees.
+* Edit the parameters within the RSIObject `AXISCORR` to specify joint limits such as **LowerLimA1**, **UpperLimA1** etc. Note that these limits are in reference to the start position of the robot.
+* Edit the parameters within `AXISCORRMON` to specify the overall correction limitation. If this limit is exceeded in either of the joint directions, RSI is stopped. The values of **MaxA1**, **MaxA2** etc. may be large to allow free movement within the specified joint limits in `AXISCORR`.
 
 Notice the RSIObject of type `ETHERNET`. Within this object is a parameter called **Timeout**. This parameter is set to **100** by default. The RSI interface operates at `250 Hz` (4ms cycle). The **kuka_rsi_hardware_interface** does not have a period configured and is completely driven by the controller's output. Every controller RSI output has a IPOC timestamp which increments for every cycle. The **kuka_rsi_hardware_interface** will answer as quickly as possible. The answer includes the last IPOC received. If the connected **PC with ROS** did not manage to answer within the RSI cycle of **4ms**, the IPOC timestamp of RSI has incremented. The IPOC included in the answer is not matched and the controller will increment a counter. When this counter hits the **Timeout** parameter (**100**), the RSI connection will shut down. If this parameter is lowered, the demand for real-time computation will increase.
 
@@ -47,7 +51,7 @@ If you have problems with the connection to RSI shutting down now and then while
 This should only be edited if the start position specified within the file is not desirable for your application.
 
 ##### Copy files to controller
-The files **ros_rsi.rsi** and **ros_rsi.rsi.diagram** should not be edited. All files should now be ready to be copied to the Kuka controller:
+The files **ros_rsi.rsi** and **ros_rsi.rsi.diagram** should not be edited. All files are now ready to be copied to the Kuka controller:
 
 1. Copy the files to a USB-stick.
 2. Plug it into the teach pad or controller.
@@ -69,11 +73,13 @@ In order to successfully launch the **kuka_rsi_hardware_interface** a parameter 
 <param name="robot_description" command="$(find xacro)/xacro.py '$(find kuka_kr6_support)/urdf/kr6r900sixx.xacro'"/>
 ```
 
-## 4. Testing
-At this point you are ready to test the RSI interface. Before the test, check that:
+Make sure that the line is added before the `kuka_hardware_interface` itself is loaded.
 
-* You have a file based on `test_params.yaml` specifying the correct IP address and port as explained in the previous step.
-* You have a launch-file based on `test_hardware_interface.launch` loading the correct joint names, hardware controller and network parameters.
+## 4. Testing
+At this point you are ready to test the RSI interface. Before the test, make sure that:
+
+* You have specified the `rsi/address` and `rsi/port` of the **kuka_rsi_hardware_interface** to correspond with the KRL files on the controller.
+* You have a launch-file loading the network parameters, robot description, kuka_hardware_interface, hardware controller and controller joint names.
 
 The next steps describe how to launch the test file:
 
@@ -83,23 +89,27 @@ The next steps describe how to launch the test file:
 $ roscore
 ```
 
-* Open new terminal and run:
+* Open a new terminal and roslaunch the previously configured launch-file:
 
 ```
 $ roslaunch kuka_rsi_hw_interface test_hardware_interface.launch sim:=false
 ```
 
-The **kuka_rsi_hardware_interface** is now spinning and waiting for the robot controller to connect. Follow the next steps to connect RSI:
+The **kuka_rsi_hardware_interface** is now waiting for the robot controller to connect. Follow the next steps to connect RSI:
 
 1. On the teach pad, enter mode **T1** for testing purposes.
 2. Navigate to `KRC:\R1\Program` and select `ros_rsi.src`.
-3. Press and hold the run/play-button and the robot will first move to the start position.
-4. Press and hold again. This time the terminal where the **kuka_rsi_hardware_interface** is running should output *Got connection from robot*. The RSI connection is now up and running.
-5. In a new terminal:
+3. Press and hold an enabling switch and the run/play-button. The robot will first move to the start position.
+   * A message like **Programmed path reached (BCO)** will be shown at the teach pad.
+4. Press and hold again. The teach pad will post a warning **!!! Attention - Sensor correction goes active !!!**.
+5. Confirm the warning and press and hold the buttons again. This time the terminal where **kuka_rsi_hardware_interface** is running should output **Got connection from robot**. The RSI connection is now up and running.
+6. In a new terminal:
 
 ```
 $ rosrun rqt_joint_trajectory_controller rqt_joint_trajectory_controller
 ```
 
-* Choose **controller manager ns** and **controller** and you should be able to move each robot joint.
+Choose **controller manager ns** and **controller** and you should be able to move each robot joint.
+
+* Note that T1-mode limits the robot movement velocity and is intended for testing purposes.
 
