@@ -34,7 +34,7 @@ The files included in this folder specifies the data transferred via RSI. Some o
 1. Edit the `IP_NUMBER` tag so that it corresponds to the IP address (192.168.1.xx) previously added for your PC.
 2. Keep the `PORT` tag as it is (49152) or change it if you want to use another port.
 
-Note that the `rsi/address` and `rsi/port` parameters of the `kuka_rsi_hw_interface` must correspond to the `IP_NUMBER`and `PORT` set in these KRL files.
+Note that the `rsi/listen_address` and `rsi/listen_port` parameters of the `kuka_rsi_hw_interface` must correspond to the `IP_NUMBER`and `PORT` set in these KRL files.
 
 ##### ros_rsi.rsi.xml
 This file may be edited with application specific joint limits in degrees.
@@ -78,7 +78,7 @@ Make sure that the line is added before the `kuka_hardware_interface` itself is 
 ## 4. Testing
 At this point you are ready to test the RSI interface. Before the test, make sure that:
 
-* You have specified the `rsi/address` and `rsi/port` of the **kuka_rsi_hardware_interface** to correspond with the KRL files on the controller.
+* You have specified the `rsi/listen_address` and `rsi/listen_port` of the **kuka_rsi_hardware_interface** to correspond with the KRL files on the controller.
 * You have a launch-file loading the network parameters, robot description, kuka_hardware_interface, hardware controller and controller joint names.
 
 The next steps describe how to launch the test file:
