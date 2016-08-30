@@ -28,7 +28,6 @@
       robot model and configuration you intend to use them with.
     </p>
   </description>
-  <author>Christopher Schindlbeck (University of Hanover)</author>
   <author email="schindlbeck@imr.uni-hannover.de">Christopher Schindlbeck (University of Hanover)</author>
   <maintainer email="g.a.vanderhoorn@tudelft.nl">G.A. vd. Hoorn (TU Delft Robotics Institute)</maintainer>
   <license>BSD</license>
