@@ -5,8 +5,10 @@ This guide highlights the steps needed in order to successfully configure the **
 ## 1. Controller network configuration
 
 Controller setup is described in chapter 4 of the **KUKA.Ethernet RSI XML 1.1** manual. 
-Make sure the not to use the `192.0.1.x` IP range for the controller or PC.
 
+Both **EthernetRSIXML** and **RSI** packages must be installed. This can be verified in the *InstallTech* window (`Setup->9 Install additional Software` on the KCP)
+
+Make sure the not to use the `192.0.1.x` IP range for the controller or PC.
 From the Ethernet RSI XML manual:
 
 > The IP address range 192.0.1.x is reserved and is disabled for applications.
@@ -30,13 +32,13 @@ Note that the `rsi/listen_address` and `rsi/listen_port` parameters of the `kuka
 
 
 ##### ros_rsi.src
-This should only be edited if the start position specified within the file is not desirable for your application.
 
+This should only be edited if the start position or max joint movements specified within the file is not desirable for your application. These variables are inside the Configuration fold.
 
 ##### Copy files to controller
 
-1. Copy the `ros_rsi.src` file to `KRC:\R1\Program`.
-2. Copy the `ros_rsi_ethernet.xml` file to `C:\KRC\ROBOTER\Init`.
+1. Copy the `ros_rsi.src` file to `KRC:\R1\Program` (Alternatively `C:\KRC\ROBOTER\KRC\R1\Program`)
+2. Copy the `ros_rsi_ethernet.xml` file to `C:\KRC\ROBOTER\Init`
 
 ## 3. Configure the kuka_rsi_hw_interface
 
@@ -96,12 +98,14 @@ Choose **controller manager ns** and **controller** and you should be able to mo
 
 ## 4. Troubleshooting
 
-### 
+### RSI: Error in function <ST_ETHERNET>
 
+Problems establishing connection between robot or PC. Check IP, port and that the **kuka_rsi_hardware_interface** is running on the PC. May also come from malformed XML in ros_rsi_ethernet.xml
 
-### Late packages
+ 
+### SEN: RSI execution error <execute> - RSI stopped
 
-From the Ethernet RSI XML manual:
+Most likely due to late packages. From the Ethernet RSI XML manual:
 
 > A data packet received by the external system must be answered within approx.
 > 10 ms. If the data packet is not received by the robot controller within this
