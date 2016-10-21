@@ -5,10 +5,10 @@ This guide highlights the steps needed in order to successfully configure the **
 ## 1. Controller network configuration
 
 Controller setup is described in chapter 4 of the **KUKA.Ethernet RSI XML 1.1** manual. 
-
-Both **EthernetRSIXML** and **RSI** packages must be installed. This can be verified in the *InstallTech* window (`Setup->9 Install additional Software` on the KCP)
+**KUKA.RobotSensorInterface** package must be installed. Depending on the version of the **KUKA.RobotSensorInterface** package you might also need the **KUKA.Ethernet RSI XML**. This can be verified in the *InstallTech* window (`Setup -> 9 Install additional Software` on the KCP)
 
 Make sure the not to use the `192.0.1.x` IP range for the controller or PC.
+
 From the Ethernet RSI XML manual:
 
 > The IP address range 192.0.1.x is reserved and is disabled for applications.
@@ -96,7 +96,7 @@ Choose **controller manager ns** and **controller** and you should be able to mo
 
 * Note that T1-mode limits the robot movement velocity and is intended for testing purposes.
 
-## 4. Troubleshooting
+## 5. Troubleshooting
 
 ### RSI: Error in function <ST_ETHERNET>
 
