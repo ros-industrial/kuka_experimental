@@ -38,7 +38,7 @@
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
-          <mesh filename="package://kuka_kr6_support/meshes/kr6r700sixx/visual/link_2.stl" />
+          <mesh filename="package://kuka_kr6_support/meshes/kr6r700sixx/visual/link_2.dae" />
         </geometry>
         <xacro:material_kuka_orange />
       </visual>
@@ -68,7 +68,7 @@
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
-          <mesh filename="package://kuka_kr6_support/meshes/kr6r700sixx/visual/link_4.stl" />
+          <mesh filename="package://kuka_kr6_support/meshes/kr6r700sixx/visual/link_4.dae" />
         </geometry>
         <xacro:material_kuka_orange />
       </visual>
