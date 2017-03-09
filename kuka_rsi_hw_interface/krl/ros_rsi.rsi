@@ -70,6 +70,14 @@
         <rSIOutPort name="Out5" />
         <rSIOutPort name="Out6" />
         <rSIOutPort name="Out7" />
+        <rSIOutPort name="Out8" />
+        <rSIOutPort name="Out9" />
+        <rSIOutPort name="Out10" />
+        <rSIOutPort name="Out11" />
+        <rSIOutPort name="Out12" />
+        <rSIOutPort name="Out13" />
+        <rSIOutPort name="Out14" />
+        <rSIOutPort name="Out15" />
       </rSIOutPorts>
       <rSIParameters>
         <rSIParameter name="ConfigFile" value="ros_rsi_ethernet.xml" paramType="System.FileName" minVal="-2147483648" maxVal="2147483647" isEnum="false" isRuntime="false" index="1" />
@@ -106,6 +114,110 @@
         <rSIParameter name="MaxE4" value="6.0" paramType="System.Double" minVal="0" maxVal="2147483647" isEnum="false" index="10" />
         <rSIParameter name="MaxE5" value="6.0" paramType="System.Double" minVal="0" maxVal="2147483647" isEnum="false" index="11" />
         <rSIParameter name="MaxE6" value="6.0" paramType="System.Double" minVal="0" maxVal="2147483647" isEnum="false" index="12" />
+      </rSIParameters>
+    </rSIElement>
+    <rSIElement name="MAP2DIGOUT1" objType="MAP2DIGOUT" objTypeID="14" maxInputs="0" maxOutputs="0">
+      <rSIInPorts>
+        <rSIInPort name="In1" signalType="Int">
+          <source>
+            <rSIOutPortMoniker name="//ETHERNET1/Out7" />
+          </source>
+        </rSIInPort>
+      </rSIInPorts>
+      <rSIParameters>
+        <rSIParameter name="Index" value="1" paramType="System.Int32" minVal="1" maxVal="4096" isEnum="false" index="1" />
+        <rSIParameter name="DataSize" value="Bit" paramType="KUKA.RSIVisual.RSI_DataSizeX" minVal="-2147483648" maxVal="2147483647" isEnum="true" index="2" />
+      </rSIParameters>
+    </rSIElement>
+    <rSIElement name="MAP2DIGOUT2" objType="MAP2DIGOUT" objTypeID="14" maxInputs="0" maxOutputs="0">
+      <rSIInPorts>
+        <rSIInPort name="In1" signalType="Int">
+          <source>
+            <rSIOutPortMoniker name="//ETHERNET1/Out8" />
+          </source>
+        </rSIInPort>
+      </rSIInPorts>
+      <rSIParameters>
+        <rSIParameter name="Index" value="2" paramType="System.Int32" minVal="1" maxVal="4096" isEnum="false" index="1" />
+        <rSIParameter name="DataSize" value="Bit" paramType="KUKA.RSIVisual.RSI_DataSizeX" minVal="-2147483648" maxVal="2147483647" isEnum="true" index="2" />
+      </rSIParameters>
+    </rSIElement>
+    <rSIElement name="MAP2DIGOUT3" objType="MAP2DIGOUT" objTypeID="14" maxInputs="0" maxOutputs="0">
+      <rSIInPorts>
+        <rSIInPort name="In1" signalType="Int">
+          <source>
+            <rSIOutPortMoniker name="//ETHERNET1/Out9" />
+          </source>
+        </rSIInPort>
+      </rSIInPorts>
+      <rSIParameters>
+        <rSIParameter name="Index" value="3" paramType="System.Int32" minVal="1" maxVal="4096" isEnum="false" index="1" />
+        <rSIParameter name="DataSize" value="Bit" paramType="KUKA.RSIVisual.RSI_DataSizeX" minVal="-2147483648" maxVal="2147483647" isEnum="true" index="2" />
+      </rSIParameters>
+    </rSIElement>
+    <rSIElement name="MAP2DIGOUT4" objType="MAP2DIGOUT" objTypeID="14" maxInputs="0" maxOutputs="0">
+      <rSIInPorts>
+        <rSIInPort name="In1" signalType="Int">
+          <source>
+            <rSIOutPortMoniker name="//ETHERNET1/Out10" />
+          </source>
+        </rSIInPort>
+      </rSIInPorts>
+      <rSIParameters>
+        <rSIParameter name="Index" value="4" paramType="System.Int32" minVal="1" maxVal="4096" isEnum="false" index="1" />
+        <rSIParameter name="DataSize" value="Bit" paramType="KUKA.RSIVisual.RSI_DataSizeX" minVal="-2147483648" maxVal="2147483647" isEnum="true" index="2" />
+      </rSIParameters>
+    </rSIElement>
+    <rSIElement name="MAP2DIGOUT5" objType="MAP2DIGOUT" objTypeID="14" maxInputs="0" maxOutputs="0">
+      <rSIInPorts>
+        <rSIInPort name="In1" signalType="Int">
+          <source>
+            <rSIOutPortMoniker name="//ETHERNET1/Out11" />
+          </source>
+        </rSIInPort>
+      </rSIInPorts>
+      <rSIParameters>
+        <rSIParameter name="Index" value="5" paramType="System.Int32" minVal="1" maxVal="4096" isEnum="false" index="1" />
+        <rSIParameter name="DataSize" value="Bit" paramType="KUKA.RSIVisual.RSI_DataSizeX" minVal="-2147483648" maxVal="2147483647" isEnum="true" index="2" />
+      </rSIParameters>
+    </rSIElement>
+    <rSIElement name="MAP2DIGOUT6" objType="MAP2DIGOUT" objTypeID="14" maxInputs="0" maxOutputs="0">
+      <rSIInPorts>
+        <rSIInPort name="In1" signalType="Int">
+          <source>
+            <rSIOutPortMoniker name="//ETHERNET1/Out12" />
+          </source>
+        </rSIInPort>
+      </rSIInPorts>
+      <rSIParameters>
+        <rSIParameter name="Index" value="6" paramType="System.Int32" minVal="1" maxVal="4096" isEnum="false" index="1" />
+        <rSIParameter name="DataSize" value="Bit" paramType="KUKA.RSIVisual.RSI_DataSizeX" minVal="-2147483648" maxVal="2147483647" isEnum="true" index="2" />
+      </rSIParameters>
+    </rSIElement>
+    <rSIElement name="MAP2DIGOUT7" objType="MAP2DIGOUT" objTypeID="14" maxInputs="0" maxOutputs="0">
+      <rSIInPorts>
+        <rSIInPort name="In1" signalType="Int">
+          <source>
+            <rSIOutPortMoniker name="//ETHERNET1/Out13" />
+          </source>
+        </rSIInPort>
+      </rSIInPorts>
+      <rSIParameters>
+        <rSIParameter name="Index" value="7" paramType="System.Int32" minVal="1" maxVal="4096" isEnum="false" index="1" />
+        <rSIParameter name="DataSize" value="Bit" paramType="KUKA.RSIVisual.RSI_DataSizeX" minVal="-2147483648" maxVal="2147483647" isEnum="true" index="2" />
+      </rSIParameters>
+    </rSIElement>
+    <rSIElement name="MAP2DIGOUT8" objType="MAP2DIGOUT" objTypeID="14" maxInputs="0" maxOutputs="0">
+      <rSIInPorts>
+        <rSIInPort name="In1" signalType="Int">
+          <source>
+            <rSIOutPortMoniker name="//ETHERNET1/Out14" />
+          </source>
+        </rSIInPort>
+      </rSIInPorts>
+      <rSIParameters>
+        <rSIParameter name="Index" value="8" paramType="System.Int32" minVal="1" maxVal="4096" isEnum="false" index="1" />
+        <rSIParameter name="DataSize" value="Bit" paramType="KUKA.RSIVisual.RSI_DataSizeX" minVal="-2147483648" maxVal="2147483647" isEnum="true" index="2" />
       </rSIParameters>
     </rSIElement>
   </rSIObjects>

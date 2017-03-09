@@ -66,6 +66,9 @@
 #include <kuka_rsi_hw_interface/rsi_state.h>
 #include <kuka_rsi_hw_interface/rsi_command.h>
 
+// SRV
+#include <kuka_rsi_hw_interface/write_8_outputs.h>
+
 namespace kuka_rsi_hw_interface
 {
 
@@ -90,6 +93,7 @@ private:
   std::vector<double> joint_position_command_;
   std::vector<double> joint_velocity_command_;
   std::vector<double> joint_effort_command_;
+  std::vector<bool> digital_output_;
 
   // RSI
   RSIState rsi_state_;
@@ -118,6 +122,8 @@ private:
   hardware_interface::PositionJointInterface position_joint_interface_;
 
 public:
+  //Test section for adding digital output control
+  bool write_8_digital_outputs(kuka_rsi_hw_interface::write_8_outputs::Request &req, kuka_rsi_hw_interface::write_8_outputs::Response &res);
 
   KukaHardwareInterface();
   ~KukaHardwareInterface();

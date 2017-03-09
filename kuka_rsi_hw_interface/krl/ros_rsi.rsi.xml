@@ -48,4 +48,76 @@
       <Parameter Name="MaxE6" ParamID="12" ParamValue="6.0" />
     </Parameters>
   </RSIObject>
+  <RSIObject ObjType="MAP2DIGOUT" ObjTypeID="14" ObjID="MAP2DIGOUT1">
+    <Inputs>
+      <Input InIdx="1" OutObjID="ETHERNET1" OutIdx="7" />
+    </Inputs>
+    <Parameters>
+      <Parameter Name="Index" ParamID="1" ParamValue="1" />
+      <Parameter Name="DataSize" ParamID="2" ParamValue="0" />
+    </Parameters>
+  </RSIObject>
+  <RSIObject ObjType="MAP2DIGOUT" ObjTypeID="14" ObjID="MAP2DIGOUT2">
+    <Inputs>
+      <Input InIdx="1" OutObjID="ETHERNET1" OutIdx="8" />
+    </Inputs>
+    <Parameters>
+      <Parameter Name="Index" ParamID="1" ParamValue="2" />
+      <Parameter Name="DataSize" ParamID="2" ParamValue="0" />
+    </Parameters>
+  </RSIObject>
+  <RSIObject ObjType="MAP2DIGOUT" ObjTypeID="14" ObjID="MAP2DIGOUT3">
+    <Inputs>
+      <Input InIdx="1" OutObjID="ETHERNET1" OutIdx="9" />
+    </Inputs>
+    <Parameters>
+      <Parameter Name="Index" ParamID="1" ParamValue="3" />
+      <Parameter Name="DataSize" ParamID="2" ParamValue="0" />
+    </Parameters>
+  </RSIObject>
+  <RSIObject ObjType="MAP2DIGOUT" ObjTypeID="14" ObjID="MAP2DIGOUT4">
+    <Inputs>
+      <Input InIdx="1" OutObjID="ETHERNET1" OutIdx="10" />
+    </Inputs>
+    <Parameters>
+      <Parameter Name="Index" ParamID="1" ParamValue="4" />
+      <Parameter Name="DataSize" ParamID="2" ParamValue="0" />
+    </Parameters>
+  </RSIObject>
+  <RSIObject ObjType="MAP2DIGOUT" ObjTypeID="14" ObjID="MAP2DIGOUT5">
+    <Inputs>
+      <Input InIdx="1" OutObjID="ETHERNET1" OutIdx="11" />
+    </Inputs>
+    <Parameters>
+      <Parameter Name="Index" ParamID="1" ParamValue="5" />
+      <Parameter Name="DataSize" ParamID="2" ParamValue="0" />
+    </Parameters>
+  </RSIObject>
+  <RSIObject ObjType="MAP2DIGOUT" ObjTypeID="14" ObjID="MAP2DIGOUT6">
+    <Inputs>
+      <Input InIdx="1" OutObjID="ETHERNET1" OutIdx="12" />
+    </Inputs>
+    <Parameters>
+      <Parameter Name="Index" ParamID="1" ParamValue="6" />
+      <Parameter Name="DataSize" ParamID="2" ParamValue="0" />
+    </Parameters>
+  </RSIObject>
+  <RSIObject ObjType="MAP2DIGOUT" ObjTypeID="14" ObjID="MAP2DIGOUT7">
+    <Inputs>
+      <Input InIdx="1" OutObjID="ETHERNET1" OutIdx="13" />
+    </Inputs>
+    <Parameters>
+      <Parameter Name="Index" ParamID="1" ParamValue="7" />
+      <Parameter Name="DataSize" ParamID="2" ParamValue="0" />
+    </Parameters>
+  </RSIObject>
+  <RSIObject ObjType="MAP2DIGOUT" ObjTypeID="14" ObjID="MAP2DIGOUT8">
+    <Inputs>
+      <Input InIdx="1" OutObjID="ETHERNET1" OutIdx="14" />
+    </Inputs>
+    <Parameters>
+      <Parameter Name="Index" ParamID="1" ParamValue="8" />
+      <Parameter Name="DataSize" ParamID="2" ParamValue="0" />
+    </Parameters>
+  </RSIObject>
 </RSIObjects>

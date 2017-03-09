@@ -48,7 +48,7 @@ namespace kuka_rsi_hw_interface
 KukaHardwareInterface::KukaHardwareInterface() :
     joint_position_(6, 0.0), joint_velocity_(6, 0.0), joint_effort_(6, 0.0), joint_position_command_(6, 0.0), joint_velocity_command_(
         6, 0.0), joint_effort_command_(6, 0.0), joint_names_(6), rsi_initial_joint_positions_(6, 0.0), rsi_joint_position_corrections_(
-        6, 0.0), ipoc_(0), n_dof_(6)
+        6, 0.0), ipoc_(0), n_dof_(6), digital_output_(8,false)
 {
   in_buffer_.resize(1024);
   out_buffer_.resize(1024);
@@ -89,6 +89,20 @@ KukaHardwareInterface::~KukaHardwareInterface()
 
 }
 
+bool KukaHardwareInterface::write_8_digital_outputs(kuka_rsi_hw_interface::write_8_outputs::Request &req, kuka_rsi_hw_interface::write_8_outputs::Response &res){
+
+   digital_output_.clear();
+   digital_output_.push_back(req.out1);
+   digital_output_.push_back(req.out2);
+   digital_output_.push_back(req.out3);
+   digital_output_.push_back(req.out4);
+   digital_output_.push_back(req.out5);
+   digital_output_.push_back(req.out6);
+   digital_output_.push_back(req.out7);
+   digital_output_.push_back(req.out8);
+   return true;
+}
+
 bool KukaHardwareInterface::read(const ros::Time time, const ros::Duration period)
 {
   in_buffer_.resize(1024);
@@ -122,7 +136,7 @@ bool KukaHardwareInterface::write(const ros::Time time, const ros::Duration peri
     rsi_joint_position_corrections_[i] = (RAD2DEG * joint_position_command_[i]) - rsi_initial_joint_positions_[i];
   }
 
-  out_buffer_ = RSICommand(rsi_joint_position_corrections_, ipoc_).xml_doc;
+  out_buffer_ = RSICommand(rsi_joint_position_corrections_, digital_output_, ipoc_).xml_doc;
   server_->send(out_buffer_);
 
   return true;
@@ -145,7 +159,7 @@ void KukaHardwareInterface::start()
     rsi_initial_joint_positions_[i] = rsi_state_.initial_positions[i];
   }
   ipoc_ = rsi_state_.ipoc;
-  out_buffer_ = RSICommand(rsi_joint_position_corrections_, ipoc_).xml_doc;
+  out_buffer_ = RSICommand(rsi_joint_position_corrections_, digital_output_, ipoc_).xml_doc;
   server_->send(out_buffer_);
   // Set receive timeout to 1 second
   server_->set_timeout(1000);
