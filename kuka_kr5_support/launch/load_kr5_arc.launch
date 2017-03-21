@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- Load robot description to parameter server -->
+  <param name="robot_description" command="$(find xacro)/xacro --inorder '$(find kuka_kr5_support)/urdf/kr5_arc.xacro'"/>
+</launch>
