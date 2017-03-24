@@ -15,24 +15,22 @@
 
       <link name="${prefix}podest_link">
         <xacro:default_inertial/>
-
-       <!-- <visual>
-          <origin xyz="0 0 0" rpy="0 0 ${-M_PI/2}" />
-          <geometry>
-            <mesh filename="package://schunk_description/meshes/lwa4p/A0_1.stl" scale="0.001 0.001 0.001" />
-          </geometry>
-          <material name="Schunk/DarkGrey" />
+        <visual>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <geometry>
+            <mesh filename="package://kuka_kr5_support/meshes/kr5_arc/visual/podest_link.dae" />
+            </geometry>
         </visual>
         <collision>
-          <origin xyz="0 0 0" rpy="0 0 ${-M_PI/2}" />
-          <geometry>
-            <mesh filename="package://schunk_description/meshes/lwa4p/A0_1.stl" scale="0.001 0.001 0.001" />
-          </geometry>
-        </collision>-->
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <geometry>
+            <mesh filename="package://kuka_kr5_support/meshes/kr5_arc/collision/podest_link.stl" scale="0.001 0.001 0.001" />
+            </geometry>
+        </collision>
       </link>
 
       <joint name="${prefix}base_joint" type="fixed">
-        <origin xyz="0 0 0.30" rpy="0 0 0" />
+        <origin xyz="0 0 0.441" rpy="0 0 0" />
         <parent link="${prefix}podest_link"/>
         <child link="${prefix}base_link"/>
       </joint>
