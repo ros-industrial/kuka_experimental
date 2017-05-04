@@ -8,10 +8,11 @@
     </p>
     <p>
       This package contains configuration data, 3D models and launch files
-      for KUKA KR 10 manipulators. This currently includes the R1100 sixx only.
+      for KUKA KR 10 manipulators. This currently includes the R900 sixx and R1100 sixx only.
     </p>
     <p><b>Specifications</b>:</p>
     <ul>
+      <li>KR 10 R900 sixx - Default</li>
       <li>KR 10 R1100 sixx - Default</li>
     </ul>
     <p>

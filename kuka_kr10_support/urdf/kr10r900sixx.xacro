@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<robot name="kuka_kr6r900sixx" xmlns:xacro="http://wiki.ros.org/xacro">
+<robot name="kuka_kr10r900sixx" xmlns:xacro="http://wiki.ros.org/xacro">
   <xacro:include filename="$(find kuka_kr6_support)/urdf/krXr900sixx_macro.xacro" />
   <xacro:kuka_krXr900sixx prefix=""/>
 </robot>
