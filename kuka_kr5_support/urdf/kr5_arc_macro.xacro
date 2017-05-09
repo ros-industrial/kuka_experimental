@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 
+  <xacro:property name="M_PI" value="3.1415926535897931" />
   <xacro:property name="KUKA_DEG2RAD" value="0.017453292519943295"/>
 
   <xacro:macro name="kuka_kr5_arc" params="prefix parent *origin has_podest">
@@ -14,7 +15,11 @@
       </joint>
 
       <link name="${prefix}podest_link">
-        <xacro:default_inertial/>
+        <inertial>
+          <mass value="0.01" />
+          <origin xyz="0 0 0" />
+          <inertia ixx="0.001" ixy="0.0" ixz="0.0" iyy="0.001" iyz="0.0" izz="0.001" />
+        </inertial>
         <visual>
             <origin rpy="0 0 0" xyz="0 0 0"/>
             <geometry>
