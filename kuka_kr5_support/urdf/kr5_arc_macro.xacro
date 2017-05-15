@@ -1,63 +1,7 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 
-  <xacro:property name="pi" value="3.1415926535897931" />
-  <xacro:property name="KUKA_DEG2RAD" value="0.017453292519943295"/>
-
-  <xacro:macro name="kuka_kr5_arc" params="prefix parent *origin has_podest">
-
-<xacro:if value="${has_podest}">
-      <!-- joint between base_link and lwa4p_extended_connector_link -->
-      <joint name="${prefix}joint_podest" type="fixed">
-        <xacro:insert_block name="origin" />
-        <parent link="${parent}"/>
-        <child link="${prefix}podest_link"/>
-      </joint>
-
-      <link name="${prefix}podest_link">
-        <inertial>
-          <mass value="0.01" />
-          <origin xyz="0 0 0" />
-          <inertia ixx="0.001" ixy="0.0" ixz="0.0" iyy="0.001" iyz="0.0" izz="0.001" />
-        </inertial>
-        <visual>
-            <origin rpy="0 0 0" xyz="0 0 0"/>
-            <geometry>
-            <mesh filename="package://kuka_kr5_support/meshes/kr5_arc/visual/podest_link.dae" />
-            </geometry>
-        </visual>
-        <collision>
-            <origin rpy="0 0 0" xyz="0 0 0"/>
-            <geometry>
-            <mesh filename="package://kuka_kr5_support/meshes/kr5_arc/collision/podest_link.stl" scale="0.001 0.001 0.001" />
-            </geometry>
-        </collision>
-      </link>
-
-      <joint name="${prefix}base_joint" type="fixed">
-        <origin xyz="0 0 0.441" rpy="0 0 0" />
-        <parent link="${prefix}podest_link"/>
-        <child link="${prefix}base_link"/>
-      </joint>
-
-    </xacro:if>
-
-    <xacro:unless value="${has_podest}">
-      <joint name="${prefix}base_joint" type="fixed">
-        <xacro:insert_block name="origin" />
-        <parent link="${parent}"/>
-        <child link="${prefix}base_link"/>
-      </joint>
-    </xacro:unless>
-    
-    <link name="${prefix}base" />
-    <!-- TODO: Check this with robots controller (c.f. http://wiki.ros.org/Industrial/Tutorials/Create%20a%20URDF%20for%20an%20Industrial%20Robot#Additional.2BAC8-Standard_Frames) -->
-    <joint name="${prefix}base_link-base" type="fixed">
-      <parent link="${prefix}base_link" />
-      <child link="${prefix}base" />
-      <origin xyz="0 0 0" rpy="0 0 0" />
-    </joint>
-
+  <xacro:macro name="kuka_kr5_arc" params="prefix">
     <!-- LINKS -->
     <!-- base link -->
     <link name="${prefix}base_link">
@@ -262,7 +206,7 @@
     </link>
     <!-- tool link -->
     <!-- This frame corresponds to the $FLANGE coordinate system in KUKA KRC controllers. -->
-    <link name="${prefix}tool_link"/>
+    <link name="${prefix}tool0"/>
     <!-- END LINKS -->
 
     <!-- JOINTS -->
@@ -296,7 +240,7 @@
       <parent link="${prefix}link_3"/>
       <child link="${prefix}link_4"/>
       <axis xyz="0 0 1"/>
-      <limit effort="0" lower="${radians(350)}" upper="${radians(350)}" velocity="${radians(343)}"/>
+      <limit effort="0" lower="${radians(-350)}" upper="${radians(350)}" velocity="${radians(343)}"/>
     </joint>
     <!-- joint 5 (A5) -->
     <joint name="${prefix}joint_a5" type="revolute">
@@ -322,5 +266,14 @@
     </joint>
     <!-- END JOINTS -->
 
+    <!-- ROS base_link to KUKA $ROBROOT coordinate system transform -->
+    <link name="${prefix}base" />
+    <joint name="${prefix}base_link-base" type="fixed">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <parent link="${prefix}base_link" />
+      <child link="${prefix}base" />
+    </joint>
+
+    
   </xacro:macro>
 </robot>
