@@ -236,7 +236,7 @@
     </joint>
     <!-- joint 4 (A4) -->
     <joint name="${prefix}joint_a4" type="revolute">
-      <origin xyz="0.62 -0.12 0" rpy="0 ${-pi/2} 0"/>
+      <origin xyz="0 -0.12 0" rpy="0 ${-pi/2} 0"/>
       <parent link="${prefix}link_3"/>
       <child link="${prefix}link_4"/>
       <axis xyz="0 0 1"/>
@@ -244,7 +244,7 @@
     </joint>
     <!-- joint 5 (A5) -->
     <joint name="${prefix}joint_a5" type="revolute">
-      <origin xyz="0 0 0" rpy="0 ${pi/2} 0"/>
+      <origin xyz="0 0 -0.62" rpy="0 ${pi/2} 0"/>
       <parent link="${prefix}link_4"/>
       <child link="${prefix}link_5"/>
       <axis xyz="0 0 1"/>
@@ -262,7 +262,7 @@
     <joint name="${prefix}joint_a6-tool0" type="fixed">
       <parent link="${prefix}link_6"/>
       <child link="${prefix}tool0"/>
-      <origin xyz="0 0 -0.115" rpy="0 ${-pi} 0"/>
+      <origin xyz="0 0 -0.115" rpy="0 ${-pi} ${-pi/2}"/>
     </joint>
     <!-- END JOINTS -->
 
