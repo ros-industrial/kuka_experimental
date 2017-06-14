@@ -26,7 +26,7 @@
       <collision>
         <origin rpy="0 0 0" xyz="0 0 0"/>
         <geometry>
-          <mesh filename="package://kuka_kr5_support/meshes/kr5_arc/collision/base_link.stl" scale="0.001 0.001 0.001" />
+          <mesh filename="package://kuka_kr5_support/meshes/kr5_arc/collision/base_link.stl" />
         </geometry>
       </collision>
     </link>
@@ -55,7 +55,7 @@
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
-          <mesh filename="package://kuka_kr5_support/meshes/kr5_arc/collision/link_1.stl" scale="0.001 0.001 0.001" />
+          <mesh filename="package://kuka_kr5_support/meshes/kr5_arc/collision/link_1.stl" />
         </geometry>
       </collision>
     </link>
@@ -84,7 +84,7 @@
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
-          <mesh filename="package://kuka_kr5_support/meshes/kr5_arc/collision/link_2.stl" scale="0.001 0.001 0.001"  />
+          <mesh filename="package://kuka_kr5_support/meshes/kr5_arc/collision/link_2.stl"  />
         </geometry>
       </collision>
     </link>
@@ -113,7 +113,7 @@
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
-          <mesh filename="package://kuka_kr5_support/meshes/kr5_arc/collision/link_3.stl" scale="0.001 0.001 0.001"  />
+          <mesh filename="package://kuka_kr5_support/meshes/kr5_arc/collision/link_3.stl"  />
         </geometry>
       </collision>
     </link>
@@ -142,7 +142,7 @@
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
-          <mesh filename="package://kuka_kr5_support/meshes/kr5_arc/collision/link_4.stl" scale="0.001 0.001 0.001"  />
+          <mesh filename="package://kuka_kr5_support/meshes/kr5_arc/collision/link_4.stl"  />
         </geometry>
       </collision>
     </link>
@@ -171,7 +171,7 @@
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
-          <mesh filename="package://kuka_kr5_support/meshes/kr5_arc/collision/link_5.stl" scale="0.001 0.001 0.001" />
+          <mesh filename="package://kuka_kr5_support/meshes/kr5_arc/collision/link_5.stl" />
         </geometry>
       </collision>
     </link>
@@ -200,7 +200,7 @@
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
-          <mesh filename="package://kuka_kr5_support/meshes/kr5_arc/collision/link_6.stl" scale="0.001 0.001 0.001" />
+          <mesh filename="package://kuka_kr5_support/meshes/kr5_arc/collision/link_6.stl" />
         </geometry>
       </collision>
     </link>
