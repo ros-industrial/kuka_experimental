@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+<robot xmlns:xacro="http://wiki.ros.org/xacro">
 
   <xacro:macro name="kuka_kr5_arc" params="prefix">
     <!-- LINKS -->
@@ -26,7 +26,7 @@
       <collision>
         <origin rpy="0 0 0" xyz="0 0 0"/>
         <geometry>
-          <mesh filename="package://kuka_kr5_support/meshes/kr5_arc/collision/base_link.stl" scale="0.001 0.001 0.001" />
+          <mesh filename="package://kuka_kr5_support/meshes/kr5_arc/collision/base_link.stl" />
         </geometry>
       </collision>
     </link>
@@ -55,7 +55,7 @@
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
-          <mesh filename="package://kuka_kr5_support/meshes/kr5_arc/collision/link_1.stl" scale="0.001 0.001 0.001" />
+          <mesh filename="package://kuka_kr5_support/meshes/kr5_arc/collision/link_1.stl" />
         </geometry>
       </collision>
     </link>
@@ -84,7 +84,7 @@
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
-          <mesh filename="package://kuka_kr5_support/meshes/kr5_arc/collision/link_2.stl" scale="0.001 0.001 0.001"  />
+          <mesh filename="package://kuka_kr5_support/meshes/kr5_arc/collision/link_2.stl"  />
         </geometry>
       </collision>
     </link>
@@ -113,7 +113,7 @@
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
-          <mesh filename="package://kuka_kr5_support/meshes/kr5_arc/collision/link_3.stl" scale="0.001 0.001 0.001"  />
+          <mesh filename="package://kuka_kr5_support/meshes/kr5_arc/collision/link_3.stl"  />
         </geometry>
       </collision>
     </link>
@@ -142,7 +142,7 @@
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
-          <mesh filename="package://kuka_kr5_support/meshes/kr5_arc/collision/link_4.stl" scale="0.001 0.001 0.001"  />
+          <mesh filename="package://kuka_kr5_support/meshes/kr5_arc/collision/link_4.stl"  />
         </geometry>
       </collision>
     </link>
@@ -171,7 +171,7 @@
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
-          <mesh filename="package://kuka_kr5_support/meshes/kr5_arc/collision/link_5.stl" scale="0.001 0.001 0.001" />
+          <mesh filename="package://kuka_kr5_support/meshes/kr5_arc/collision/link_5.stl" />
         </geometry>
       </collision>
     </link>
@@ -200,7 +200,7 @@
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
-          <mesh filename="package://kuka_kr5_support/meshes/kr5_arc/collision/link_6.stl" scale="0.001 0.001 0.001" />
+          <mesh filename="package://kuka_kr5_support/meshes/kr5_arc/collision/link_6.stl" />
         </geometry>
       </collision>
     </link>
@@ -236,7 +236,7 @@
     </joint>
     <!-- joint 4 (A4) -->
     <joint name="${prefix}joint_a4" type="revolute">
-      <origin xyz="0.62 -0.12 0" rpy="0 ${-pi/2} 0"/>
+      <origin xyz="0 -0.12 0" rpy="0 ${-pi/2} 0"/>
       <parent link="${prefix}link_3"/>
       <child link="${prefix}link_4"/>
       <axis xyz="0 0 1"/>
@@ -244,7 +244,7 @@
     </joint>
     <!-- joint 5 (A5) -->
     <joint name="${prefix}joint_a5" type="revolute">
-      <origin xyz="0 0 0" rpy="0 ${pi/2} 0"/>
+      <origin xyz="0 0 -0.62" rpy="0 ${pi/2} 0"/>
       <parent link="${prefix}link_4"/>
       <child link="${prefix}link_5"/>
       <axis xyz="0 0 1"/>
@@ -262,7 +262,7 @@
     <joint name="${prefix}joint_a6-tool0" type="fixed">
       <parent link="${prefix}link_6"/>
       <child link="${prefix}tool0"/>
-      <origin xyz="0 0 -0.115" rpy="0 ${-pi} 0"/>
+      <origin xyz="0 0 -0.115" rpy="0 ${-pi} ${-pi/2}"/>
     </joint>
     <!-- END JOINTS -->
 
