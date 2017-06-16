@@ -4,7 +4,7 @@
 <!-- |    EDITING THIS FILE BY HAND IS NOT RECOMMENDED                                 | -->
 <!-- =================================================================================== -->
 <!--Generates a urdf from the macro in kr120r2500pro_macro.xacro -->
-<robot name="kuka_kr120r2500pro" xmlns:xacro="http://www.ros.org/wiki/xacro">
+<robot name="kuka_kr120r2500pro" xmlns:xacro="http://wiki.ros.org/xacro">
   <link name="base_link">
     <inertial>
       <origin rpy="0 0 0" xyz="0 0 0"/>

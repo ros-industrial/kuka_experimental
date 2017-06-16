@@ -4,7 +4,7 @@
 <!-- |    EDITING THIS FILE BY HAND IS NOT RECOMMENDED                                 | -->
 <!-- =================================================================================== -->
 <!--Generates a urdf from the macro in kr16_2_macro.xacro -->
-<robot name="kuka_kr16_2" xmlns:xacro="http://www.ros.org/wiki/xacro">
+<robot name="kuka_kr16_2" xmlns:xacro="http://wiki.ros.org/xacro">
   <!-- LINKS -->
   <!-- base link -->
   <link name="base_link">
