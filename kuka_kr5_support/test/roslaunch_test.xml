@@ -1,0 +1,9 @@
+<launch>
+  <group ns="load_kr5_arc__">
+    <include file="$(find kuka_kr5_support)/launch/load_kr5_arc.launch"/>
+  </group>
+
+  <group ns="test_kr5_arc__">
+    <include file="$(find kuka_kr5_support)/launch/test_kr5_arc.launch"/>
+  </group>
+</launch>
