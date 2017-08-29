@@ -65,7 +65,7 @@ DEF ros_rsi( )
 
 ;FOLD Configuration
   numAxes = 6                                           ; Number of axes on robot
-  HOME = {AXIS: A1 90, A2 -90, A3 90, A4 0, A5 0, A6 0} ; Start position
+  HOME = {AXIS: A1 0, A2 -90, A3 90, A4 0, A5 90, A6 0} ; Start position
   configFileName[] = "ros_rsi_ethernet.xml"             ; Name of XML file. Should be in c:/krc/roboter/init
 
   ; Internal axes
