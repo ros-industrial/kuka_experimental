@@ -1,6 +1,6 @@
 <ROOT>
    <CONFIG>
-      <IP_NUMBER>10.0.0.200</IP_NUMBER>   <!-- IP-number of the external socket !-->
+      <IP_NUMBER>ip.address.of.rospc</IP_NUMBER>   <!-- IP-number of the external socket !-->
       <PORT>49152</PORT>                  <!-- Port-number of the external socket !-->
       <PROTOCOL>UDP</PROTOCOL>            <!-- TCP or UDP, Protocol of the socket !-->
       <SENTYPE>ImFree</SENTYPE>           <!-- The name of your system send in <Sen Type="" > !-->
