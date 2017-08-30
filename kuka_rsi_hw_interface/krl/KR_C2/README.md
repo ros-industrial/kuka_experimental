@@ -25,7 +25,7 @@ The files included in this folder specifies the data transferred via RSI. Some o
 
 ##### ros_rsi_ethernet.xml
 
-1. Edit the `IP_NUMBER` tag so that it corresponds to the IP address (192.168.1.xx) previously added for your PC.
+1. Edit the `IP_NUMBER` tag so that it corresponds to the IP address of the PC running `kuka_rsi_hw_interface`.
 2. Keep the `PORT` tag as it is (49152) or change it if you want to use another port.
 
 Note that the `rsi/listen_address` and `rsi/listen_port` parameters of the `kuka_rsi_hw_interface` must correspond to the `IP_NUMBER`and `PORT` set in these KRL files.
@@ -39,6 +39,8 @@ This should only be edited if the start position or max joint movements specifie
 
 1. Copy the `ros_rsi.src` file to `KRC:\R1\Program` (Alternatively `C:\KRC\ROBOTER\KRC\R1\Program`)
 2. Copy the `ros_rsi_ethernet.xml` file to `C:\KRC\ROBOTER\Init`
+
+Note: You must reload KSS or reboot the controller if `ros_rsi.src` is not created\copied using the HMI.
 
 ## 3. Configure the kuka_rsi_hw_interface
 
