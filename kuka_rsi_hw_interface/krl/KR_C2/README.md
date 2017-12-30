@@ -4,19 +4,17 @@ This guide highlights the steps needed in order to successfully configure the **
 
 ## 1. Controller network configuration
 
-Controller setup is described in chapter 4 of the **KUKA.Ethernet RSI XML 1.1** manual. 
-**KUKA.RobotSensorInterface** package must be installed. Depending on the version of the **KUKA.RobotSensorInterface** package you might also need the **KUKA.Ethernet RSI XML**. This can be verified in the *InstallTech* window (`Setup -> 9 Install additional Software` on the KCP)
+Controller setup is described in chapter 4 of the **KUKA.Ethernet RSI XML 1.1** manual.
+**KUKA.RobotSensorInterface** package must be installed. Depending on the version of the **KUKA.RobotSensorInterface** package you might also need the **KUKA.Ethernet RSI XML**. This can be verified in the *InstallTech* window (`Setup -> 9 Install additional Software` on the KCP).
 
-Make sure the not to use the `192.0.1.x` IP range for the controller or PC.
+Make sure not to use the `192.0.1.x` IP range for the controller or PC.
 
 From the Ethernet RSI XML manual:
 
 > The IP address range 192.0.1.x is reserved and is disabled for applications.
-> Configuring the VxWorks network connection with this address range results
-> in a system error in the KUKA system software. It is no longer possible to
-> boot the robot controller. 
+> Configuring the VxWorks network connection with this address range results in a system error in the KUKA system software. It is no longer possible to boot the robot controller.
 
-Ping the controller from the PC with ROS to make sure the network configuration is working. 
+Ping the controller from the PC with ROS to make sure the network configuration is working.
 
 
 ## 2. KRL Files
@@ -40,7 +38,7 @@ This should only be edited if the start position or max joint movements specifie
 1. Copy the `ros_rsi.src` file to `KRC:\R1\Program` (Alternatively `C:\KRC\ROBOTER\KRC\R1\Program`)
 2. Copy the `ros_rsi_ethernet.xml` file to `C:\KRC\ROBOTER\Init`
 
-Note: You must reload KSS or reboot the controller if `ros_rsi.src` is not created\copied using the HMI.
+Note: You must reload KSS or reboot the controller if `ros_rsi.src` is not created / copied using the HMI.
 
 ## 3. Configure the kuka_rsi_hw_interface
 
@@ -51,7 +49,7 @@ The **kuka_rsi_hardware_interface** needs to be configured in order to successfu
 
 We recommend that you copy the configuration files, edit the copies for your needs and use these files to create your own launch file. A template will be provided at a later time. However, at this time, have a look at `test_hardware_interface.launch`, `test_params.yaml`, `controller_joint_names.yaml` and `hardware_controllers.yaml` to achieve a working test-launch.
 
-In order to successfully launch the **kuka_rsi_hardware_interface** a parameter `robot_description` needs to be present on the ROS parameter server. This parameter can be set manually or by adding this line inside the launch file (replace support package and .xacro to match your application):
+In order to successfully launch the **kuka_rsi_hardware_interface** a parameter `robot_description` needs to be present on the ROS parameter server. This parameter can be set manually or by adding this line inside the launch file (replace support package and `.xacro` to match your application):
 
 ```
 <param name="robot_description" command="$(find xacro)/xacro.py '$(find kuka_kr6_support)/urdf/kr6r900sixx.xacro'"/>
@@ -102,21 +100,16 @@ Choose **controller manager ns** and **controller** and you should be able to mo
 
 ### RSI: Error in function <ST_ETHERNET>
 
-Problems establishing connection between robot or PC. Check IP, port and that the **kuka_rsi_hardware_interface** is running on the PC. May also come from malformed XML in ros_rsi_ethernet.xml
+Problems establishing connection between robot or PC. Check IP, port and that the **kuka_rsi_hardware_interface** is running on the PC. May also come from malformed XML in `ros_rsi_ethernet.xml`.
 
- 
+
 ### SEN: RSI execution error <execute> - RSI stopped
 
 Most likely due to late packages. From the Ethernet RSI XML manual:
 
-> A data packet received by the external system must be answered within approx.
-> 10 ms. If the data packet is not received by the robot controller within this
-> period, the response is classified as too late. When the maximum number of
-> external data packets for which a response has been sent too late has been
-> exceeded, the robot interprets this as an error and stops
+> A data packet received by the external system must be answered within approx. 10 ms. If the data packet is not received by the robot controller within this period, the response is classified as too late. When the maximum number of external data packets for which a response has been sent too late has been exceeded, the robot interprets this as an error and stops.
 
 If you have problems with the connection to RSI shutting down now and then while moving the robot it is suggested to:
+
 * Compile and install a [RT-Preempt](https://rt.wiki.kernel.org/index.php/RT_PREEMPT_HOWTO) kernel for your PC.
 * Give **kuka_rsi_hardware_interface** on your PC real-time priority when the RSI connection is established.
-
-
