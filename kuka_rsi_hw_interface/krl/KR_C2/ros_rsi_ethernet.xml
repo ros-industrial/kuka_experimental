@@ -1,0 +1,28 @@
+<ROOT>
+   <CONFIG>
+      <IP_NUMBER>ip.address.of.rospc</IP_NUMBER>   <!-- IP address of PC running kuka_rsi_hardware_interface !-->
+      <PORT>49152</PORT>                  <!-- Port-number set up for kuka_rsi_hardware_interface !-->
+      <PROTOCOL>UDP</PROTOCOL>            <!-- TCP or UDP, Protocol of the socket !-->
+      <SENTYPE>ImFree</SENTYPE>           <!-- The name of your system send in <Sen Type="" > !-->
+      <ONLYSEND>FALSE</ONLYSEND>          <!-- TRUE means the client don't expect answers. Do not send anything to robot !-->
+   </CONFIG> 
+   <SEND>
+      <ELEMENTS>
+         <ELEMENT TAG="DEF_RIst" TYPE="DOUBLE" INDX="INTERNAL" UNIT="0" />
+         <ELEMENT TAG="DEF_RSol" TYPE="DOUBLE" INDX="INTERNAL" UNIT="0" />
+         <ELEMENT TAG="DEF_AIPos" TYPE="DOUBLE" INDX="INTERNAL" UNIT="0" />
+         <ELEMENT TAG="DEF_ASPos" TYPE="DOUBLE" INDX="INTERNAL" UNIT="0" />
+         <ELEMENT TAG="DEF_Delay" TYPE="LONG" INDX="INTERNAL" UNIT="0" />
+      </ELEMENTS>
+   </SEND>
+   <RECEIVE>
+      <ELEMENTS>
+         <ELEMENT TAG="AK.A1" TYPE="DOUBLE" INDX="1" UNIT="0" HOLDON="0" />
+         <ELEMENT TAG="AK.A2" TYPE="DOUBLE" INDX="2" UNIT="0" HOLDON="0" />
+         <ELEMENT TAG="AK.A3" TYPE="DOUBLE" INDX="3" UNIT="0" HOLDON="0" />
+         <ELEMENT TAG="AK.A4" TYPE="DOUBLE" INDX="4" UNIT="0" HOLDON="0" />
+         <ELEMENT TAG="AK.A5" TYPE="DOUBLE" INDX="5" UNIT="0" HOLDON="0" />
+         <ELEMENT TAG="AK.A6" TYPE="DOUBLE" INDX="6" UNIT="0" HOLDON="0" />
+      </ELEMENTS>
+   </RECEIVE>
+</ROOT>

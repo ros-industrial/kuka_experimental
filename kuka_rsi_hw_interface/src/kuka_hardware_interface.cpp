@@ -137,6 +137,12 @@ void KukaHardwareInterface::start()
 
   int bytes = server_->recv(in_buffer_);
 
+  // Drop empty <rob> frame with RSI <= 2.3
+  if (bytes < 100)
+  {
+    bytes = server_->recv(in_buffer_);
+  }
+
   rsi_state_ = RSIState(in_buffer_);
   for (std::size_t i = 0; i < n_dof_; ++i)
   {
