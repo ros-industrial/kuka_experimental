@@ -59,9 +59,11 @@ target_link_libraries(kuka_hardware_interface_node
 )
 
 install(
-  TARGETS
-    kuka_hardware_interface
-    kuka_hardware_interface_node
+  TARGETS kuka_hardware_interface
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   RUNTIME DESTINATION ${CATKIN_GLOBAL_BIN_DESTINATION})
+
+install(
+  TARGETS kuka_hardware_interface_node
+  RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
