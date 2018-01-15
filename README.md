@@ -2,7 +2,7 @@
 
 [![Build Status](http://build.ros.org/job/Idev__kuka_experimental__ubuntu_trusty_amd64/badge/icon)](http://build.ros.org/job/Idev__kuka_experimental__ubuntu_trusty_amd64)
 
-[![support level: community](http://img.shields.io/badge/support%20level-community-lightgray.png)](http://rosindustrial.org/news/2016/10/7/better-supporting-a-growing-ros-industrial-software-platform)
+[![support level: community](https://img.shields.io/badge/support%20level-community-lightgray.png)](http://rosindustrial.org/news/2016/10/7/better-supporting-a-growing-ros-industrial-software-platform)
 
 Experimental packages for Kuka manipulators within [ROS-Industrial][].
 See the [ROS wiki][] page for more information.
