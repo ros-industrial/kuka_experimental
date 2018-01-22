@@ -17,7 +17,7 @@
     </ul>
     <p>
       Joint limits and maximum joint velocities are based on the information
-      found in the online datasheet <a href="https://www.kuka.com/-/media/kuka-downloads/imported/6b77eecacfe542d3b736af377562ecaa/pf0020_kr1502_en.pdf">here</a>.
+      found in the online datasheet on the KUKA website for KR 150-2.
       All urdfs are based on the default motion and joint velocity limits,
       unless noted otherwise.
     </p>
