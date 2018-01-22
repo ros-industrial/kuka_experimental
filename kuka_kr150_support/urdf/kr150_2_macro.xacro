@@ -156,7 +156,7 @@
     </joint>
     <!-- joint 6 (A6) -->
     <joint name="${prefix}joint_a6" type="revolute">
-      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <origin xyz="0.23 0 0" rpy="0 0 0"/>
       <parent link="${prefix}link_5"/>
       <child link="${prefix}link_6"/>
       <axis xyz="-1 0 0"/>
@@ -166,7 +166,7 @@
     <joint name="${prefix}joint_a6-tool0" type="fixed">
       <parent link="${prefix}link_6"/>
       <child link="${prefix}tool0"/>
-      <origin xyz="0.23 0 0" rpy="0 ${pi/2} 0"/>
+      <origin xyz="0 0 0" rpy="0 ${pi/2} 0"/>
     </joint>
     <!-- END JOINTS -->
 
