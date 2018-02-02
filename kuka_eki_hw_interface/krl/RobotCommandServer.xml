@@ -1,0 +1,25 @@
+<ETHERNETKRL>
+   <CONFIGURATION>
+      <EXTERNAL>
+         <TYPE>Client</TYPE>
+      </EXTERNAL>
+      <INTERNAL>
+         <ENVIRONMENT>Program</ENVIRONMENT>
+         <ALIVE Set_Flag="2" />
+         <IP>192.168.1.121</IP>
+         <PORT>54601</PORT>
+         <PROTOCOL>UDP</PROTOCOL>
+      </INTERNAL>
+   </CONFIGURATION>
+   <RECEIVE>
+      <XML>
+         <ELEMENT Tag="RobotCommand/@A1" Type="REAL" />
+         <ELEMENT Tag="RobotCommand/@A2" Type="REAL" />
+         <ELEMENT Tag="RobotCommand/@A3" Type="REAL" />
+         <ELEMENT Tag="RobotCommand/@A4" Type="REAL" />
+         <ELEMENT Tag="RobotCommand/@A5" Type="REAL" />
+         <ELEMENT Tag="RobotCommand/@A6" Type="REAL" />
+      </XML>
+   </RECEIVE>
+   <SEND />
+</ETHERNETKRL>

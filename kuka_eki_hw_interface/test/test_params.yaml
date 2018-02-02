@@ -1,0 +1,5 @@
+eki:
+  state_server_address: "192.168.1.121"
+  state_server_port: "54600"
+  command_server_address: "192.168.1.121"
+  command_server_port: "54601"
