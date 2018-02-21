@@ -1,7 +1,7 @@
 /*
  * Software License Agreement (BSD License)
  *
- * Copyright (c) 2018, Brett Hemes (3M)
+ * Copyright (c) 2018, 3M
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
