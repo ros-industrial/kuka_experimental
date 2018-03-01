@@ -6,7 +6,7 @@
       <INTERNAL>
          <ENVIRONMENT>Program</ENVIRONMENT>
          <ALIVE Set_Flag="1" />
-         <IP>192.168.1.121</IP>
+         <IP>ip.address.of.rospc</IP>
          <PORT>54600</PORT>
          <PROTOCOL>UDP</PROTOCOL>
       </INTERNAL>
