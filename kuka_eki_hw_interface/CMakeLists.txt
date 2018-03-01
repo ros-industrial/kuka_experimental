@@ -4,6 +4,7 @@ project(kuka_eki_hw_interface)
 add_compile_options(-std=c++11)
 
 find_package(catkin REQUIRED COMPONENTS
+  angles
   cmake_modules
   controller_manager
   hardware_interface

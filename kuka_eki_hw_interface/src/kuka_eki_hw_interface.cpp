@@ -35,6 +35,8 @@
 #include <boost/asio.hpp>
 #include <boost/array.hpp>
 
+#include <angles/angles.h>
+
 #include <tinyxml.h>
 
 #include <kuka_eki_hw_interface/kuka_eki_hw_interface.h>
@@ -42,10 +44,6 @@
 
 namespace kuka_eki_hw_interface
 {
-
-static const double DEG2RAD = 0.017453292519943295;
-static const double RAD2DEG = 57.295779513082323;
-
 
 KukaEkiHardwareInterface::KukaEkiHardwareInterface() :
     n_dof_(6), joint_position_(6, 0.0), joint_velocity_(6, 0.0), joint_effort_(6, 0.0),
@@ -111,7 +109,7 @@ bool KukaEkiHardwareInterface::socket_read_state(std::vector<double> &joint_posi
     for (int i = 0; i < n_dof_; ++i)
     {
       robot_state->Attribute(axis_name, &joint_pos_deg);
-      joint_position[i] = DEG2RAD * joint_pos_deg;
+      joint_position[i] = angles::from_degrees(joint_pos_deg);
       axis_name[1]++;
     }
 
@@ -131,7 +129,7 @@ bool KukaEkiHardwareInterface::socket_write_command(const std::vector<double> &j
   char axis_name[] = "A1";
   for (int i = 0; i < n_dof_; ++i)
   {
-    robot_command->SetAttribute(axis_name, std::to_string(RAD2DEG * joint_position_command[i]).c_str());
+    robot_command->SetAttribute(axis_name, std::to_string(angles::to_degrees(joint_position_command[i])).c_str());
     axis_name[1]++;
   }
   xml_out.LinkEndChild(robot_command);
