@@ -20,5 +20,4 @@
   <depend>hardware_interface</depend>
   <depend>joint_limits_interface</depend>
   <depend>roscpp</depend>
-  <depend>std_msgs</depend>
 </package>

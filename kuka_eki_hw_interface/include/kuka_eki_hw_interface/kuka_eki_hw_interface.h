@@ -41,7 +41,6 @@
 #include <boost/asio.hpp>
 
 #include <ros/ros.h>
-#include <std_msgs/String.h>
 #include <controller_manager/controller_manager.h>
 #include <hardware_interface/joint_command_interface.h>
 #include <hardware_interface/joint_state_interface.h>

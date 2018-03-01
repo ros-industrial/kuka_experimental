@@ -9,7 +9,6 @@ find_package(catkin REQUIRED COMPONENTS
   hardware_interface
   joint_limits_interface
   roscpp
-  std_msgs
 )
 
 find_package(Boost REQUIRED COMPONENTS system)
@@ -26,7 +25,6 @@ catkin_package(
     hardware_interface
     joint_limits_interface
     roscpp
-    std_msgs
   DEPENDS
     TinyXML
 )
