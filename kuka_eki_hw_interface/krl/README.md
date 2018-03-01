@@ -8,9 +8,9 @@ Windows runs behind the SmartHMI on the teach pad. Make sure that the **Windows 
 
 1. Log in as **Expert** or **Administrator** on the teach pad and navigate to **Network configuration** (**Start-up > Network configuration > Activate advanced configuration**).
 2. There should already be an interface checked out as the **Windows interface**. For example:
-   * **IP**: 192.168.1.121
-   * **Subnet mask**: 255.255.255.0
-   * **Default gateway**: 192.168.1.121
+   * **IP**: `192.168.1.121`
+   * **Subnet mask**: `255.255.255.0`
+   * **Default gateway**: `192.168.1.121`
    * **Windows interface checkbox** should be checked.
 3. Make note of the above IP address as you will need it later.
 4. (Optional) Run **cmd.exe** and ping the PC you want to communicate with on the same subnet (e.g. 192.168.1.10).  If your **PC** has an IP address on the same subnet as the **Windows interface** on the controller, the controller should receive answers from the PC.
@@ -20,14 +20,14 @@ Windows runs behind the SmartHMI on the teach pad. Make sure that the **Windows 
 The files included in the `kuka_eki_hw_interface/krl` folder provide the KRL interface and Ethernet packet configurations.  The XML files need to be modified to work for your specific configuration:
 
 ##### RobotStateServer.xml
-1. Edit the `IP` tag so that it corresponds to the IP address (192.168.1.xx) corresponding to the **Windows interface** of the controller (noted earlier).
-2. Keep the `PORT` tag as it is (54600) or change it if you want to use another port (must be in the range of 54600 to 54615).
+1. Edit the `IP` tag so that it corresponds to the IP address (`192.168.1.xx`) corresponding to the **Windows interface** of the controller (noted earlier).
+2. Keep the `PORT` tag as it is (`54600`) or change it if you want to use another port (must be in the range of `54600` to `54615`).
 
 Note that the `eki/state_server_address` and `eki/state_server_port` parameters of the `kuka_eki_hw_interface` must correspond to the `IP`and `PORT` set in this XML file.
 
 ##### RobotCommandServer.xml
-1. Edit the `IP` tag so that it corresponds to the IP address (192.168.1.xx) corresponding to the **Windows interface** of the controller (noted earlier).
-2. Keep the `PORT` tag as it is (54601) or change it if you want to use another port (must be in the range of 54600 to 54615).
+1. Edit the `IP` tag so that it corresponds to the IP address (`192.168.1.xx`) corresponding to the **Windows interface** of the controller (noted earlier).
+2. Keep the `PORT` tag as it is (`54601`) or change it if you want to use another port (must be in the range of `54600` to `54615`).
 
 Note that the `eki/command_server_address` and `eki/command_server_port` parameters of the `kuka_eki_hw_interface` must correspond to the `IP`and `PORT` set in this XML file.
 
@@ -47,7 +47,7 @@ We recommend that you copy the configuration files, edit the copies for your nee
 
 In order to successfully launch the **kuka_eki_hw_interface** a parameter `robot_description` needs to be present on the ROS parameter server. This parameter can be set manually or by adding this line inside the launch file (replace support package and .xacro to match your application):
 
-```
+```xml
 <param name="robot_description" command="$(find xacro)/xacro.py '$(find kuka_kr6_support)/urdf/kr6r900sixx.xacro'"/>
 ```
 

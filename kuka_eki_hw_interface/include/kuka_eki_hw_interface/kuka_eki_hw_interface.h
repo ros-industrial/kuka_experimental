@@ -53,9 +53,7 @@ namespace kuka_eki_hw_interface
 
 class KukaEkiHardwareInterface : public hardware_interface::RobotHW
 {
-
 private:
-
   ros::NodeHandle nh_;
 
   unsigned int n_dof_;
@@ -92,7 +90,6 @@ private:
   bool socket_write_command(const std::vector<double> &joint_position);
 
 public:
-
   KukaEkiHardwareInterface();
   ~KukaEkiHardwareInterface();
 
@@ -100,7 +97,6 @@ public:
   void configure();
   bool read(const ros::Time time, const ros::Duration period);
   bool write(const ros::Time time, const ros::Duration period);
-
 };
 
 } // namespace kuka_eki_hw_interface
