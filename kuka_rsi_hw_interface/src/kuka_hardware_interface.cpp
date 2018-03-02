@@ -161,15 +161,20 @@ void KukaHardwareInterface::start()
 
 void KukaHardwareInterface::configure()
 {
-  if (nh_.getParam("rsi/listen_address", local_host_) && nh_.getParam("rsi/listen_port", local_port_))
+  const std::string param_addr = "rsi/listen_address";
+  const std::string param_port = "rsi/listen_port";
+
+  if (nh_.getParam(param_addr, local_host_) && nh_.getParam(param_port, local_port_))
   {
     ROS_INFO_STREAM_NAMED("kuka_hardware_interface",
                           "Setting up RSI server on: (" << local_host_ << ", " << local_port_ << ")");
   }
   else
   {
-    ROS_ERROR("Failed to get RSI listen address or listen port from parameter server!");
-    throw std::runtime_error("Failed to get RSI listen address or listen port from parameter server.");
+    std::string msg = "Failed to get RSI listen address or listen port from"
+    " parameter server (looking for '" + param_addr + "' and '" + param_port + "')";
+    ROS_ERROR_STREAM(msg);
+    throw std::runtime_error(msg);
   }
   rt_rsi_pub_.reset(new realtime_tools::RealtimePublisher<std_msgs::String>(nh_, "rsi_xml_doc", 3));
 }
