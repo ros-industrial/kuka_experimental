@@ -45,7 +45,7 @@ int main(int argc, char** argv)
 
   ros::init(argc, argv, "kuka_rsi_hardware_interface");
 
-  ros::AsyncSpinner spinner(1);
+  ros::AsyncSpinner spinner(2);
   spinner.start();
 
   ros::NodeHandle nh;
