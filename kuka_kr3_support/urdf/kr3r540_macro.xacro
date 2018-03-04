@@ -1,6 +1,5 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://wiki.ros.org/xacro">
-  <xacro:include filename="$(find kuka_resources)/urdf/common_constants.xacro"/>
   <xacro:include filename="$(find kuka_resources)/urdf/common_materials.xacro"/>
 
   <xacro:macro name="kuka_kr3r540" params="prefix">
@@ -117,47 +116,47 @@
       <parent link="${prefix}base_link"/>
       <child link="${prefix}link_1"/>
       <axis xyz="0 0 -1"/>
-      <limit lower="${-170 * DEG2RAD}" upper="${170 * DEG2RAD}" effort="0" velocity="${530 * DEG2RAD}"/>
+      <limit lower="${radians(-170)}" upper="${radians(170)}" effort="0" velocity="${radians(530)}"/>
     </joint>
     <joint name="${prefix}joint_a2" type="revolute">
       <origin xyz="0.020 0 0" rpy="0 0 0"/>
       <parent link="${prefix}link_1"/>
       <child link="${prefix}link_2"/>
       <axis xyz="0 1 0"/>
-      <limit lower="${-170 * DEG2RAD}" upper="${50 * DEG2RAD}" effort="0" velocity="${529 * DEG2RAD}"/>
+      <limit lower="${radians(-170)}" upper="${radians(50)}" effort="0" velocity="${radians(529)}"/>
     </joint>
     <joint name="${prefix}joint_a3" type="revolute">
       <origin xyz="0.260 0 0" rpy="0 0 0"/>
       <parent link="${prefix}link_2"/>
       <child link="${prefix}link_3"/>
       <axis xyz="0 1 0"/>
-      <limit lower="${-110 * DEG2RAD}" upper="${155 * DEG2RAD}" effort="0" velocity="${538 * DEG2RAD}"/>
+      <limit lower="${radians(-110)}" upper="${radians(155)}" effort="0" velocity="${radians(538)}"/>
     </joint>
     <joint name="${prefix}joint_a4" type="revolute">
       <origin xyz="0 0 0.020" rpy="0 0 0"/>
       <parent link="${prefix}link_3"/>
       <child link="${prefix}link_4"/>
       <axis xyz="-1 0 0"/>
-      <limit lower="${-175 * DEG2RAD}" upper="${175 * DEG2RAD}" effort="0" velocity="${600 * DEG2RAD}"/>
+      <limit lower="${radians(-175)}" upper="${radians(175)}" effort="0" velocity="${radians(600)}"/>
     </joint>
     <joint name="${prefix}joint_a5" type="revolute">
       <origin xyz="0.260 0 0" rpy="0 0 0"/>
       <parent link="${prefix}link_4"/>
       <child link="${prefix}link_5"/>
       <axis xyz="0 1 0"/>
-      <limit lower="${-120 * DEG2RAD}" upper="${120 * DEG2RAD}" effort="0" velocity="${600 * DEG2RAD}"/>
+      <limit lower="${radians(-120)}" upper="${radians(120)}" effort="0" velocity="${radians(600)}"/>
     </joint>
     <joint name="${prefix}joint_a6" type="revolute">
       <origin xyz="0.075 0 0" rpy="0 0 0"/>
       <parent link="${prefix}link_5"/>
       <child link="${prefix}link_6"/>
       <axis xyz="-1 0 0"/>
-      <limit lower="${-350 * DEG2RAD}" upper="${350 * DEG2RAD}" effort="0" velocity="${800 * DEG2RAD}"/>
+      <limit lower="${radians(-350)}" upper="${radians(350)}" effort="0" velocity="${radians(800)}"/>
     </joint>
     <joint name="${prefix}joint_a6-tool0" type="fixed">
       <parent link="${prefix}link_6"/>
       <child link="${prefix}tool0"/>
-      <origin xyz="0 0 0" rpy="0 ${90 * DEG2RAD} 0"/>
+      <origin xyz="0 0 0" rpy="0 ${radians(90)} 0"/>
     </joint>
 
     <!-- ROS base_link to KUKA $ROBROOT coordinate system transform -->
