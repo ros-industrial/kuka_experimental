@@ -39,7 +39,7 @@ int main(int argc, char** argv)
 {
   ros::init(argc, argv, "kuka_eki_hw_interface");
 
-  ros::AsyncSpinner spinner(1);
+  ros::AsyncSpinner spinner(2);
   spinner.start();
 
   ros::NodeHandle nh;
