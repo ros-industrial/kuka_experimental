@@ -17,7 +17,7 @@
     </ul>
     <p>
       Joint limits and maximum joint velocities are based on the information
-      found in <em>Series 2000 KR 150-2</em>, version <em>PF0020/E/1/0709</em>
+      found in <em>Series 2000 KR 150-2</em>, version <em>PF0020/E/1/0709</em>.
       All urdfs are based on the default motion and joint velocity limits,
       unless noted otherwise.
     </p>
