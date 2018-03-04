@@ -3,9 +3,8 @@
   <name>kuka_experimental</name>
   <version>0.1.0</version>
   <description>Experimental packages for KUKA manipulators within ROS-Industrial.</description>
-  <maintainer email="sedwards@swri.org">Shaun Edwards</maintainer>
+  <author>Shaun Edwards</author>
   <maintainer email="g.a.vanderhoorn@tudelft.nl">G.A. vd. Hoorn (TU Delft Robotics Institute)</maintainer>
-  <author email="sedwards@swri.org">Shaun Edwards</author>
   <license>BSD</license>
 
   <url type="website">http://wiki.ros.org/kuka_experimental</url>
