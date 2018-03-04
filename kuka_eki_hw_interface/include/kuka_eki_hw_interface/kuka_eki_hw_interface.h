@@ -94,8 +94,8 @@ public:
 
   void start();
   void configure();
-  bool read(const ros::Time time, const ros::Duration period);
-  bool write(const ros::Time time, const ros::Duration period);
+  void read(const ros::Time &time, const ros::Duration &period);
+  void write(const ros::Time &time, const ros::Duration &period);
 };
 
 } // namespace kuka_eki_hw_interface

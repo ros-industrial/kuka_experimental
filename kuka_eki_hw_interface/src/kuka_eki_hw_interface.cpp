@@ -195,15 +195,15 @@ void KukaEkiHardwareInterface::configure()
 }
 
 
-bool KukaEkiHardwareInterface::read(const ros::Time time, const ros::Duration period)
+void KukaEkiHardwareInterface::read(const ros::Time &time, const ros::Duration &period)
 {
-  return socket_read_state(joint_position_);
+  socket_read_state(joint_position_);
 }
 
 
-bool KukaEkiHardwareInterface::write(const ros::Time time, const ros::Duration period)
+void KukaEkiHardwareInterface::write(const ros::Time &time, const ros::Duration &period)
 {
-  return socket_write_command(joint_position_command_);
+  socket_write_command(joint_position_command_);
 }
 
 } // namespace kuka_eki_hw_interface
