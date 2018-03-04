@@ -171,10 +171,15 @@ void KukaEkiHardwareInterface::start()
 
 void KukaEkiHardwareInterface::configure()
 {
-  if (nh_.getParam("eki/state_server_address", state_server_address_) &&
-      nh_.getParam("eki/state_server_port", state_server_port_) &&
-      nh_.getParam("eki/command_server_address", command_server_address_) &&
-      nh_.getParam("eki/command_server_port", command_server_port_))
+  const std::string param_state_addr = "eki/state_server_address";
+  const std::string param_state_port = "eki/state_server_port";
+  const std::string param_command_addr = "eki/command_server_address";
+  const std::string param_command_port = "eki/command_server_port";
+
+  if (nh_.getParam(param_state_addr, state_server_address_) &&
+      nh_.getParam(param_state_port, state_server_port_) &&
+      nh_.getParam(param_command_addr, command_server_address_) &&
+      nh_.getParam(param_command_port, command_server_port_))
   {
     ROS_INFO_STREAM_NAMED("kuka_eki_hw_interface", "Configuring Kuka EKI hardware interface\n"
                           " * State client on: " << state_server_address_ << ", " << state_server_port_ << "\n"
@@ -182,8 +187,10 @@ void KukaEkiHardwareInterface::configure()
   }
   else
   {
-    ROS_ERROR("Failed to get EKI addresses/ports from parameter server!");
-    throw std::runtime_error("Failed to get EKI addresses/ports parameter server.");
+    std::string msg = "Failed to get EKI addresses/ports from parameter server (looking for '" + param_state_addr +
+                      "', '" + param_state_port + "', '" + param_command_addr + "', '" + param_command_port + "')";
+    ROS_ERROR_STREAM(msg);
+    throw std::runtime_error(msg);
   }
 }
 
