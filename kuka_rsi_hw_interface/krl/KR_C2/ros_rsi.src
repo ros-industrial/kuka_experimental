@@ -1,0 +1,169 @@
+&ACCESS RVP
+&REL 54
+&PARAM TEMPLATE = C:\KRC\Roboter\Template\vorgabe
+&PARAM EDITMASK = *
+DEF ros_rsi( )
+
+; =============================================
+;
+; Software License Agreement (BSD License)
+;
+; Copyright (c) 2017 Norwegian University of Science and Technology
+; All rights reserved.
+;
+; Redistribution and use in source and binary forms, with or without
+; modification, are permitted provided that the following conditions
+; are met:
+;
+;  * Redistributions of source code must retain the above copyright
+;    notice, this list of conditions and the following disclaimer.
+;  * Redistributions in binary form must reproduce the above
+;    copyright notice, this list of conditions and the following
+;    disclaimer in the documentation and/or other materials provided
+;    with the distribution.
+;  * Neither the name of the Norwegian University of Science and
+;    Technology, nor the names of its contributors may be used to
+;    endorse or promote products derived from this software without
+;    specific prior written permission.
+; 
+; THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+; "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+; LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+; FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
+; COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+; INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+; BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+; CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+; LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
+; ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+; POSSIBILITY OF SUCH DAMAGE.
+;
+; =============================================
+
+
+; FOLD VAR DECLARATION
+  CHAR configFileName[21]                    ;ST_ETHERNET object configuration file
+  DECL RSIERR err                            ;Error value from RSI commands
+  REAL lowerBound[12], upperBound[12]                ;Bounds for motion control
+  INT i                                      ;Counter variable used in for-loops
+  DECL AXIS HOME                             ; HOME position
+  INT containerID, hEthernet, hAxis, numAxes ;Container IDs
+; ENDFOLD VAR DECLARATION
+
+;FOLD INI
+  ;FOLD BASISTECH INI
+    GLOBAL INTERRUPT DECL 3 WHEN $STOPMESS==TRUE DO IR_STOPM ( )
+    INTERRUPT ON 3 
+    BAS (#INITMOV,0 )
+  ;ENDFOLD (BASISTECH INI)
+  ;FOLD USER INI
+    ;Make your modifications here
+
+  ;ENDFOLD (USER INI)
+;ENDFOLD (INI)
+
+;FOLD Configuration
+  numAxes = 6                                           ; Number of axes on robot
+  HOME = {AXIS: A1 0, A2 -90, A3 90, A4 0, A5 90, A6 0} ; Start position
+  configFileName[] = "ros_rsi_ethernet.xml"             ; Name of XML file. Should be in c:/krc/roboter/init
+
+  ; Internal axes
+  lowerBound[1] = -100     ; lower limit A1 axis correction
+  upperBound[1] =  100     ; upper limit A1 axis correction
+  lowerBound[2] = -100     ; lower limit A2 axis correction
+  upperBound[2] =  100     ; upper limit A2 axis correction
+  lowerBound[3] = -100     ; lower limit A3 axis correction
+  upperBound[3] =  100     ; upper limit A3 axis correction
+  lowerBound[4] = -100     ; lower limit A4 axis correction
+  upperBound[4] =  100     ; upper limit A4 axis correction
+  lowerBound[5] = -100     ; lower limit A5 axis correction
+  upperBound[5] =  100     ; upper limit A5 axis correction
+  lowerBound[6] = -100     ; lower limit A6 axis correction
+  upperBound[6] =  100     ; upper limit A6 axis correction
+
+  ; External axes
+  lowerBound[7]  = -100    ; lower limit E1 axis correction
+  upperBound[7]  =  100    ; upper limit E1 axis correction
+  lowerBound[8]  = -100    ; lower limit E2 axis correction
+  upperBound[8]  =  100    ; upper limit E2 axis correction
+  lowerBound[9]  = -100    ; lower limit E3 axis correction
+  upperBound[9]  =  100    ; upper limit E3 axis correction
+  lowerBound[10] = -100    ; lower limit E4 axis correction
+  upperBound[10] =  100    ; upper limit E4 axis correction
+  lowerBound[11] = -100    ; lower limit E5 axis correction
+  upperBound[11] =  100    ; upper limit E5 axis correction
+  lowerBound[12] = -100    ; lower limit E6 axis correction
+  upperBound[12] =  100    ; upper limit E6 axis correction
+
+
+
+;ENDFOLD Configuration
+
+
+; Move to start position
+PTP $AXIS_ACT ; Be able to use PTP without all axes in HOME
+PTP HOME
+
+; Create RSI Ethernet object
+containerID = 0
+err = ST_ETHERNET(hEthernet,containerID,configFileName[])
+IF (err <> #RSIOK) THEN
+  HALT
+ENDIF
+
+; Object for axis correction.
+err = ST_AXISCORR(hAxis, containerID)
+IF (err <> #RSIOK) THEN
+  HALT
+ENDIF
+
+; Link axis correction objects from XML file
+for i=1 TO numAxes
+  err = ST_NEWLINK(hEthernet,i,hAxis,i)
+  IF err<>#RSIOK  THEN
+    HALT
+  ENDIF
+ENDFOR
+
+; Set integration mode (0 absolute, 1 relative)
+err = ST_SETPARAM(hAxis,1,0)
+IF err<>#RSIOK THEN
+  HALT
+ENDIF
+
+; Set lowerBound axis correction
+for i=2 TO numAxes+1
+  err = ST_SETPARAM(hAxis,i,lowerBound[i-1]);
+  IF err<>#RSIOK THEN
+    HALT
+  ENDIF
+ENDFOR
+
+; Set upperBound axis correction
+for i=14 TO numAxes+13
+  err = ST_SETPARAM(hAxis,i,upperBound[i-13]);
+  IF err<>#RSIOK THEN
+    HALT
+  ENDIF
+ENDFOR
+
+; Start RSI execution
+err = ST_ON()
+IF (err <> #RSIOK) THEN
+  HALT
+ENDIF
+
+; Runs untill RSI break
+ST_SKIPSENS()
+
+; Turn off RSI 
+err = ST_OFF()
+IF (err <> #RSIOK) THEN
+  HALT
+ENDIF
+
+; Go back to home position
+; PTP HOME
+
+END
