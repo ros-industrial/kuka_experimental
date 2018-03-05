@@ -88,7 +88,7 @@ KukaEkiHardwareInterface::~KukaEkiHardwareInterface()
 
 bool KukaEkiHardwareInterface::socket_read_state(std::vector<double> &joint_position)
 {
-  boost::array<char, 2048> in_buffer;
+  static boost::array<char, 2048> in_buffer;
 
   // Read socket buffer
   size_t len = eki_state_socket_.receive_from(boost::asio::buffer(in_buffer), eki_state_endpoint_);
