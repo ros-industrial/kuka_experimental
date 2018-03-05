@@ -95,28 +95,26 @@ bool KukaEkiHardwareInterface::socket_read_state(std::vector<double> &joint_posi
   size_t len = eki_state_socket_.receive_from(boost::asio::buffer(in_buffer), eki_state_endpoint_);
 
   // Update joint positions from XML packet (if received)
-  if (len > 0)
+  if (len == 0)
+    return false;
+
+  // Parse XML
+  TiXmlDocument xml_in;
+  in_buffer[len] = '\0';  // null-terminate data buffer for parsing (expects c-string)
+  xml_in.Parse(in_buffer.data());
+  TiXmlElement* robot_state = xml_in.FirstChildElement("RobotState");
+
+  // Extract axis positions
+  double joint_pos_deg;
+  char axis_name[] = "A1";
+  for (int i = 0; i < n_dof_; ++i)
   {
-    // Parse XML
-    TiXmlDocument xml_in;
-    in_buffer[len] = '\0';  // null-terminate data buffer for parsing (expects c-string)
-    xml_in.Parse(in_buffer.data());
-    TiXmlElement* robot_state = xml_in.FirstChildElement("RobotState");
-
-    // Extract axis positions
-    double joint_pos_deg;
-    char axis_name[] = "A1";
-    for (int i = 0; i < n_dof_; ++i)
-    {
-      robot_state->Attribute(axis_name, &joint_pos_deg);
-      joint_position[i] = angles::from_degrees(joint_pos_deg);
-      axis_name[1]++;
-    }
-
-    return true;
+    robot_state->Attribute(axis_name, &joint_pos_deg);
+    joint_position[i] = angles::from_degrees(joint_pos_deg);
+    axis_name[1]++;
   }
 
-  return false;
+  return true;
 }
 
 
