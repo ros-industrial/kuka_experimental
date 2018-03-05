@@ -88,7 +88,6 @@ KukaEkiHardwareInterface::~KukaEkiHardwareInterface()
 
 bool KukaEkiHardwareInterface::socket_read_state(std::vector<double> &joint_position)
 {
-  // TODO(BrettHemes): Look into making receive non-blocking?
   boost::array<char, 2048> in_buffer;
 
   // Read socket buffer
@@ -146,8 +145,6 @@ bool KukaEkiHardwareInterface::socket_write_command(const std::vector<double> &j
 void KukaEkiHardwareInterface::start()
 {
   ROS_INFO_NAMED("kuka_eki_hw_interface", "Starting Kuka EKI hardware interface...");
-  // TODO(BrettHemes): Error handling?
-  // TODO(BrettHemes): Do these block?  Look into implementing non-blocking receives
 
   // Start client to receive joint states
   ROS_INFO_NAMED("kuka_eki_hw_interface", "... connecting to EKI joint state server...");
