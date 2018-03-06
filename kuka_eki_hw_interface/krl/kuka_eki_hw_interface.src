@@ -41,7 +41,7 @@ def  kuka_eki_hw_interface()
 
    ; Initialize robot state server
    ;   Config located in C:/ROBOTER/Config/User/Common/EthernetKRL/RobotStateServer.xml
-   ;   Starts a TCP state sever on IP address 192.168.1.121:54600.
+   ;   Starts a TCP state sever on xml-specified IP address/port.
    ;   Transmission is periodic (currently determined by $timer[1]=-## line in
    ;   robot_state_server_send()
    ;
@@ -59,7 +59,7 @@ def  kuka_eki_hw_interface()
 
    ; Initialize robot command server
    ;   Config located in C:/ROBOTER/Config/User/Common/EthernetKRL/RobotCommandServer.xml
-   ;   Starts a TCP command sever on IP address 192.168.1.121:54601 to receive
+   ;   Starts a TCP command sever on xml-specified address/port to receive
    ;   axis positional commands and executes as they come in.
    ;   PTP motions are blended in joint-space via c_ptp approximation when possible
    ;   via the advance run.  The advance run will read and blend command points as
@@ -88,7 +88,6 @@ def  kuka_eki_hw_interface()
       if robot_cmd_srv_get(joint_pos_tgt) > 0 then
          ptp joint_pos_tgt c_ptp  ; PTP to most recent commanded position
       else
-         TODO(BrettHemes): Possible better options on empty buffer?
          ptp joint_pos_tgt c_ptp
       endif
    endloop
@@ -183,7 +182,6 @@ deffct int robot_cmd_srv_available()
    decl eki_status eki_ret
 
    if $flag[2] then
-      ; FIXME(BrettHemes): Better way to check size? 
       eki_ret = eki_checkbuffer("RobotCommandServer", "RobotCommand/@A1")
       return eki_ret.buff
    else
@@ -201,7 +199,6 @@ deffct int robot_cmd_srv_get(joint_pos_cmd :out)
    decl axis joint_pos_cmd
 
    if $flag[2] then
-      ; FIXME(BrettHemes): Better way to check size? Possible issue with partial structures...
       eki_ret = eki_checkbuffer("RobotCommandServer", "RobotCommand/@A1")
       if eki_ret.buff > 0 then
          eki_ret = eki_getreal("RobotCommandServer", "RobotCommand/@A1", joint_pos_cmd.a1)
