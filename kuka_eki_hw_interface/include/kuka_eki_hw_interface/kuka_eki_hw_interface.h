@@ -61,8 +61,6 @@ private:
   std::vector<double> joint_velocity_;
   std::vector<double> joint_effort_;
   std::vector<double> joint_position_command_;
-  std::vector<double> joint_velocity_command_;
-  std::vector<double> joint_effort_command_;
 
   // EKI
   boost::asio::io_service ios_;

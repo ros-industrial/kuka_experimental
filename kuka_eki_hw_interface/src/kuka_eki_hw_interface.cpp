@@ -47,8 +47,8 @@ namespace kuka_eki_hw_interface
 
 KukaEkiHardwareInterface::KukaEkiHardwareInterface() :
     n_dof_(6), joint_position_(6, 0.0), joint_velocity_(6, 0.0), joint_effort_(6, 0.0),
-    joint_position_command_(6, 0.0), joint_velocity_command_(6, 0.0), joint_effort_command_(6, 0.0),
-    joint_names_(6), eki_state_socket_(ios_, boost::asio::ip::udp::endpoint(boost::asio::ip::udp::v4(), 0)),
+    joint_position_command_(6, 0.0), joint_names_(6),
+    eki_state_socket_(ios_, boost::asio::ip::udp::endpoint(boost::asio::ip::udp::v4(), 0)),
     eki_command_socket_(ios_, boost::asio::ip::udp::endpoint(boost::asio::ip::udp::v4(), 0))
 {
   // Get controller joint names
