@@ -45,44 +45,15 @@
 namespace kuka_eki_hw_interface
 {
 
-KukaEkiHardwareInterface::KukaEkiHardwareInterface() :
-    n_dof_(6), joint_position_(6, 0.0), joint_velocity_(6, 0.0), joint_effort_(6, 0.0),
-    joint_position_command_(6, 0.0), joint_names_(6),
+KukaEkiHardwareInterface::KukaEkiHardwareInterface() : joint_position_(n_dof_, 0.0), joint_velocity_(n_dof_, 0.0),
+    joint_effort_(n_dof_, 0.0), joint_position_command_(n_dof_, 0.0), joint_names_(n_dof_),
     eki_server_socket_(ios_, boost::asio::ip::udp::endpoint(boost::asio::ip::udp::v4(), 0))
 {
-  // Get controller joint names
-  if (!nh_.getParam("controller_joint_names", joint_names_))
-  {
-    ROS_ERROR("Cannot find required parameter 'controller_joint_names' on the parameter server.");
-    throw std::runtime_error("Cannot find required parameter 'controller_joint_names' on the parameter server.");
-  }
-
-  // Create ros_control interfaces (joint state and position joint for all dof's)
-  for (std::size_t i = 0; i < n_dof_; ++i)
-  {
-    // Joint state interface
-    joint_state_interface_.registerHandle(
-        hardware_interface::JointStateHandle(joint_names_[i], &joint_position_[i], &joint_velocity_[i],
-                                             &joint_effort_[i]));
-
-    // Joint position control interface
-    position_joint_interface_.registerHandle(
-        hardware_interface::JointHandle(joint_state_interface_.getHandle(joint_names_[i]),
-                                        &joint_position_command_[i]));
-  }
-
-  // Register interfaces
-  registerInterface(&joint_state_interface_);
-  registerInterface(&position_joint_interface_);
-
-  ROS_INFO_STREAM_NAMED("kukw_eki_hw_interface", "Loaded Kuka EKI hardware interface");
-}
-
-
-KukaEkiHardwareInterface::~KukaEkiHardwareInterface()
-{
 
 }
+
+
+KukaEkiHardwareInterface::~KukaEkiHardwareInterface() {}
 
 
 bool KukaEkiHardwareInterface::eki_read_state(std::vector<double> &joint_position,
@@ -173,8 +144,17 @@ void KukaEkiHardwareInterface::start()
   ROS_INFO_NAMED("kuka_eki_hw_interface", "... done. EKI hardware interface started!");
 }
 
-void KukaEkiHardwareInterface::configure()
+
+void KukaEkiHardwareInterface::init()
 {
+  // Get controller joint names from parameter server
+  if (!nh_.getParam("controller_joint_names", joint_names_))
+  {
+    ROS_ERROR("Cannot find required parameter 'controller_joint_names' on the parameter server.");
+    throw std::runtime_error("Cannot find required parameter 'controller_joint_names' on the parameter server.");
+  }
+
+  // Get EKI parameters from parameter server
   const std::string param_addr = "eki/robot_address";
   const std::string param_port = "eki/robot_port";
 
@@ -191,6 +171,26 @@ void KukaEkiHardwareInterface::configure()
     ROS_ERROR_STREAM(msg);
     throw std::runtime_error(msg);
   }
+
+  // Create ros_control interfaces (joint state and position joint for all dof's)
+  for (std::size_t i = 0; i < n_dof_; ++i)
+  {
+    // Joint state interface
+    joint_state_interface_.registerHandle(
+        hardware_interface::JointStateHandle(joint_names_[i], &joint_position_[i], &joint_velocity_[i],
+                                             &joint_effort_[i]));
+
+    // Joint position control interface
+    position_joint_interface_.registerHandle(
+        hardware_interface::JointHandle(joint_state_interface_.getHandle(joint_names_[i]),
+                                        &joint_position_command_[i]));
+  }
+
+  // Register interfaces
+  registerInterface(&joint_state_interface_);
+  registerInterface(&position_joint_interface_);
+
+  ROS_INFO_STREAM_NAMED("kukw_eki_hw_interface", "Loaded Kuka EKI hardware interface");
 }
 
 

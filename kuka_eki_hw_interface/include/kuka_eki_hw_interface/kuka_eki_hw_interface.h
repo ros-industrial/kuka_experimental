@@ -55,7 +55,7 @@ class KukaEkiHardwareInterface : public hardware_interface::RobotHW
 private:
   ros::NodeHandle nh_;
 
-  unsigned int n_dof_;
+  static const unsigned int n_dof_ = 6;
   std::vector<std::string> joint_names_;
   std::vector<double> joint_position_;
   std::vector<double> joint_velocity_;
@@ -84,11 +84,12 @@ private:
   bool eki_write_command(const std::vector<double> &joint_position);
 
 public:
+
   KukaEkiHardwareInterface();
   ~KukaEkiHardwareInterface();
 
   void start();
-  void configure();
+  void init();
   void read(const ros::Time &time, const ros::Duration &period);
   void write(const ros::Time &time, const ros::Duration &period);
 };

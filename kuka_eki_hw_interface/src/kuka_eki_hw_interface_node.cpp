@@ -45,7 +45,7 @@ int main(int argc, char** argv)
   ros::NodeHandle nh;
 
   kuka_eki_hw_interface::KukaEkiHardwareInterface hardware_interface;
-  hardware_interface.configure();
+  hardware_interface.init();
 
   // Set up timers
   ros::Time timestamp;
