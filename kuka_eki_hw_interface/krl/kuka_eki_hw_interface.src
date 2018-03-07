@@ -124,12 +124,27 @@ def robot_state_server_send()
 
    if $flag[1] then  ; If connection alive
       ; Load state values into xml structure
-      eki_ret = eki_setreal("RobotStateServer", "RobotState/@A1", $axis_act_meas.a1)
-      eki_ret = eki_setreal("RobotStateServer", "RobotState/@A2", $axis_act_meas.a2)
-      eki_ret = eki_setreal("RobotStateServer", "RobotState/@A3", $axis_act_meas.a3)
-      eki_ret = eki_setreal("RobotStateServer", "RobotState/@A4", $axis_act_meas.a4)
-      eki_ret = eki_setreal("RobotStateServer", "RobotState/@A5", $axis_act_meas.a5)
-      eki_ret = eki_setreal("RobotStateServer", "RobotState/@A6", $axis_act_meas.a6)
+      ; position
+      eki_ret = eki_setreal("RobotStateServer", "RobotState/Pos/@A1", $axis_act_meas.a1)
+      eki_ret = eki_setreal("RobotStateServer", "RobotState/Pos/@A2", $axis_act_meas.a2)
+      eki_ret = eki_setreal("RobotStateServer", "RobotState/Pos/@A3", $axis_act_meas.a3)
+      eki_ret = eki_setreal("RobotStateServer", "RobotState/Pos/@A4", $axis_act_meas.a4)
+      eki_ret = eki_setreal("RobotStateServer", "RobotState/Pos/@A5", $axis_act_meas.a5)
+      eki_ret = eki_setreal("RobotStateServer", "RobotState/Pos/@A6", $axis_act_meas.a6)
+      ; velocity
+      ;eki_ret = eki_setreal("RobotStateServer", "RobotState/Vel/@A1", $vel_axis_act[1] * $vel_axis_ma[1] / 100.0)
+      ;eki_ret = eki_setreal("RobotStateServer", "RobotState/Vel/@A2", $vel_axis_act[2] * $vel_axis_ma[2] / 100.0)
+      ;eki_ret = eki_setreal("RobotStateServer", "RobotState/Vel/@A3", $vel_axis_act[3] * $vel_axis_ma[3] / 100.0)
+      ;eki_ret = eki_setreal("RobotStateServer", "RobotState/Vel/@A4", $vel_axis_act[4] * $vel_axis_ma[4] / 100.0)
+      ;eki_ret = eki_setreal("RobotStateServer", "RobotState/Vel/@A5", $vel_axis_act[5] * $vel_axis_ma[5] / 100.0)
+      ;eki_ret = eki_setreal("RobotStateServer", "RobotState/Vel/@A6", $vel_axis_act[6] * $vel_axis_ma[6] / 100.0)
+      ; effort
+      ;eki_ret = eki_setreal("RobotStateServer", "RobotState/Eff/@A1", $torque_axis_act[1])
+      ;eki_ret = eki_setreal("RobotStateServer", "RobotState/Eff/@A2", $torque_axis_act[2])
+      ;eki_ret = eki_setreal("RobotStateServer", "RobotState/Eff/@A3", $torque_axis_act[3])
+      ;eki_ret = eki_setreal("RobotStateServer", "RobotState/Eff/@A4", $torque_axis_act[4])
+      ;eki_ret = eki_setreal("RobotStateServer", "RobotState/Eff/@A5", $torque_axis_act[5])
+      ;eki_ret = eki_setreal("RobotStateServer", "RobotState/Eff/@A6", $torque_axis_act[6])
 
       ; Send xml structure
       if $flag[1] then  ; Make sure connection hasn't died while updating xml structure
@@ -182,7 +197,7 @@ deffct int robot_cmd_srv_available()
    decl eki_status eki_ret
 
    if $flag[2] then
-      eki_ret = eki_checkbuffer("RobotCommandServer", "RobotCommand/@A1")
+      eki_ret = eki_checkbuffer("RobotCommandServer", "RobotCommand/Pos/@A1")
       return eki_ret.buff
    else
       return 0
@@ -199,14 +214,14 @@ deffct int robot_cmd_srv_get(joint_pos_cmd :out)
    decl axis joint_pos_cmd
 
    if $flag[2] then
-      eki_ret = eki_checkbuffer("RobotCommandServer", "RobotCommand/@A1")
+      eki_ret = eki_checkbuffer("RobotCommandServer", "RobotCommand/Pos/@A1")
       if eki_ret.buff > 0 then
-         eki_ret = eki_getreal("RobotCommandServer", "RobotCommand/@A1", joint_pos_cmd.a1)
-         eki_ret = eki_getreal("RobotCommandServer", "RobotCommand/@A2", joint_pos_cmd.a2)
-         eki_ret = eki_getreal("RobotCommandServer", "RobotCommand/@A3", joint_pos_cmd.a3)
-         eki_ret = eki_getreal("RobotCommandServer", "RobotCommand/@A4", joint_pos_cmd.a4)
-         eki_ret = eki_getreal("RobotCommandServer", "RobotCommand/@A5", joint_pos_cmd.a5)
-         eki_ret = eki_getreal("RobotCommandServer", "RobotCommand/@A6", joint_pos_cmd.a6)
+         eki_ret = eki_getreal("RobotCommandServer", "RobotCommand/Pos/@A1", joint_pos_cmd.a1)
+         eki_ret = eki_getreal("RobotCommandServer", "RobotCommand/Pos/@A2", joint_pos_cmd.a2)
+         eki_ret = eki_getreal("RobotCommandServer", "RobotCommand/Pos/@A3", joint_pos_cmd.a3)
+         eki_ret = eki_getreal("RobotCommandServer", "RobotCommand/Pos/@A4", joint_pos_cmd.a4)
+         eki_ret = eki_getreal("RobotCommandServer", "RobotCommand/Pos/@A5", joint_pos_cmd.a5)
+         eki_ret = eki_getreal("RobotCommandServer", "RobotCommand/Pos/@A6", joint_pos_cmd.a6)
          return 1
       else
          return 0

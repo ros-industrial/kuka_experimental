@@ -13,12 +13,12 @@
    </CONFIGURATION>
    <RECEIVE>
       <XML>
-         <ELEMENT Tag="RobotCommand/@A1" Type="REAL" />
-         <ELEMENT Tag="RobotCommand/@A2" Type="REAL" />
-         <ELEMENT Tag="RobotCommand/@A3" Type="REAL" />
-         <ELEMENT Tag="RobotCommand/@A4" Type="REAL" />
-         <ELEMENT Tag="RobotCommand/@A5" Type="REAL" />
-         <ELEMENT Tag="RobotCommand/@A6" Type="REAL" />
+         <ELEMENT Tag="RobotCommand/Pos/@A1" Type="REAL" />
+         <ELEMENT Tag="RobotCommand/Pos/@A2" Type="REAL" />
+         <ELEMENT Tag="RobotCommand/Pos/@A3" Type="REAL" />
+         <ELEMENT Tag="RobotCommand/Pos/@A4" Type="REAL" />
+         <ELEMENT Tag="RobotCommand/Pos/@A5" Type="REAL" />
+         <ELEMENT Tag="RobotCommand/Pos/@A6" Type="REAL" />
       </XML>
    </RECEIVE>
    <SEND />

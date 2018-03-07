@@ -86,7 +86,9 @@ KukaEkiHardwareInterface::~KukaEkiHardwareInterface()
 }
 
 
-bool KukaEkiHardwareInterface::socket_read_state(std::vector<double> &joint_position)
+bool KukaEkiHardwareInterface::socket_read_state(std::vector<double> &joint_position,
+                                                 std::vector<double> &joint_velocity,
+                                                 std::vector<double> &joint_effort)
 {
   static boost::array<char, 2048> in_buffer;
 
@@ -102,16 +104,26 @@ bool KukaEkiHardwareInterface::socket_read_state(std::vector<double> &joint_posi
   in_buffer[len] = '\0';  // null-terminate data buffer for parsing (expects c-string)
   xml_in.Parse(in_buffer.data());
   TiXmlElement* robot_state = xml_in.FirstChildElement("RobotState");
+  TiXmlElement* pos = robot_state->FirstChildElement("Pos");
+  TiXmlElement* vel = robot_state->FirstChildElement("Vel");
+  TiXmlElement* eff = robot_state->FirstChildElement("Eff");
 
   // Extract axis positions
-  double joint_pos_deg;
+  double joint_pos;  // [deg]
+  double joint_vel;  // [%max]
+  double joint_eff;  // [Nm]
   char axis_name[] = "A1";
   for (int i = 0; i < n_dof_; ++i)
   {
-    robot_state->Attribute(axis_name, &joint_pos_deg);
-    joint_position[i] = angles::from_degrees(joint_pos_deg);
+    pos->Attribute(axis_name, &joint_pos);
+    joint_position[i] = angles::from_degrees(joint_pos);  // convert deg to rad
+    vel->Attribute(axis_name, &joint_vel);
+    joint_velocity[i] = joint_vel;
+    eff->Attribute(axis_name, &joint_eff);
+    joint_effort[i] = joint_eff;
     axis_name[1]++;
   }
+  ROS_INFO_STREAM(joint_effort[0]);
 
   return true;
 }
@@ -121,12 +133,14 @@ bool KukaEkiHardwareInterface::socket_write_command(const std::vector<double> &j
 {
   TiXmlDocument xml_out;
   TiXmlElement* robot_command = new TiXmlElement("RobotCommand");
+  TiXmlElement* pos = new TiXmlElement("Pos");
   TiXmlText* empty_text = new TiXmlText("");
-  robot_command->LinkEndChild(empty_text);   // force <RobotCommand></RobotCommand> format (vs <RobotCommand />)
+  robot_command->LinkEndChild(pos);
+  pos->LinkEndChild(empty_text);   // force <Pos></Pos> format (vs <Pos />)
   char axis_name[] = "A1";
   for (int i = 0; i < n_dof_; ++i)
   {
-    robot_command->SetAttribute(axis_name, std::to_string(angles::to_degrees(joint_position_command[i])).c_str());
+    pos->SetAttribute(axis_name, std::to_string(angles::to_degrees(joint_position_command[i])).c_str());
     axis_name[1]++;
   }
   xml_out.LinkEndChild(robot_command);
@@ -159,7 +173,8 @@ void KukaEkiHardwareInterface::start()
                                              command_server_port_});
 
   // Initialize joint_position_command_ from initial robot state (avoid bad (null) commands before controllers come up)
-  while (!socket_read_state(joint_position_command_));
+  while (!socket_read_state(joint_position_, joint_velocity_, joint_effort_));
+  joint_position_command_ = joint_position_;
 
   ROS_INFO_NAMED("kuka_eki_hw_interface", "... done. EKI hardware interface started!");
 }
@@ -192,7 +207,7 @@ void KukaEkiHardwareInterface::configure()
 
 void KukaEkiHardwareInterface::read(const ros::Time &time, const ros::Duration &period)
 {
-  socket_read_state(joint_position_);
+  socket_read_state(joint_position_, joint_velocity_, joint_effort_);
 }
 
 

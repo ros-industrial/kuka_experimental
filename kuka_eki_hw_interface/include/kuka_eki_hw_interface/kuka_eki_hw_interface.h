@@ -83,7 +83,8 @@ private:
   hardware_interface::PositionJointInterface position_joint_interface_;
 
   // Private socket read/write member functions
-  bool socket_read_state(std::vector<double> &joint_position);
+  bool socket_read_state(std::vector<double> &joint_position, std::vector<double> &joint_velocity,
+                         std::vector<double> &joint_effort);
   bool socket_write_command(const std::vector<double> &joint_position);
 
 public:
