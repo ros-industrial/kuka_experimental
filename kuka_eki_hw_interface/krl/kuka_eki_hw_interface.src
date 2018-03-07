@@ -143,12 +143,12 @@ end
 deffct int eki_hw_iface_available()
    decl eki_status eki_ret
 
-   if $flag[1] then
-      eki_ret = eki_checkbuffer("EkiHwInterface", "RobotCommand/Pos/@A1")
-      return eki_ret.buff
-   else
+   if not $flag[1] then
       return 0
    endif
+
+   eki_ret = eki_checkbuffer("EkiHwInterface", "RobotCommand/Pos/@A1")
+   return eki_ret.buff
 endfct
 
 
@@ -160,22 +160,22 @@ deffct int eki_hw_iface_get(joint_pos_cmd :out)
    decl eki_status eki_ret
    decl axis joint_pos_cmd
 
-   if $flag[1] then
-      eki_ret = eki_checkbuffer("EkiHwInterface", "RobotCommand/Pos/@A1")
-      if eki_ret.buff > 0 then
-         eki_ret = eki_getreal("EkiHwInterface", "RobotCommand/Pos/@A1", joint_pos_cmd.a1)
-         eki_ret = eki_getreal("EkiHwInterface", "RobotCommand/Pos/@A2", joint_pos_cmd.a2)
-         eki_ret = eki_getreal("EkiHwInterface", "RobotCommand/Pos/@A3", joint_pos_cmd.a3)
-         eki_ret = eki_getreal("EkiHwInterface", "RobotCommand/Pos/@A4", joint_pos_cmd.a4)
-         eki_ret = eki_getreal("EkiHwInterface", "RobotCommand/Pos/@A5", joint_pos_cmd.a5)
-         eki_ret = eki_getreal("EkiHwInterface", "RobotCommand/Pos/@A6", joint_pos_cmd.a6)
-         return 1
-      else
-         return 0
-      endif
-   else
+   if not $flag[1] then
       return 0
    endif
+
+   eki_ret = eki_checkbuffer("EkiHwInterface", "RobotCommand/Pos/@A1")
+   if eki_ret.buff <= 0 then
+     return 0
+   endif
+
+   eki_ret = eki_getreal("EkiHwInterface", "RobotCommand/Pos/@A1", joint_pos_cmd.a1)
+   eki_ret = eki_getreal("EkiHwInterface", "RobotCommand/Pos/@A2", joint_pos_cmd.a2)
+   eki_ret = eki_getreal("EkiHwInterface", "RobotCommand/Pos/@A3", joint_pos_cmd.a3)
+   eki_ret = eki_getreal("EkiHwInterface", "RobotCommand/Pos/@A4", joint_pos_cmd.a4)
+   eki_ret = eki_getreal("EkiHwInterface", "RobotCommand/Pos/@A5", joint_pos_cmd.a5)
+   eki_ret = eki_getreal("EkiHwInterface", "RobotCommand/Pos/@A6", joint_pos_cmd.a6)
+   return 1
 endfct
 
 
