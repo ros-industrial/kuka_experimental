@@ -121,6 +121,7 @@ end
 
 def robot_state_server_send()
    decl eki_status eki_ret
+   decl real vel_percent
 
    if $flag[1] then  ; If connection alive
       ; Load state values into xml structure
