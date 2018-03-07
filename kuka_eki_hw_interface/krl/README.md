@@ -19,23 +19,17 @@ Windows runs behind the SmartHMI on the teach pad. Make sure that the **Windows 
 
 The files included in the `kuka_eki_hw_interface/krl` folder provide the KRL interface and Ethernet packet configurations.  The XML files need to be modified to work for your specific configuration:
 
-##### RobotStateServer.xml
-1. Edit the `IP` tag so that it corresponds to the IP address (`192.168.1.xx`) corresponding to the **Windows interface** of the controller (noted earlier).
+##### EkiHwInterface.xml
+1. Edit the `IP` tag so that it corresponds to the IP address (`address.of.robot.controller`) corresponding to the **Windows interface** of the controller (noted earlier).
 2. Keep the `PORT` tag as it is (`54600`) or change it if you want to use another port (must be in the range of `54600` to `54615`).
 
-Note that the `eki/state_server_address` and `eki/state_server_port` parameters of the `kuka_eki_hw_interface` must correspond to the `IP`and `PORT` set in this XML file.
-
-##### RobotCommandServer.xml
-1. Edit the `IP` tag so that it corresponds to the IP address (`192.168.1.xx`) corresponding to the **Windows interface** of the controller (noted earlier).
-2. Keep the `PORT` tag as it is (`54601`) or change it if you want to use another port (must be in the range of `54600` to `54615`).
-
-Note that the `eki/command_server_address` and `eki/command_server_port` parameters of the `kuka_eki_hw_interface` must correspond to the `IP`and `PORT` set in this XML file.
+Note that the `eki/robot_address` and `eki/robot_port` parameters of the `kuka_eki_hw_interface` must correspond to the `IP`and `PORT` set in this XML file.
 
 ##### Copy files to controller
 The files `kuka_eki_hw_interface.dat` and `kuke_eki_hw_interface.src` should not be edited. All files are now ready to be copied to the Kuka controller.  Using WorkVisual or a USB drive (with appropriate privleges):
 
 1. Copy `kuka_eki_hw_interface.dat` and `kuka_eki_hw_interface.src` files to `KRC:\R1\Program`.
-2. Copy `RobotStateServer.xml` and `RobotCommandServer.xml` to `C:\KRC\ROBOTER\Config\User\Common\EthernetKRL\`.
+2. Copy `EkiHwInterface.xml` to `C:\KRC\ROBOTER\Config\User\Common\EthernetKRL\`.
 
 ## 3. Configure the kuka_eki_hw_interface
 The **kuka_eki_hw_interface** needs to be configured in order to successfully communicate with EKI on the controller. Inside `/kuka_eki_hw_interface/test` and `/kuka_eki_hw_interface/config` in this repository is a set of `*.yaml` files. These configuration files may be loaded into a launch-file used to start the **kuka_eki_hw_interface** with correct parameters, such as:
@@ -56,7 +50,7 @@ Make sure that the line is added before the `kuka_eki_hw_interface` itself is lo
 ## 4. Testing
 At this point you are ready to test the EKI interface. Before the test, make sure that:
 
-* You have specified the `eki/state_server_address`, `eki/state_server_port`, `eki/command_server_address` and `eki/command_server_port` of the **kuka_eki_hw_interface** to correspond with the KRL files on the controller.
+* You have specified the `eki/robot_address` and `eki/robot_port` of the **kuka_eki_hw_interface** to correspond with the KRL files on the controller.
 * You have a launch-file loading the network parameters, robot description, kuka_hw_interface, hardware controller and controller joint names.
 
 The next steps describe how to launch the test file:

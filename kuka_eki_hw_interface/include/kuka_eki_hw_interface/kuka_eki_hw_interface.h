@@ -64,14 +64,10 @@ private:
 
   // EKI
   boost::asio::io_service ios_;
-  std::string state_server_address_;
-  std::string state_server_port_;
-  boost::asio::ip::udp::endpoint eki_state_endpoint_;
-  boost::asio::ip::udp::socket eki_state_socket_;
-  std::string command_server_address_;
-  std::string command_server_port_;
-  boost::asio::ip::udp::endpoint eki_command_endpoint_;
-  boost::asio::ip::udp::socket eki_command_socket_;
+  std::string eki_server_address_;
+  std::string eki_server_port_;
+  boost::asio::ip::udp::endpoint eki_server_endpoint_;
+  boost::asio::ip::udp::socket eki_server_socket_;
 
   // Timing
   ros::Duration control_period_;
@@ -82,10 +78,10 @@ private:
   hardware_interface::JointStateInterface joint_state_interface_;
   hardware_interface::PositionJointInterface position_joint_interface_;
 
-  // Private socket read/write member functions
-  bool socket_read_state(std::vector<double> &joint_position, std::vector<double> &joint_velocity,
-                         std::vector<double> &joint_effort);
-  bool socket_write_command(const std::vector<double> &joint_position);
+  // Private EKI socket read/write member functions
+  bool eki_read_state(std::vector<double> &joint_position, std::vector<double> &joint_velocity,
+                      std::vector<double> &joint_effort);
+  bool eki_write_command(const std::vector<double> &joint_position);
 
 public:
   KukaEkiHardwareInterface();

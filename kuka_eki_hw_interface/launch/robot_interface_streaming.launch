@@ -31,9 +31,8 @@
           continue with those).
 -->
 
-  <arg name="robot_ip" doc="IP of the EKI interface on the controller" />
-  <arg name="state_port" default="54600" doc="UDP port of the EKI state server on the robot" />
-  <arg name="command_port" default="54601" doc="UDP port of the EKI command server on the robot" />
+  <arg name="robot_ip" doc="IP of the EKI interface on the robot controller" />
+  <arg name="port" default="54600" doc="UDP port of the EKI interface on the robot controller" />
 
   <!-- name of the ros_control controllers (see below) -->
   <arg name="js_ctrlr" value="joint_state_controller" />
@@ -46,10 +45,8 @@
   <!-- the hardware_interface node expects its parameters in the 'eki' namespace -->
   <rosparam subst_value="true">
     eki:
-      state_server_address: "$(arg robot_ip)"
-      state_server_port: "$(arg state_port)"
-      command_server_address: "$(arg robot_ip)"
-      command_server_port: "$(arg command_port)"
+      robot_address: "$(arg robot_ip)"
+      robot_port: "$(arg port)"
   </rosparam>
 
   <!-- the ros_control controller configuration for the hardware_interface:

@@ -48,8 +48,7 @@ namespace kuka_eki_hw_interface
 KukaEkiHardwareInterface::KukaEkiHardwareInterface() :
     n_dof_(6), joint_position_(6, 0.0), joint_velocity_(6, 0.0), joint_effort_(6, 0.0),
     joint_position_command_(6, 0.0), joint_names_(6),
-    eki_state_socket_(ios_, boost::asio::ip::udp::endpoint(boost::asio::ip::udp::v4(), 0)),
-    eki_command_socket_(ios_, boost::asio::ip::udp::endpoint(boost::asio::ip::udp::v4(), 0))
+    eki_server_socket_(ios_, boost::asio::ip::udp::endpoint(boost::asio::ip::udp::v4(), 0))
 {
   // Get controller joint names
   if (!nh_.getParam("controller_joint_names", joint_names_))
@@ -86,14 +85,14 @@ KukaEkiHardwareInterface::~KukaEkiHardwareInterface()
 }
 
 
-bool KukaEkiHardwareInterface::socket_read_state(std::vector<double> &joint_position,
+bool KukaEkiHardwareInterface::eki_read_state(std::vector<double> &joint_position,
                                                  std::vector<double> &joint_velocity,
                                                  std::vector<double> &joint_effort)
 {
   static boost::array<char, 2048> in_buffer;
 
   // Read socket buffer
-  size_t len = eki_state_socket_.receive_from(boost::asio::buffer(in_buffer), eki_state_endpoint_);
+  size_t len = eki_server_socket_.receive_from(boost::asio::buffer(in_buffer), eki_server_endpoint_);
 
   // Update joint positions from XML packet (if received)
   if (len == 0)
@@ -129,7 +128,7 @@ bool KukaEkiHardwareInterface::socket_read_state(std::vector<double> &joint_posi
 }
 
 
-bool KukaEkiHardwareInterface::socket_write_command(const std::vector<double> &joint_position_command)
+bool KukaEkiHardwareInterface::eki_write_command(const std::vector<double> &joint_position_command)
 {
   TiXmlDocument xml_out;
   TiXmlElement* robot_command = new TiXmlElement("RobotCommand");
@@ -149,8 +148,8 @@ bool KukaEkiHardwareInterface::socket_write_command(const std::vector<double> &j
   xml_printer.SetStreamPrinting();  // no linebreaks
   xml_out.Accept(&xml_printer);
 
-  size_t len = eki_command_socket_.send_to(boost::asio::buffer(xml_printer.CStr(), xml_printer.Size()),
-                                           eki_command_endpoint_);
+  size_t len = eki_server_socket_.send_to(boost::asio::buffer(xml_printer.CStr(), xml_printer.Size()),
+                                          eki_server_endpoint_);
 
   return true;
 }
@@ -160,20 +159,15 @@ void KukaEkiHardwareInterface::start()
 {
   ROS_INFO_NAMED("kuka_eki_hw_interface", "Starting Kuka EKI hardware interface...");
 
-  // Start client to receive joint states
-  ROS_INFO_NAMED("kuka_eki_hw_interface", "... connecting to EKI joint state server...");
+  // Start client
+  ROS_INFO_NAMED("kuka_eki_hw_interface", "... connecting to robot's EKI server...");
   boost::asio::ip::udp::resolver resolver(ios_);
-  eki_state_endpoint_ = *resolver.resolve({boost::asio::ip::udp::v4(), state_server_address_, state_server_port_});
+  eki_server_endpoint_ = *resolver.resolve({boost::asio::ip::udp::v4(), eki_server_address_, eki_server_port_});
   boost::array<char, 1> ini_buf = { 0 };
-  eki_state_socket_.send_to(boost::asio::buffer(ini_buf), eki_state_endpoint_);  // initiate contact to start server
-
-  // Start client to send joint commands
-  ROS_INFO_NAMED("kuka_eki_hw_interface", "... connecting to EKI joint command server...");
-  eki_command_endpoint_ = *resolver.resolve({boost::asio::ip::udp::v4(), command_server_address_,
-                                             command_server_port_});
+  eki_server_socket_.send_to(boost::asio::buffer(ini_buf), eki_server_endpoint_);  // initiate contact to start server
 
   // Initialize joint_position_command_ from initial robot state (avoid bad (null) commands before controllers come up)
-  while (!socket_read_state(joint_position_, joint_velocity_, joint_effort_));
+  while (!eki_read_state(joint_position_, joint_velocity_, joint_effort_));
   joint_position_command_ = joint_position_;
 
   ROS_INFO_NAMED("kuka_eki_hw_interface", "... done. EKI hardware interface started!");
@@ -181,24 +175,19 @@ void KukaEkiHardwareInterface::start()
 
 void KukaEkiHardwareInterface::configure()
 {
-  const std::string param_state_addr = "eki/state_server_address";
-  const std::string param_state_port = "eki/state_server_port";
-  const std::string param_command_addr = "eki/command_server_address";
-  const std::string param_command_port = "eki/command_server_port";
+  const std::string param_addr = "eki/robot_address";
+  const std::string param_port = "eki/robot_port";
 
-  if (nh_.getParam(param_state_addr, state_server_address_) &&
-      nh_.getParam(param_state_port, state_server_port_) &&
-      nh_.getParam(param_command_addr, command_server_address_) &&
-      nh_.getParam(param_command_port, command_server_port_))
+  if (nh_.getParam(param_addr, eki_server_address_) &&
+      nh_.getParam(param_port, eki_server_port_))
   {
-    ROS_INFO_STREAM_NAMED("kuka_eki_hw_interface", "Configuring Kuka EKI hardware interface\n"
-                          " * State client on: " << state_server_address_ << ", " << state_server_port_ << "\n"
-                          " * Command client on : " << command_server_address_ << ", " << command_server_port_);
+    ROS_INFO_STREAM_NAMED("kuka_eki_hw_interface", "Configuring Kuka EKI hardware interface on: "
+                          << eki_server_address_ << ", " << eki_server_port_);
   }
   else
   {
-    std::string msg = "Failed to get EKI addresses/ports from parameter server (looking for '" + param_state_addr +
-                      "', '" + param_state_port + "', '" + param_command_addr + "', '" + param_command_port + "')";
+    std::string msg = "Failed to get EKI address/port from parameter server (looking for '" + param_addr +
+                      "', '" + param_port + "')";
     ROS_ERROR_STREAM(msg);
     throw std::runtime_error(msg);
   }
@@ -207,13 +196,13 @@ void KukaEkiHardwareInterface::configure()
 
 void KukaEkiHardwareInterface::read(const ros::Time &time, const ros::Duration &period)
 {
-  socket_read_state(joint_position_, joint_velocity_, joint_effort_);
+  eki_read_state(joint_position_, joint_velocity_, joint_effort_);
 }
 
 
 void KukaEkiHardwareInterface::write(const ros::Time &time, const ros::Duration &period)
 {
-  socket_write_command(joint_position_command_);
+  eki_write_command(joint_position_command_);
 }
 
 } // namespace kuka_eki_hw_interface
