@@ -74,9 +74,13 @@ bool KukaEkiHardwareInterface::eki_read_state(std::vector<double> &joint_positio
   in_buffer[len] = '\0';  // null-terminate data buffer for parsing (expects c-string)
   xml_in.Parse(in_buffer.data());
   TiXmlElement* robot_state = xml_in.FirstChildElement("RobotState");
+  if (!robot_state)
+    return false;
   TiXmlElement* pos = robot_state->FirstChildElement("Pos");
   TiXmlElement* vel = robot_state->FirstChildElement("Vel");
   TiXmlElement* eff = robot_state->FirstChildElement("Eff");
+  if (!pos || !vel || !eff)
+    return false;
 
   // Extract axis positions
   double joint_pos;  // [deg]
