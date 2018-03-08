@@ -55,7 +55,7 @@ class KukaEkiHardwareInterface : public hardware_interface::RobotHW
 private:
   ros::NodeHandle nh_;
 
-  static const unsigned int n_dof_ = 6;
+  const unsigned int n_dof_ = 6;
   std::vector<std::string> joint_names_;
   std::vector<double> joint_position_;
   std::vector<double> joint_velocity_;
@@ -63,11 +63,8 @@ private:
   std::vector<double> joint_position_command_;
 
   // EKI
-  boost::asio::io_service ios_;
   std::string eki_server_address_;
   std::string eki_server_port_;
-  boost::asio::ip::udp::endpoint eki_server_endpoint_;
-  boost::asio::ip::udp::socket eki_server_socket_;
 
   // Timing
   ros::Duration control_period_;
@@ -78,7 +75,15 @@ private:
   hardware_interface::JointStateInterface joint_state_interface_;
   hardware_interface::PositionJointInterface position_joint_interface_;
 
-  // Private EKI socket read/write member functions
+  // EKI socket read/write
+  const int eki_read_state_timeout_ = 5;  // [s]
+  boost::asio::io_service ios_;
+  boost::asio::deadline_timer deadline_;
+  boost::asio::ip::udp::endpoint eki_server_endpoint_;
+  boost::asio::ip::udp::socket eki_server_socket_;
+  void eki_check_read_state_deadline();
+  static void eki_handle_receive(const boost::system::error_code &ec, size_t length,
+                                 boost::system::error_code* out_ec, size_t* out_length);
   bool eki_read_state(std::vector<double> &joint_position, std::vector<double> &joint_velocity,
                       std::vector<double> &joint_effort);
   bool eki_write_command(const std::vector<double> &joint_position);
@@ -88,8 +93,8 @@ public:
   KukaEkiHardwareInterface();
   ~KukaEkiHardwareInterface();
 
-  void start();
   void init();
+  void start();
   void read(const ros::Time &time, const ros::Duration &period);
   void write(const ros::Time &time, const ros::Duration &period);
 };

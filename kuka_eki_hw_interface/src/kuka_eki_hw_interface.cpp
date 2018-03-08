@@ -32,8 +32,9 @@
 // Author: Brett Hemes (3M) <brhemes@mmm.com>
 
 
-#include <boost/asio.hpp>
 #include <boost/array.hpp>
+#include <boost/bind.hpp>
+#include <boost/date_time/posix_time/posix_time_types.hpp>
 
 #include <angles/angles.h>
 
@@ -46,7 +47,7 @@ namespace kuka_eki_hw_interface
 {
 
 KukaEkiHardwareInterface::KukaEkiHardwareInterface() : joint_position_(n_dof_, 0.0), joint_velocity_(n_dof_, 0.0),
-    joint_effort_(n_dof_, 0.0), joint_position_command_(n_dof_, 0.0), joint_names_(n_dof_),
+    joint_effort_(n_dof_, 0.0), joint_position_command_(n_dof_, 0.0), joint_names_(n_dof_), deadline_(ios_),
     eki_server_socket_(ios_, boost::asio::ip::udp::endpoint(boost::asio::ip::udp::v4(), 0))
 {
 
@@ -56,14 +57,46 @@ KukaEkiHardwareInterface::KukaEkiHardwareInterface() : joint_position_(n_dof_, 0
 KukaEkiHardwareInterface::~KukaEkiHardwareInterface() {}
 
 
+void KukaEkiHardwareInterface::eki_check_read_state_deadline()
+{
+  // Check if deadline has already passed
+  if (deadline_.expires_at() <= boost::asio::deadline_timer::traits_type::now())
+  {
+    eki_server_socket_.cancel();
+    deadline_.expires_at(boost::posix_time::pos_infin);
+  }
+
+  // Sleep until deadline exceeded
+  deadline_.async_wait(boost::bind(&KukaEkiHardwareInterface::eki_check_read_state_deadline, this));
+}
+
+
+void KukaEkiHardwareInterface::eki_handle_receive(const boost::system::error_code &ec, size_t length,
+                                                  boost::system::error_code* out_ec, size_t* out_length)
+{
+  *out_ec = ec;
+  *out_length = length;
+}
+
+
 bool KukaEkiHardwareInterface::eki_read_state(std::vector<double> &joint_position,
-                                                 std::vector<double> &joint_velocity,
-                                                 std::vector<double> &joint_effort)
+                                              std::vector<double> &joint_velocity,
+                                              std::vector<double> &joint_effort)
 {
   static boost::array<char, 2048> in_buffer;
 
-  // Read socket buffer
-  size_t len = eki_server_socket_.receive_from(boost::asio::buffer(in_buffer), eki_server_endpoint_);
+  // Read socket buffer (with timeout)
+  // Based off of Boost documentation example: doc/html/boost_asio/example/timeouts/blocking_udp_client.cpp
+  deadline_.expires_from_now(boost::posix_time::seconds(eki_read_state_timeout_));  // set deadline
+  boost::system::error_code ec = boost::asio::error::would_block;
+  size_t len = 0;
+  eki_server_socket_.async_receive(boost::asio::buffer(in_buffer),
+                                   boost::bind(&KukaEkiHardwareInterface::eki_handle_receive, _1, _2, &ec, &len));
+  do
+    ios_.run_one();
+  while (ec == boost::asio::error::would_block);
+  if (ec)
+    return false;
 
   // Update joint positions from XML packet (if received)
   if (len == 0)
@@ -130,25 +163,6 @@ bool KukaEkiHardwareInterface::eki_write_command(const std::vector<double> &join
 }
 
 
-void KukaEkiHardwareInterface::start()
-{
-  ROS_INFO_NAMED("kuka_eki_hw_interface", "Starting Kuka EKI hardware interface...");
-
-  // Start client
-  ROS_INFO_NAMED("kuka_eki_hw_interface", "... connecting to robot's EKI server...");
-  boost::asio::ip::udp::resolver resolver(ios_);
-  eki_server_endpoint_ = *resolver.resolve({boost::asio::ip::udp::v4(), eki_server_address_, eki_server_port_});
-  boost::array<char, 1> ini_buf = { 0 };
-  eki_server_socket_.send_to(boost::asio::buffer(ini_buf), eki_server_endpoint_);  // initiate contact to start server
-
-  // Initialize joint_position_command_ from initial robot state (avoid bad (null) commands before controllers come up)
-  while (!eki_read_state(joint_position_, joint_velocity_, joint_effort_));
-  joint_position_command_ = joint_position_;
-
-  ROS_INFO_NAMED("kuka_eki_hw_interface", "... done. EKI hardware interface started!");
-}
-
-
 void KukaEkiHardwareInterface::init()
 {
   // Get controller joint names from parameter server
@@ -198,9 +212,46 @@ void KukaEkiHardwareInterface::init()
 }
 
 
+void KukaEkiHardwareInterface::start()
+{
+  ROS_INFO_NAMED("kuka_eki_hw_interface", "Starting Kuka EKI hardware interface...");
+
+  // Start client
+  ROS_INFO_NAMED("kuka_eki_hw_interface", "... connecting to robot's EKI server...");
+  boost::asio::ip::udp::resolver resolver(ios_);
+  eki_server_endpoint_ = *resolver.resolve({boost::asio::ip::udp::v4(), eki_server_address_, eki_server_port_});
+  boost::array<char, 1> ini_buf = { 0 };
+  eki_server_socket_.send_to(boost::asio::buffer(ini_buf), eki_server_endpoint_);  // initiate contact to start server
+
+  // Start persistent actor to check for eki_read_state timeouts
+  deadline_.expires_at(boost::posix_time::pos_infin);  // do nothing unit a read is invoked (deadline_ = +inf)
+  eki_check_read_state_deadline();
+
+  // Initialize joint_position_command_ from initial robot state (avoid bad (null) commands before controllers come up)
+  if (!eki_read_state(joint_position_, joint_velocity_, joint_effort_))
+  {
+    std::string msg = "Failed to read from robot EKI server within alloted time of "
+                      + std::to_string(eki_read_state_timeout_) + " seconds.  Make sure eki_hw_interface is running "
+                      "on the robot controller and all configurations are correct.";
+    ROS_ERROR_STREAM(msg);
+    throw std::runtime_error(msg);
+  }
+  joint_position_command_ = joint_position_;
+
+  ROS_INFO_NAMED("kuka_eki_hw_interface", "... done. EKI hardware interface started!");
+}
+
+
 void KukaEkiHardwareInterface::read(const ros::Time &time, const ros::Duration &period)
 {
-  eki_read_state(joint_position_, joint_velocity_, joint_effort_);
+  if (!eki_read_state(joint_position_, joint_velocity_, joint_effort_))
+  {
+    std::string msg = "Failed to read from robot EKI server within alloted time of "
+                      + std::to_string(eki_read_state_timeout_) + " seconds.  Make sure eki_hw_interface is running "
+                      "on the robot controller and all configurations are correct.";
+    ROS_ERROR_STREAM(msg);
+    throw std::runtime_error(msg);
+  }
 }
 
 
