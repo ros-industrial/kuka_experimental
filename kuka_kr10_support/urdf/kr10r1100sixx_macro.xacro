@@ -8,7 +8,7 @@
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
-          <mesh filename="package://kuka_kr10_support/meshes/kr10r1100sixx/visual/base_link.dae" />
+          <mesh filename="package://kuka_kr10_support/meshes/kr10r1100sixx/visual/base_link.stl" />
         </geometry>
         <xacro:material_kuka_black />
       </visual>
@@ -23,7 +23,7 @@
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
-          <mesh filename="package://kuka_kr10_support/meshes/kr10r1100sixx/visual/link_1.dae" />
+          <mesh filename="package://kuka_kr10_support/meshes/kr10r1100sixx/visual/link_1.stl" />
         </geometry>
         <xacro:material_kuka_orange />
       </visual>
@@ -38,7 +38,7 @@
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
-          <mesh filename="package://kuka_kr10_support/meshes/kr10r1100sixx/visual/link_2.dae"/>
+          <mesh filename="package://kuka_kr10_support/meshes/kr10r1100sixx/visual/link_2.stl"/>
         </geometry>
         <xacro:material_kuka_orange />
       </visual>
@@ -53,7 +53,7 @@
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
-          <mesh filename="package://kuka_kr10_support/meshes/kr10r1100sixx/visual/link_3.dae" />
+          <mesh filename="package://kuka_kr10_support/meshes/kr10r1100sixx/visual/link_3.stl" />
         </geometry>
         <xacro:material_kuka_orange />
       </visual>
@@ -68,7 +68,7 @@
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
-          <mesh filename="package://kuka_kr10_support/meshes/kr10r1100sixx/visual/link_4.dae" />
+          <mesh filename="package://kuka_kr10_support/meshes/kr10r1100sixx/visual/link_4.stl" />
         </geometry>
         <xacro:material_kuka_orange />
       </visual>
@@ -83,7 +83,7 @@
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
-          <mesh filename="package://kuka_kr10_support/meshes/kr10r1100sixx/visual/link_5.dae" />
+          <mesh filename="package://kuka_kr10_support/meshes/kr10r1100sixx/visual/link_5.stl" />
         </geometry>
         <xacro:material_kuka_orange />
       </visual>
@@ -98,7 +98,7 @@
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
-          <mesh filename="package://kuka_kr10_support/meshes/kr10r1100sixx/visual/link_6.dae" />
+          <mesh filename="package://kuka_kr10_support/meshes/kr10r1100sixx/visual/link_6.stl" />
         </geometry>
         <xacro:material_kuka_pedestal />
       </visual>
