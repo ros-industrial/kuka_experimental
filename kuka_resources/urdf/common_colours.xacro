@@ -105,4 +105,7 @@
 
   <!-- RAL 9002 - gray white  -->
   <xacro:property name="colour_kuka_ral_gray_white"       value="${215/255} ${213/255} ${203/255} 1.0" />
+
+  <!-- RAL 9010 - pure white  -->
+  <xacro:property name="colour_kuka_ral_pure_white"       value="${241/255} ${236/255} ${255/255} 1.0" />
 </robot>
