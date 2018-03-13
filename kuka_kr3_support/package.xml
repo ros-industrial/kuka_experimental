@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>kuka_kr3_support</name>
+  <version>0.1.0</version>
+  <description>
+    <p>
+      ROS-Industrial support for the KUKA KR 3 (and variants).
+    </p>
+    <p>
+      This package contains configuration data, 3D models and launch files
+      for the KUKA KR 3 manipulators. This currently includes the R540 only.
+    </p>
+    <p><b>Specifications</b>:</p>
+    <ul>
+      <li>KR 3 R540 - Default</li>
+    </ul>
+    <p>
+      Joint limits and maximum joint velocities are based on the information
+      in the <em>KUKA Roboter GmbH - KR 3 AGILUS Specification</em> version
+      <em>Spez KR 3 AGILUS V3, 21.03.2017</em>.
+      All urdfs are based on the default motion and joint velocity limits,
+      unless noted otherwise (ie: no support for high speed joints,
+      extended / limited motion ranges or other options).
+    </p>
+    <p>
+      Before using any of the configuration files and / or meshes included
+      in this package, be sure to check they are correct for the particular
+      robot model and configuration you intend to use them with.
+    </p>
+  </description>
+  <author>Brett Hemes (3M)</author>
+  <maintainer email="g.a.vanderhoorn@tudelft.nl">G.A. vd. Hoorn (TU Delft Robotics Institute)</maintainer>
+  <license>BSD</license>
+
+  <url type="website">http://wiki.ros.org/kuka_kr3_support</url>
+  <url type="bugtracker">https://github.com/ros-industrial/kuka_experimental/issues</url>
+  <url type="repository">https://github.com/ros-industrial/kuka_experimental</url>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <test_depend>roslaunch</test_depend>
+
+  <exec_depend>industrial_robot_client</exec_depend>
+  <exec_depend>joint_state_publisher</exec_depend>
+  <exec_depend>kuka_resources</exec_depend>
+  <exec_depend>robot_state_publisher</exec_depend>
+  <exec_depend>rviz</exec_depend>
+  <exec_depend>xacro</exec_depend>
+
+  <export>
+    <architecture_independent/>
+  </export>
+</package>
