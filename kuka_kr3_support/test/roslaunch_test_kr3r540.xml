@@ -1,0 +1,10 @@
+<?xml version="1.0" ?>
+<launch>
+  <group ns="load_kr3r540__">
+    <include file="$(find kuka_kr3_support)/launch/load_kr3r540.launch"/>
+  </group>
+
+  <group ns="test_kr3r540__">
+    <include file="$(find kuka_kr3_support)/launch/test_kr3r540.launch"/>
+  </group>
+</launch>
