@@ -6,7 +6,7 @@
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
-          <mesh filename="package://kuka_lbr_iiwa_support/meshes/lbr_iiwa_14_r820/visual/base_link.dae" />
+          <mesh filename="package://kuka_lbr_iiwa_support/meshes/lbr_iiwa_14_r820/visual/base_link.stl" />
         </geometry>
       </visual>
       <collision>
@@ -20,7 +20,7 @@
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
-          <mesh filename="package://kuka_lbr_iiwa_support/meshes/lbr_iiwa_14_r820/visual/link_1.dae" />
+          <mesh filename="package://kuka_lbr_iiwa_support/meshes/lbr_iiwa_14_r820/visual/link_1.stl" />
         </geometry>
       </visual>
       <collision>
@@ -34,7 +34,7 @@
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
-          <mesh filename="package://kuka_lbr_iiwa_support/meshes/lbr_iiwa_14_r820/visual/link_2.dae" />
+          <mesh filename="package://kuka_lbr_iiwa_support/meshes/lbr_iiwa_14_r820/visual/link_2.stl" />
         </geometry>
       </visual>
       <collision>
@@ -48,7 +48,7 @@
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
-          <mesh filename="package://kuka_lbr_iiwa_support/meshes/lbr_iiwa_14_r820/visual/link_3.dae" />
+          <mesh filename="package://kuka_lbr_iiwa_support/meshes/lbr_iiwa_14_r820/visual/link_3.stl" />
         </geometry>
       </visual>
       <collision>
@@ -62,7 +62,7 @@
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
-          <mesh filename="package://kuka_lbr_iiwa_support/meshes/lbr_iiwa_14_r820/visual/link_4.dae" />
+          <mesh filename="package://kuka_lbr_iiwa_support/meshes/lbr_iiwa_14_r820/visual/link_4.stl" />
         </geometry>
       </visual>
       <collision>
@@ -76,7 +76,7 @@
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
-          <mesh filename="package://kuka_lbr_iiwa_support/meshes/lbr_iiwa_14_r820/visual/link_5.dae" />
+          <mesh filename="package://kuka_lbr_iiwa_support/meshes/lbr_iiwa_14_r820/visual/link_5.stl" />
         </geometry>
       </visual>
       <collision>
@@ -90,7 +90,7 @@
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
-          <mesh filename="package://kuka_lbr_iiwa_support/meshes/lbr_iiwa_14_r820/visual/link_6.dae" />
+          <mesh filename="package://kuka_lbr_iiwa_support/meshes/lbr_iiwa_14_r820/visual/link_6.stl" />
         </geometry>
       </visual>
       <collision>
@@ -104,7 +104,7 @@
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
-          <mesh filename="package://kuka_lbr_iiwa_support/meshes/lbr_iiwa_14_r820/visual/link_7.dae" />
+          <mesh filename="package://kuka_lbr_iiwa_support/meshes/lbr_iiwa_14_r820/visual/link_7.stl" />
         </geometry>
       </visual>
       <collision>
@@ -119,56 +119,56 @@
 
     <!-- joint list -->
     <joint name="${prefix}joint_a1" type="revolute">
-      <origin xyz="0 0 0" rpy="0 0 0" />
+      <origin xyz="0 0 0.36" rpy="0 0 0" />
       <parent link="${prefix}base_link" />
       <child link="${prefix}link_1" />
       <axis xyz="0 0 1" />
-      <limit lower="-2.9668" upper="2.9668" effort="0" velocity="1.4834" />
+      <limit lower="-2.967" upper="2.967" effort="0" velocity="1.4835" />
     </joint>
     <joint name="${prefix}joint_a2" type="revolute">
-      <origin xyz="-0.00043624 0 0.36" rpy="0 0 0" />
+      <origin xyz="0 0 0" rpy="0 0 0" />
       <parent link="${prefix}link_1" />
       <child link="${prefix}link_2" />
       <axis xyz="0 1 0" />
-      <limit lower="-2.0942" upper="2.0942" effort="0" velocity="1.4834" />
+      <limit lower="-2.094" upper="2.094" effort="0" velocity="1.4835" />
     </joint>
     <joint name="${prefix}joint_a3" type="revolute">
-      <origin xyz="0 0 0" rpy="0 0 0" />
+      <origin xyz="0 0 0.42" rpy="0 0 0" />
       <parent link="${prefix}link_2" />
       <child link="${prefix}link_3" />
       <axis xyz="0 0 1" />
-      <limit lower="-2.9668" upper="2.9668" effort="0" velocity="1.7452" />
+      <limit lower="-2.967" upper="2.967" effort="0" velocity="1.7453" />
     </joint>
     <joint name="${prefix}joint_a4" type="revolute">
-      <origin xyz="0.00043624 0 0.42" rpy="0 0 0" />
+      <origin xyz="0 0 0" rpy="0 0 0" />
       <parent link="${prefix}link_3" />
       <child link="${prefix}link_4" />
       <axis xyz="0 -1 0" />
-      <limit lower="-2.0942" upper="2.0942" effort="0" velocity="1.3089" />
+      <limit lower="-2.094" upper="2.094" effort="0" velocity="1.3089" />
     </joint>
     <joint name="${prefix}joint_a5" type="revolute">
-      <origin xyz="0 0 0" rpy="0 0 0" />
+      <origin xyz="0 0 0.40" rpy="0 0 0" />
       <parent link="${prefix}link_4" />
       <child link="${prefix}link_5" />
       <axis xyz="0 0 1" />
-      <limit lower="-2.9668" upper="2.9668" effort="0" velocity="2.2688" />
+      <limit lower="-2.967" upper="2.967" effort="0" velocity="2.2689" />
     </joint>
     <joint name="${prefix}joint_a6" type="revolute">
-      <origin xyz="0 0 0.4" rpy="0 0 0" />
+      <origin xyz="0 0 0" rpy="0 0 0" />
       <parent link="${prefix}link_5" />
       <child link="${prefix}link_6" />
       <axis xyz="0 1 0" />
-      <limit lower="-2.0942" upper="2.0942" effort="0" velocity="2.356" />
+      <limit lower="-2.094" upper="2.094" effort="0" velocity="2.356" />
     </joint>
     <joint name="${prefix}joint_a7" type="revolute">
-      <origin xyz="0 0 0" rpy="0 0 0" />
+      <origin xyz="0 0 0.126" rpy="0 0 0" />
       <parent link="${prefix}link_6" />
       <child link="${prefix}link_7" />
       <axis xyz="0 0 1" />
-      <limit lower="-3.0541" upper="3.0541" effort="0" velocity="2.356" />
+      <limit lower="-3.054" upper="3.054" effort="0" velocity="2.356" />
     </joint>
     <joint name="${prefix}joint_a7-tool0" type="fixed">
-      <origin xyz="0 0 0.126" rpy="0 0 0" />
+      <origin xyz="0 0 0" rpy="0 0 0" />
       <parent link="${prefix}link_7" />
       <child link="${prefix}tool0" />
       <axis xyz="0 0 0" />
