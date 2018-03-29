@@ -175,6 +175,7 @@ void KukaEkiHardwareInterface::init()
   // Get EKI parameters from parameter server
   const std::string param_addr = "eki/robot_address";
   const std::string param_port = "eki/robot_port";
+  const std::string param_socket_timeout = "eki/socket_timeout";
 
   if (nh_.getParam(param_addr, eki_server_address_) &&
       nh_.getParam(param_port, eki_server_port_))
@@ -188,6 +189,18 @@ void KukaEkiHardwareInterface::init()
                       "', '" + param_port + "')";
     ROS_ERROR_STREAM(msg);
     throw std::runtime_error(msg);
+  }
+
+  if (nh_.getParam(param_socket_timeout, eki_read_state_timeout_))
+  {
+    ROS_INFO_STREAM_NAMED("kuka_eki_hw_interface", "Configuring Kuka EKI hardware interface socket timeout to "
+                          << eki_read_state_timeout_ << " seconds");
+  }
+  else
+  {
+    ROS_INFO_STREAM_NAMED("kuka_eki_hw_interface", "Failed to get EKI socket timeout from parameter server (looking "
+                          "for '" + param_socket_timeout + "'), defaulting to " +
+                          std::to_string(eki_read_state_timeout_)  + " seconds");
   }
 
   // Create ros_control interfaces (joint state and position joint for all dof's)

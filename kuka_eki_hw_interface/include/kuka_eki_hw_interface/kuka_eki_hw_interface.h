@@ -76,7 +76,7 @@ private:
   hardware_interface::PositionJointInterface position_joint_interface_;
 
   // EKI socket read/write
-  const int eki_read_state_timeout_ = 5;  // [s]
+  int eki_read_state_timeout_ = 5;  // [s]; settable by parameter (default = 5)
   boost::asio::io_service ios_;
   boost::asio::deadline_timer deadline_;
   boost::asio::ip::udp::endpoint eki_server_endpoint_;
