@@ -8,14 +8,14 @@
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
-          <mesh filename="package://kuka_kr10_support/meshes/kr10r1100sixx/visual/base.stl" />
+          <mesh filename="package://kuka_kr10_support/meshes/kr10r1100sixx/visual/base_link.stl" />
         </geometry>
         <xacro:material_kuka_black />
       </visual>
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
-          <mesh filename="package://kuka_kr10_support/meshes/kr10r1100sixx/collision/base.stl" />
+          <mesh filename="package://kuka_kr10_support/meshes/kr10r1100sixx/collision/base_link.stl" />
         </geometry>
       </collision>
     </link>
