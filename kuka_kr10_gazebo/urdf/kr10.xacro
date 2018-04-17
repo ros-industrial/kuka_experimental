@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<robot name="kuka_kr10_gazebo" xmlns:xacro="http://ros.org/wiki/xacro">
+<robot name="kuka_kr10_gazebo" xmlns:xacro="http://wiki.ros.org/xacro">
   <!-- kr10 -->
   <xacro:include filename="$(find kuka_kr10_gazebo)/urdf/kr10_macro.xacro"/>
 
