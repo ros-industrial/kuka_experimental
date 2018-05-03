@@ -1,0 +1,69 @@
+<ETHERNETKRL>
+   <CONFIGURATION>
+      <EXTERNAL>
+         <TYPE>Client</TYPE>                  <!-- Users connect as clients -->
+      </EXTERNAL>
+      <INTERNAL>
+         <ENVIRONMENT>Program</ENVIRONMENT>   <!-- Server run via robot interpreter -->
+         <BUFFERING Limit="512" />            <!-- Allow buffering of up to 512 messages (system max) -->
+         <ALIVE Set_Flag="1" />               <!-- Use $flag[1] to indicate alive/good connection status -->
+         <IP>address.of.robot.controller</IP> <!-- IP address for EKI interface on robot controller (KRC) -->
+         <PORT>54600</PORT>                   <!-- Port of EKI interface on robot controller (in [54600, 54615]) -->
+         <PROTOCOL>UDP</PROTOCOL>             <!-- Use UDP protocol -->
+      </INTERNAL>
+   </CONFIGURATION>
+
+   <!-- Configured XML structure for data reception (external client to robot)
+        <RobotCommand>
+           <Pos A1="..." A2="..." A3="..." A4="..." A5="..." A6="...">
+           </Pos>
+        </RobotCommand>
+   -->
+   <RECEIVE>
+      <XML>
+         <!-- Joint position command -->
+         <ELEMENT Tag="RobotCommand/Pos/@A1" Type="REAL" />
+         <ELEMENT Tag="RobotCommand/Pos/@A2" Type="REAL" />
+         <ELEMENT Tag="RobotCommand/Pos/@A3" Type="REAL" />
+         <ELEMENT Tag="RobotCommand/Pos/@A4" Type="REAL" />
+         <ELEMENT Tag="RobotCommand/Pos/@A5" Type="REAL" />
+         <ELEMENT Tag="RobotCommand/Pos/@A6" Type="REAL" />
+      </XML>
+   </RECEIVE>
+
+   <!-- Configured XML structure for data transmission (robot to external client)
+        <RobotState>
+           <Pos A1="..." A2="..." A3="..." A4="..." A5="..." A6="...">
+           </Pos>
+           <Vel A1="..." A2="..." A3="..." A4="..." A5="..." A6="...">
+           </Vel>
+           <Eff A1="..." A2="..." A3="..." A4="..." A5="..." A6="...">
+           </Eff>
+        </RobotState>
+   -->
+   <SEND>
+      <XML>
+         <!-- Joint state positions -->
+         <ELEMENT Tag="RobotState/Pos/@A1"/>
+         <ELEMENT Tag="RobotState/Pos/@A2"/>
+         <ELEMENT Tag="RobotState/Pos/@A3"/>
+         <ELEMENT Tag="RobotState/Pos/@A4"/>
+         <ELEMENT Tag="RobotState/Pos/@A5"/>
+         <ELEMENT Tag="RobotState/Pos/@A6"/>
+         <!-- Joint state velocities -->
+         <ELEMENT Tag="RobotState/Vel/@A1"/>
+         <ELEMENT Tag="RobotState/Vel/@A2"/>
+         <ELEMENT Tag="RobotState/Vel/@A3"/>
+         <ELEMENT Tag="RobotState/Vel/@A4"/>
+         <ELEMENT Tag="RobotState/Vel/@A5"/>
+         <ELEMENT Tag="RobotState/Vel/@A6"/>
+         <!-- Joint state efforts (torques) -->
+         <ELEMENT Tag="RobotState/Eff/@A1"/>
+         <ELEMENT Tag="RobotState/Eff/@A2"/>
+         <ELEMENT Tag="RobotState/Eff/@A3"/>
+         <ELEMENT Tag="RobotState/Eff/@A4"/>
+         <ELEMENT Tag="RobotState/Eff/@A5"/>
+         <ELEMENT Tag="RobotState/Eff/@A6"/>
+      </XML>
+   </SEND>
+</ETHERNETKRL>
