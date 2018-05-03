@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<launch>
+<!-- This launch file provides a ROS-Industrial compatible launch wrapper
+     around the KUKA EKI ros_control based hardware interface node. It is
+     intended to expose the same interfaces (services, topics) with similar
+     semantics as a typical (industrial_robot_client-based) ROS-Industrial
+     driver.
+     Remapping of the Action server topics subscribed to by the joint
+     trajectory controller of ros_control to those described in the
+     ROS-Industrial driver specification as well as use of the typical
+     parameters used by ROS-Industrial robot driver launch files is included.
+     Identical to other ROS-Industrial driver base launch files, it's the users
+     responsibility to:
+       1. set the 'controller_joint_names' parameter (prior to starting or
+          including this launch file)
+       2. set the 'robot_description' parameter (prior to starting or including
+          this launch file)
+       3. run an instance of robot_state_publisher
+     For points 1 and 2 (and for simple setups), users are encouraged to use
+     the 'launch/load_X.launch' and the 'config/joint_names_X' files provided
+     with the various robot support packages for KUKAs in the
+     ros-industrial/kuka_experimental repository.
+     Notes:
+       1. remapping the action topics makes the joint_trajectory_controller
+          incompatible with the rqt_joint_trajectory_controller package
+       2. the hardware interface node will throw an exception and exit if
+          it does not find either the 'robot_description' or the
+          'controller_joint_names' parameter on the server. THIS BEHAVIOUR IS
+          DIFFERENT FROM WHAT THE GENERIC NODES IN INDUSTRIAL_ROBOT_CLIENT DO
+          IN THAT CASE (they will use a default set of joint names and
+          continue with those).
+-->
+
+  <arg name="robot_ip" doc="IP of the EKI interface on the robot controller" />
+  <arg name="port" default="54600" doc="UDP port of the EKI interface on the robot controller" />
+
+  <!-- name of the ros_control controllers (see below) -->
+  <arg name="js_ctrlr" value="joint_state_controller" />
+  <arg name="pos_ctrlr_name" value="position_trajectory_controller" />
+
+  <!-- other ROS-Industrial nodes may expect the 'robot_ip_address' parameter
+       to be present -->
+  <param name="robot_ip_address" type="str" value="$(arg robot_ip)" />
+
+  <!-- the hardware_interface node expects its parameters in the 'eki' namespace -->
+  <rosparam subst_value="true">
+    eki:
+      robot_address: "$(arg robot_ip)"
+      robot_port: "$(arg port)"
+  </rosparam>
+
+  <!-- the ros_control controller configuration for the hardware_interface:
+       this is typically loaded from the 'config/hardware_controller.yaml' file,
+       but is recreated here to ensure a consistent configuration when using
+       this convenience launch file -->
+  <rosparam subst_value="true">
+    $(arg js_ctrlr):
+      type: joint_state_controller/JointStateController
+      publish_rate: 50
+
+    # NOTE: these joint names MUST correspond to those specified in the
+    #       'controller_joint_names' parameter (typically loaded by the
+    #       calling launch file)
+    $(arg pos_ctrlr_name):
+      type: "position_controllers/JointTrajectoryController"
+      joints:
+        - joint_a1
+        - joint_a2
+        - joint_a3
+        - joint_a4
+        - joint_a5
+        - joint_a6
+
+      state_publish_rate: 50 # Defaults to 50
+      action_monitor_rate: 20 # Defaults to 20
+  </rosparam>
+
+  <!-- main 'driver node': the EKI hardware interface -->
+  <node name="kuka_eki_hw_interface" pkg="kuka_eki_hw_interface" type="kuka_eki_hw_interface_node" respawn="false">
+    <!-- remap topics to conform to ROS-I specifications -->
+    <remap from="$(arg pos_ctrlr_name)/follow_joint_trajectory" to="/joint_trajectory_action" />
+    <remap from="$(arg pos_ctrlr_name)/state" to="/feedback_states" />
+    <remap from="$(arg pos_ctrlr_name)/command" to="/joint_path_command"/>
+  </node>
+
+  <!-- spawn the actual controllers: note that the names of the controllers must
+       correspond to those specified in the rosparam snippet above -->
+  <node name="controller_spawner" pkg="controller_manager" type="spawner"
+    args="$(arg pos_ctrlr_name) $(arg js_ctrlr) --shutdown-timeout 1"
+    respawn="false" output="screen" />
+</launch>

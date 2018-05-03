@@ -22,6 +22,7 @@
   <exec_depend>kuka_kr6_support</exec_depend>
   <exec_depend>kuka_lbr_iiwa_support</exec_depend>
   <exec_depend>kuka_resources</exec_depend>
+  <exec_depend>kuka_eki_hw_interface</exec_depend>
   <exec_depend>kuka_rsi_hw_interface</exec_depend>
   <exec_depend>kuka_rsi_simulator</exec_depend>
 
