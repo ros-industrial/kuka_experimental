@@ -3,7 +3,7 @@
   <xacro:include filename="$(find kuka_resources)/urdf/common_constants.xacro"/>
   <xacro:include filename="$(find kuka_resources)/urdf/common_materials.xacro"/>
 
-  <xacro:macro name="kuka_kr210l150" params="prefix">
+  <xacro:macro name="kuka_kr210l150-2" params="prefix">
     <!-- links -->
     <link name="${prefix}base_link">
       <visual>
@@ -129,11 +129,11 @@
       <limit lower="${radians(-61)}" upper="${radians(90)}" effort="0" velocity="${radians(84)}"/>
     </joint>
     <joint name="${prefix}joint_a3" type="revolute">
-      <origin xyz="0 0 1.25" rpy="0 ${radians(90)} 0"/>
+      <origin xyz="0 0 1.25" rpy="0 0 0"/>
       <parent link="${prefix}link_2"/>
       <child link="${prefix}link_3"/>
       <axis xyz="0 1 0"/>
-      <limit lower="${radians(-219)}" upper="${radians(65)}" effort="0" velocity="${radians(81)}"/>
+      <limit lower="${radians(-119)}" upper="${radians(155)}" effort="0" velocity="${radians(81)}"/>
     </joint>
     <joint name="${prefix}joint_a4" type="revolute">
       <origin xyz="0.055 0 0" rpy="0 0 0"/>
