@@ -1,8 +1,11 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://wiki.ros.org/xacro">
-  <xacro:include filename="$(find kuka_resources)/urdf/common_constants.xacro"/>
   <xacro:include filename="$(find kuka_resources)/urdf/common_materials.xacro"/>
+  <xacro:include filename="$(find kuka_kr210_support)/urdf/kr210_variants_macro.xacro"/>
 
+  <!-- for the KR210 L150, use ""; for the KR210 L150-2, use "_2" -->
+  <xacro:arg name="variant" default="" />
+  
   <xacro:macro name="kuka_kr210l150" params="prefix">
     <!-- links -->
     <link name="${prefix}base_link">
@@ -128,13 +131,7 @@
       <axis xyz="0 1 0"/>
       <limit lower="${radians(-61)}" upper="${radians(90)}" effort="0" velocity="${radians(84)}"/>
     </joint>
-    <joint name="${prefix}joint_a3" type="revolute">
-      <origin xyz="0 0 1.25" rpy="0 ${radians(90)} 0"/>
-      <parent link="${prefix}link_2"/>
-      <child link="${prefix}link_3"/>
-      <axis xyz="0 1 0"/>
-      <limit lower="${radians(-219)}" upper="${radians(65)}" effort="0" velocity="${radians(81)}"/>
-    </joint>
+    <xacro:kuka_kr210l150_a3 prefix="${prefix}" variant="$(arg variant)"/>
     <joint name="${prefix}joint_a4" type="revolute">
       <origin xyz="0.055 0 0" rpy="0 0 0"/>
       <parent link="${prefix}link_3"/>
