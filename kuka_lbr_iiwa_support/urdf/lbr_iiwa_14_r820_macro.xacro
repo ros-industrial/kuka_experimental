@@ -114,24 +114,7 @@
 
       </collision>
     </link>
-<<<<<<< HEAD
     <xacro:kuka_lbr_iiwa_flange_link prefix="${prefix}" flange_type="$(arg flange_type)"/>
-=======
-    <link name="${prefix}link_7">
-      <visual>
-        <origin xyz="0 0 0" rpy="0 0 0" />
-        <geometry>
-          <mesh filename="package://kuka_lbr_iiwa_support/meshes/lbr_iiwa_14_r820/visual/link_7.stl" />
-        </geometry>
-      </visual>
-      <collision>
-        <origin xyz="0 0 0" rpy="0 0 0" />
-        <geometry>
-          <mesh filename="package://kuka_lbr_iiwa_support/meshes/lbr_iiwa_14_r820/collision/link_7.stl" />
-        </geometry>
-      </collision>
-    </link>
->>>>>>> 90d28ba4e9541f3ba9392e667ebb19260d333760
     <link name="${prefix}tool0" />
     <!-- end of link list -->
 
@@ -177,16 +160,6 @@
       <child link="${prefix}link_6" />
       <axis xyz="0 1 0" />
       <limit lower="${radians(-120)}" upper="${radians(120)}" effort="0" velocity="${radians(-135)}" />
-<<<<<<< HEAD
-=======
-    </joint>
-    <joint name="${prefix}joint_a7" type="revolute">
-      <origin xyz="0 0 0.126" rpy="0 0 0" />
-      <parent link="${prefix}link_6" />
-      <child link="${prefix}link_7" />
-      <axis xyz="0 0 1" />
-      <limit lower="${radians(-175)}" upper="${radians(175)}" effort="0" velocity="${radians(135)}" />
->>>>>>> 90d28ba4e9541f3ba9392e667ebb19260d333760
     </joint>
     <xacro:kuka_lbr_iiwa_flange_joint prefix="${prefix}" flange_type="$(arg flange_type)"/>
     <joint name="${prefix}joint_a7-tool0" type="fixed">
