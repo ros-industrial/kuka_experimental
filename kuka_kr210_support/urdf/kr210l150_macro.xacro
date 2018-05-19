@@ -1,7 +1,6 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://wiki.ros.org/xacro">
   <xacro:include filename="$(find kuka_resources)/urdf/common_materials.xacro"/>
-  <xacro:include filename="$(find kuka_kr210_support)/urdf/kr210_variants_macro.xacro"/>
 
   <!-- for the KR210 L150, use ""; for the KR210 L150-2, use "_2" -->
   <xacro:arg name="variant" default="" />
