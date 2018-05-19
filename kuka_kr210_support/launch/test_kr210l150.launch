@@ -1,3 +1,4 @@
+<?xml version="1.0" ?>
 <launch>
   <arg name="variant" default="" />
   <include file="$(find kuka_kr210_support)/launch/load_kr210l150.launch" pass_all_args="true" />
