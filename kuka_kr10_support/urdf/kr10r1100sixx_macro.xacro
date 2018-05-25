@@ -4,21 +4,21 @@
   <xacro:include filename="$(find kuka_resources)/urdf/common_materials.xacro"/>
 
   <!-- Mass parameters (guessed), total mass should be 55 kg -->
-  <xacro:property name="kuka_kr10r1100sixx_base_link_mass" value="4.0" />
-  <xacro:property name="kuka_kr10r1100sixx_link_1_mass" value="4.0" />
-  <xacro:property name="kuka_kr10r1100sixx_link_2_mass" value="19.0" />
-  <xacro:property name="kuka_kr10r1100sixx_link_3_mass" value="10.0" />
-  <xacro:property name="kuka_kr10r1100sixx_link_4_mass" value="15.0" />
-  <xacro:property name="kuka_kr10r1100sixx_link_5_mass" value="2.8" />
-  <xacro:property name="kuka_kr10r1100sixx_link_6_mass" value="0.2" />
+  <xacro:property name="base_mass" value="4.0" />
+  <xacro:property name="link1_mass" value="4.0" />
+  <xacro:property name="link2_mass" value="19.0" />
+  <xacro:property name="link3_mass" value="10.0" />
+  <xacro:property name="link4_mass" value="15.0" />
+  <xacro:property name="link5_mass" value="2.8" />
+  <xacro:property name="link6_mass" value="0.2" />
 
   <!-- Kinematic parameters -->
-  <xacro:property name="kuka_kr10r1100sixx_d1" value="0.400" />
-  <xacro:property name="kuka_kr10r1100sixx_d4" value="0.515" />
-  <xacro:property name="kuka_kr10r1100sixx_a1" value="0.025" />
-  <xacro:property name="kuka_kr10r1100sixx_a2" value="0.560" />
-  <xacro:property name="kuka_kr10r1100sixx_a3" value="0.035" />
-  <xacro:property name="kuka_kr10r1100sixx_a5" value="0.080" />
+  <xacro:property name="base_link1_length" value="0.400" />
+  <xacro:property name="link1_link2_offset" value="0.025" />
+  <xacro:property name="link2_length" value="0.560" />
+  <xacro:property name="link2_link3_offset" value="0.035" />
+  <xacro:property name="link3_link4_length" value="0.515" />
+  <xacro:property name="link5_link6_length" value="0.080" />
 
   <!-- Cylindrical inertia tensor -->
   <xacro:macro name="cylinder_inertial" params="radius length mass *origin">
@@ -47,7 +47,7 @@
           <mesh filename="package://kuka_kr10_support/meshes/kr10r1100sixx/collision/base_link.stl" />
         </geometry>
       </collision>
-      <xacro:cylinder_inertial radius="${kuka_kr10r1100sixx_d1/4}" length="${kuka_kr10r1100sixx_d1/2}" mass="${kuka_kr10r1100sixx_base_link_mass}">
+      <xacro:cylinder_inertial radius="${base_link1_length/4}" length="${base_link1_length/2}" mass="${base_mass}">
         <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
       </xacro:cylinder_inertial>
     </link>
@@ -65,7 +65,7 @@
           <mesh filename="package://kuka_kr10_support/meshes/kr10r1100sixx/collision/link_1.stl" />
         </geometry>
       </collision>
-      <xacro:cylinder_inertial radius="${kuka_kr10r1100sixx_d1/4}" length="${kuka_kr10r1100sixx_d1/2}" mass="${kuka_kr10r1100sixx_link_1_mass}">
+      <xacro:cylinder_inertial radius="${base_link1_length/4}" length="${base_link1_length/2}" mass="${link1_mass}">
         <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
       </xacro:cylinder_inertial>
     </link>
@@ -83,7 +83,7 @@
           <mesh filename="package://kuka_kr10_support/meshes/kr10r1100sixx/collision/link_2.stl" />
         </geometry>
       </collision>
-      <xacro:cylinder_inertial radius="${kuka_kr10r1100sixx_d1/4}" length="${kuka_kr10r1100sixx_a2}" mass="${kuka_kr10r1100sixx_link_2_mass}">
+      <xacro:cylinder_inertial radius="${base_link1_length/4}" length="${link2_length}" mass="${link2_mass}">
         <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
       </xacro:cylinder_inertial>
     </link>
@@ -101,7 +101,7 @@
           <mesh filename="package://kuka_kr10_support/meshes/kr10r1100sixx/collision/link_3.stl" />
         </geometry>
       </collision>
-      <xacro:cylinder_inertial radius="${kuka_kr10r1100sixx_a3}" length="${kuka_kr10r1100sixx_a3*10}" mass="${kuka_kr10r1100sixx_link_3_mass}">
+      <xacro:cylinder_inertial radius="${link2_link3_offset}" length="${link2_link3_offset*10}" mass="${link3_mass}">
         <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
       </xacro:cylinder_inertial>
     </link>
@@ -119,7 +119,7 @@
           <mesh filename="package://kuka_kr10_support/meshes/kr10r1100sixx/collision/link_4.stl" />
         </geometry>
       </collision>
-      <xacro:cylinder_inertial radius="${kuka_kr10r1100sixx_d1/4}" length="${kuka_kr10r1100sixx_d4}" mass="${kuka_kr10r1100sixx_link_4_mass}">
+      <xacro:cylinder_inertial radius="${base_link1_length/4}" length="${link3_link4_length}" mass="${link4_mass}">
         <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
       </xacro:cylinder_inertial>
     </link>
@@ -137,7 +137,7 @@
           <mesh filename="package://kuka_kr10_support/meshes/kr10r1100sixx/collision/link_5.stl" />
         </geometry>
       </collision>
-      <xacro:cylinder_inertial radius="${kuka_kr10r1100sixx_a5/2}" length="${kuka_kr10r1100sixx_a5}" mass="${kuka_kr10r1100sixx_link_5_mass}">
+      <xacro:cylinder_inertial radius="${link5_link6_length/2}" length="${link5_link6_length}" mass="${link5_mass}">
         <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
       </xacro:cylinder_inertial>
     </link>
@@ -155,7 +155,7 @@
           <mesh filename="package://kuka_kr10_support/meshes/kr10r1100sixx/collision/link_6.stl" />
         </geometry>
       </collision>
-      <xacro:cylinder_inertial radius="${kuka_kr10r1100sixx_a5/2}" length="${kuka_kr10r1100sixx_a5/10}" mass="${kuka_kr10r1100sixx_link_6_mass}">
+      <xacro:cylinder_inertial radius="${link5_link6_length/2}" length="${link5_link6_length/10}" mass="${link6_mass}">
         <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
       </xacro:cylinder_inertial>
     </link>
@@ -163,42 +163,42 @@
     <link name="${prefix}tool0"/>
 
     <joint name="${prefix}joint_a1" type="revolute">
-      <origin xyz="0 0 ${kuka_kr10r1100sixx_d1}" rpy="0 0 0"/>
+      <origin xyz="0 0 ${base_link1_length}" rpy="0 0 0"/>
       <parent link="${prefix}base_link"/>
       <child link="${prefix}link_1"/>
       <axis xyz="0 0 -1"/>
       <limit effort="0" lower="${-DEG2RAD * 170}" upper="${DEG2RAD * 170}" velocity="${DEG2RAD * 360}"/>
     </joint>
     <joint name="${prefix}joint_a2" type="revolute">
-      <origin xyz="${kuka_kr10r1100sixx_a1} 0 0" rpy="0 0 0"/>
+      <origin xyz="${link1_link2_offset} 0 0" rpy="0 0 0"/>
       <parent link="${prefix}link_1"/>
       <child link="${prefix}link_2"/>
       <axis xyz="0 1 0"/>
       <limit effort="0" lower="${-DEG2RAD * 190}" upper="${DEG2RAD * 45}" velocity="${DEG2RAD * 300}"/>
     </joint>
     <joint name="${prefix}joint_a3" type="revolute">
-      <origin xyz="${kuka_kr10r1100sixx_a2} 0 0" rpy="0 0 0"/>
+      <origin xyz="${link2_length} 0 0" rpy="0 0 0"/>
       <parent link="${prefix}link_2"/>
       <child link="${prefix}link_3"/>
       <axis xyz="0 1 0"/>
       <limit effort="0" lower="${-DEG2RAD * 120}" upper="${DEG2RAD * 156}" velocity="${DEG2RAD * 360}"/>
     </joint>
     <joint name="${prefix}joint_a4" type="revolute">
-      <origin xyz="0 0 ${kuka_kr10r1100sixx_a3}" rpy="0 0 0"/>
+      <origin xyz="0 0 ${link2_link3_offset}" rpy="0 0 0"/>
       <parent link="${prefix}link_3"/>
       <child link="${prefix}link_4"/>
       <axis xyz="-1 0 0"/>
       <limit effort="0" lower="${-DEG2RAD * 185}" upper="${DEG2RAD * 185}" velocity="${DEG2RAD * 381}"/>
     </joint>
     <joint name="${prefix}joint_a5" type="revolute">
-      <origin xyz="${kuka_kr10r1100sixx_d4} 0 0" rpy="0 0 0"/>
+      <origin xyz="${link3_link4_length} 0 0" rpy="0 0 0"/>
       <parent link="${prefix}link_4"/>
       <child link="${prefix}link_5"/>
       <axis xyz="0 1 0"/>
       <limit effort="0" lower="${-DEG2RAD * 120}" upper="${DEG2RAD * 120}" velocity="${DEG2RAD * 388}"/>
     </joint>
     <joint name="${prefix}joint_a6" type="revolute">
-      <origin xyz="${kuka_kr10r1100sixx_a5} 0 0" rpy="0 0 0"/>
+      <origin xyz="${link5_link6_length} 0 0" rpy="0 0 0"/>
       <parent link="${prefix}link_5"/>
       <child link="${prefix}link_6"/>
       <axis xyz="-1 0 0"/>
