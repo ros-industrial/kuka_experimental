@@ -56,8 +56,6 @@
 #include <hardware_interface/joint_state_interface.h>
 #include <hardware_interface/robot_hw.h>
 
-// Timers
-#include <chrono>
 
 // UDP server
 #include <kuka_rsi_hw_interface/udp_server.h>
@@ -126,7 +124,7 @@ public:
   void configure();
   bool read(const ros::Time time, const ros::Duration period);
   bool write(const ros::Time time, const ros::Duration period);
-
+  ros::Duration getPeriod() const { return control_period_; }
 };
 
 } // namespace kuka_rsi_hw_interface

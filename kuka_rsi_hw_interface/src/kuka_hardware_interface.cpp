@@ -104,6 +104,11 @@ bool KukaHardwareInterface::read(const ros::Time time, const ros::Duration perio
   }
 
   rsi_state_ = RSIState(in_buffer_);
+  if(rsi_state_.ipoc > ipoc_)
+  {
+    control_period_.fromSec((rsi_state_.ipoc - ipoc_) / 1000.0);
+  }
+
   for (std::size_t i = 0; i < n_dof_; ++i)
   {
     joint_position_[i] = DEG2RAD * rsi_state_.positions[i];
