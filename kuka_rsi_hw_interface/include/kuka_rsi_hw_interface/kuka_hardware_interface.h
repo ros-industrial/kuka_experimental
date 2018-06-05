@@ -110,6 +110,7 @@ private:
   ros::Duration control_period_;
   ros::Duration elapsed_time_;
   double loop_hz_;
+  double krc_multiplier_;
 
   // Interfaces
   hardware_interface::JointStateInterface joint_state_interface_;
