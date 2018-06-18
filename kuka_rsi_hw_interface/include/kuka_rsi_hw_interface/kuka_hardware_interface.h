@@ -85,6 +85,7 @@ private:
   std::vector<std::string> joint_names_;
 
   std::vector<double> joint_position_;
+  std::vector<double> joint_position_last_;
   std::vector<double> joint_velocity_;
   std::vector<double> joint_effort_;
   std::vector<double> joint_position_command_;
