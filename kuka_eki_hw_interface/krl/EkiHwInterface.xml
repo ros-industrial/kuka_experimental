@@ -64,6 +64,8 @@
          <ELEMENT Tag="RobotState/Eff/@A4"/>
          <ELEMENT Tag="RobotState/Eff/@A5"/>
          <ELEMENT Tag="RobotState/Eff/@A6"/>
+         <!-- Interface state -->
+         <ELEMENT Tag="RobotState/RobotCommand/@Size"/>  <!-- Number of elements currently in command buffer -->
       </XML>
    </SEND>
 </ETHERNETKRL>

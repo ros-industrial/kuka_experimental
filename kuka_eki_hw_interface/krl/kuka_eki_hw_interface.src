@@ -127,6 +127,9 @@ def eki_hw_iface_send()
       ;eki_ret = eki_setreal("EkiHwInterface", "RobotState/Eff/@A4", $torque_axis_act[4])
       ;eki_ret = eki_setreal("EkiHwInterface", "RobotState/Eff/@A5", $torque_axis_act[5])
       ;eki_ret = eki_setreal("EkiHwInterface", "RobotState/Eff/@A6", $torque_axis_act[6])
+      ; interface state
+      eki_ret = eki_checkbuffer("EkiHwInterface", "RobotCommand/Pos/@A1")
+      eki_ret = eki_setint("EkiHwInterface", "RobotState/RobotCommand/@Size", eki_ret.buff)
 
       ; Send xml structure
       if $flag[1] then  ; Make sure connection hasn't died while updating xml structure
