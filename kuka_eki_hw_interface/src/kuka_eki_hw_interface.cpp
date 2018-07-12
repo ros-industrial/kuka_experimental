@@ -130,7 +130,6 @@ bool KukaEkiHardwareInterface::eki_read_state(std::vector<double> &joint_positio
     joint_effort[i] = joint_eff;
     axis_name[1]++;
   }
-  ROS_INFO_STREAM(joint_effort[0]);
 
   return true;
 }
