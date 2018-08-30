@@ -42,7 +42,7 @@ We recommend that you copy the configuration files, edit the copies for your nee
 In order to successfully launch the **kuka_eki_hw_interface** a parameter `robot_description` needs to be present on the ROS parameter server. This parameter can be set manually or by adding this line inside the launch file (replace support package and .xacro to match your application):
 
 ```xml
-<param name="robot_description" command="$(find xacro)/xacro.py '$(find kuka_kr6_support)/urdf/kr6r900sixx.xacro'"/>
+<param name="robot_description" command="$(find xacro)/xacro --inorder '$(find kuka_kr6_support)/urdf/kr6r900sixx.xacro'"/>
 ```
 
 Make sure that the line is added before the `kuka_eki_hw_interface` itself is loaded.
