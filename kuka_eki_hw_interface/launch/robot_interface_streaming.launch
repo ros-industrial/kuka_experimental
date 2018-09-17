@@ -78,9 +78,9 @@
   <!-- main 'driver node': the EKI hardware interface -->
   <node name="kuka_eki_hw_interface" pkg="kuka_eki_hw_interface" type="kuka_eki_hw_interface_node" respawn="false">
     <!-- remap topics to conform to ROS-I specifications -->
-    <remap from="$(arg pos_ctrlr_name)/follow_joint_trajectory" to="/joint_trajectory_action" />
-    <remap from="$(arg pos_ctrlr_name)/state" to="/feedback_states" />
-    <remap from="$(arg pos_ctrlr_name)/command" to="/joint_path_command"/>
+    <remap from="$(arg pos_ctrlr_name)/follow_joint_trajectory" to="joint_trajectory_action" />
+    <remap from="$(arg pos_ctrlr_name)/state" to="feedback_states" />
+    <remap from="$(arg pos_ctrlr_name)/command" to="joint_path_command"/>
   </node>
 
   <!-- spawn the actual controllers: note that the names of the controllers must
