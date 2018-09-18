@@ -292,6 +292,9 @@ void KukaEkiHardwareInterface::write(const ros::Time &time, const ros::Duration 
     eki_write_command(joint_position_command_);
 
   // underflow/overflow checking
+  // NOTE: this is commented as it results in a lot of logging output and the use of ROS_*
+  //       logging macros breaks incurs (quite) some overhead. Uncomment and rebuild this
+  //       if you'd like to use this anyway.
   //if (eki_cmd_buff_len_ >= eki_max_cmd_buff_len_)
   //  ROS_WARN_STREAM("eki_hw_iface RobotCommand buffer overflow (curent size " << eki_cmd_buff_len_
   //                  << " greater than or equal max allowed " << eki_max_cmd_buff_len_ << ")");
