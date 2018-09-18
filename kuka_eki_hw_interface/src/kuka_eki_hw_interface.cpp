@@ -81,7 +81,8 @@ void KukaEkiHardwareInterface::eki_handle_receive(const boost::system::error_cod
 
 bool KukaEkiHardwareInterface::eki_read_state(std::vector<double> &joint_position,
                                               std::vector<double> &joint_velocity,
-                                              std::vector<double> &joint_effort)
+                                              std::vector<double> &joint_effort,
+                                              int &cmd_buff_len)
 {
   static boost::array<char, 2048> in_buffer;
 
@@ -112,7 +113,8 @@ bool KukaEkiHardwareInterface::eki_read_state(std::vector<double> &joint_positio
   TiXmlElement* pos = robot_state->FirstChildElement("Pos");
   TiXmlElement* vel = robot_state->FirstChildElement("Vel");
   TiXmlElement* eff = robot_state->FirstChildElement("Eff");
-  if (!pos || !vel || !eff)
+  TiXmlElement* robot_command = robot_state->FirstChildElement("RobotCommand");
+  if (!pos || !vel || !eff || !robot_command)
     return false;
 
   // Extract axis positions
@@ -130,6 +132,9 @@ bool KukaEkiHardwareInterface::eki_read_state(std::vector<double> &joint_positio
     joint_effort[i] = joint_eff;
     axis_name[1]++;
   }
+
+  // Extract number of command elements buffered on robot
+  robot_command->Attribute("Size", &cmd_buff_len);
 
   return true;
 }
@@ -175,6 +180,7 @@ void KukaEkiHardwareInterface::init()
   const std::string param_addr = "eki/robot_address";
   const std::string param_port = "eki/robot_port";
   const std::string param_socket_timeout = "eki/socket_timeout";
+  const std::string param_max_cmd_buf_len = "eki/max_cmd_buf_len";
 
   if (nh_.getParam(param_addr, eki_server_address_) &&
       nh_.getParam(param_port, eki_server_port_))
@@ -200,6 +206,18 @@ void KukaEkiHardwareInterface::init()
     ROS_INFO_STREAM_NAMED("kuka_eki_hw_interface", "Failed to get EKI socket timeout from parameter server (looking "
                           "for '" + param_socket_timeout + "'), defaulting to " +
                           std::to_string(eki_read_state_timeout_)  + " seconds");
+  }
+
+  if (nh_.getParam(param_max_cmd_buf_len, eki_max_cmd_buff_len_))
+  {
+    ROS_INFO_STREAM_NAMED("kuka_eki_hw_interface", "Configuring Kuka EKI hardware interface maximum command buffer "
+                          "length to " << eki_max_cmd_buff_len_);
+  }
+  else
+  {
+    ROS_INFO_STREAM_NAMED("kuka_eki_hw_interface", "Failed to get EKI hardware interface maximum command buffer length "
+                          "from parameter server (looking for '" + param_max_cmd_buf_len + "'), defaulting to " +
+                          std::to_string(eki_max_cmd_buff_len_));
   }
 
   // Create ros_control interfaces (joint state and position joint for all dof's)
@@ -240,7 +258,7 @@ void KukaEkiHardwareInterface::start()
   eki_check_read_state_deadline();
 
   // Initialize joint_position_command_ from initial robot state (avoid bad (null) commands before controllers come up)
-  if (!eki_read_state(joint_position_, joint_velocity_, joint_effort_))
+  if (!eki_read_state(joint_position_, joint_velocity_, joint_effort_, eki_cmd_buff_len_))
   {
     std::string msg = "Failed to read from robot EKI server within alloted time of "
                       + std::to_string(eki_read_state_timeout_) + " seconds.  Make sure eki_hw_interface is running "
@@ -256,7 +274,7 @@ void KukaEkiHardwareInterface::start()
 
 void KukaEkiHardwareInterface::read(const ros::Time &time, const ros::Duration &period)
 {
-  if (!eki_read_state(joint_position_, joint_velocity_, joint_effort_))
+  if (!eki_read_state(joint_position_, joint_velocity_, joint_effort_, eki_cmd_buff_len_))
   {
     std::string msg = "Failed to read from robot EKI server within alloted time of "
                       + std::to_string(eki_read_state_timeout_) + " seconds.  Make sure eki_hw_interface is running "
@@ -269,7 +287,19 @@ void KukaEkiHardwareInterface::read(const ros::Time &time, const ros::Duration &
 
 void KukaEkiHardwareInterface::write(const ros::Time &time, const ros::Duration &period)
 {
-  eki_write_command(joint_position_command_);
+  // only write if max will not be exceeded
+  if (eki_cmd_buff_len_ < eki_max_cmd_buff_len_)
+    eki_write_command(joint_position_command_);
+
+  // underflow/overflow checking
+  // NOTE: this is commented as it results in a lot of logging output and the use of ROS_*
+  //       logging macros breaks incurs (quite) some overhead. Uncomment and rebuild this
+  //       if you'd like to use this anyway.
+  //if (eki_cmd_buff_len_ >= eki_max_cmd_buff_len_)
+  //  ROS_WARN_STREAM("eki_hw_iface RobotCommand buffer overflow (curent size " << eki_cmd_buff_len_
+  //                  << " greater than or equal max allowed " << eki_max_cmd_buff_len_ << ")");
+  //else if (eki_cmd_buff_len_ == 0)
+  //  ROS_WARN_STREAM("eki_hw_iface RobotCommand buffer empty");
 }
 
 } // namespace kuka_eki_hw_interface

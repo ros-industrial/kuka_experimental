@@ -65,6 +65,8 @@ private:
   // EKI
   std::string eki_server_address_;
   std::string eki_server_port_;
+  int eki_cmd_buff_len_;
+  int eki_max_cmd_buff_len_ = 5;  // by default, limit command buffer to 5 (size of advance run in KRL)
 
   // Timing
   ros::Duration control_period_;
@@ -85,7 +87,7 @@ private:
   static void eki_handle_receive(const boost::system::error_code &ec, size_t length,
                                  boost::system::error_code* out_ec, size_t* out_length);
   bool eki_read_state(std::vector<double> &joint_position, std::vector<double> &joint_velocity,
-                      std::vector<double> &joint_effort);
+                      std::vector<double> &joint_effort, int &cmd_buff_len);
   bool eki_write_command(const std::vector<double> &joint_position);
 
 public:
