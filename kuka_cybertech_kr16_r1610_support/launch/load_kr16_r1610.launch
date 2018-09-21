@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- Load robot description to parameter server -->
+  <param name="robot_description" command="$(find xacro)/xacro --inorder '$(find kuka_cybertech_kr16_r1610_support)/urdf/kr16_r1610.xacro'"/>
+</launch>
