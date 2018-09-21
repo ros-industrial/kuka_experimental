@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>kuka_cybertech_kr16_r1610_support</name>
+  <version>0.1.0</version>
+  <description>
+    <p>
+      ROS-Industrial support for the KUKA cybertech KR16 R1610.
+    </p>
+    <p>
+      This package contains configuration data, 3D models and launch files
+      for KUKA cybertech KR 16 R1610 manipulators.
+    </p>
+    <p><b>Specifications</b>:</p>
+    <ul>
+      <li>KR cybertech 16-R1610 - Default</li>
+    </ul>
+    <p>
+      Joint limits and maximum joint velocities are based on the information
+      found in the online datasheet <a href="https://www.kuka.com/-/media/kuka-downloads/imported/48ec812b1b2947898ac2598aff70abc0/spez_kr_cybertech_en.pdf">here</a>. All urdfs are based on the default motion and joint velocity limits,
+      unless noted otherwise.
+    </p>
+    <p>
+      Before using any of the configuration files and / or meshes included
+      in this package, be sure to check they are correct for the particular
+      robot model and configuration you intend to use them with.
+    </p>
+    <p>
+      <b>NB</b>: this package currently uses non-valid inertia parameters.
+    </p>
+  </description>
+  <author>Simon Schmeißer</author>
+  <maintainer email="simon.schmeisser@isys-vision.de">Simon schmeisser</maintainer>
+  <maintainer email="lars.tingelstad@ntnu.no">Lars Tingelstad</maintainer>
+  <maintainer email="g.a.vanderhoorn@tudelft.nl">G.A. vd. Hoorn (TU Delft Robotics Institute)</maintainer>
+  <license>BSD</license>
+
+  <url type="website">http://wiki.ros.org/kuka_cybertech_kr16_r1610_support</url>
+  <url type="bugtracker">https://github.com/ros-industrial/kuka_experimental/issues</url>
+  <url type="repository">https://github.com/ros-industrial/kuka_experimental</url>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <test_depend>roslaunch</test_depend>
+
+  <exec_depend>industrial_robot_client</exec_depend>
+  <exec_depend>joint_state_publisher</exec_depend>
+  <exec_depend>robot_state_publisher</exec_depend>
+  <exec_depend>rviz</exec_depend>
+  <exec_depend>xacro</exec_depend>
+
+  <export>
+    <architecture_independent/>
+  </export>
+</package>
