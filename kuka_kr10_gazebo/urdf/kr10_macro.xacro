@@ -1,0 +1,113 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+
+<xacro:macro name="kuka_kr10_robot" params="prefix *origin">
+
+  <xacro:include filename="$(find kuka_kr10_support)/urdf/kr10r1100sixx_macro.xacro"/>
+
+  <!-- get URDF description of Kuka kr10 model -->
+  <xacro:kuka_kr10r1100sixx prefix="${prefix}" />
+
+  <!-- transmission list -->
+  <transmission name="${prefix}tran1">
+    <robotNamespace>/${prefix}</robotNamespace>
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="${prefix}joint_a1">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="${prefix}motor1">
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+  <transmission name="${prefix}tran2">
+    <robotNamespace>/${prefix}</robotNamespace>
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="${prefix}joint_a2">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="${prefix}motor2">
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+  <transmission name="${prefix}tran3">
+    <robotNamespace>/${prefix}</robotNamespace>
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="${prefix}joint_a3">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="${prefix}motor3">
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+  <transmission name="${prefix}tran4">
+    <robotNamespace>/${prefix}</robotNamespace>
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="${prefix}joint_a4">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="${prefix}motor4">
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+  <transmission name="${prefix}tran5">
+    <robotNamespace>/${prefix}</robotNamespace>
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="${prefix}joint_a5">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="${prefix}motor5">
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+  <transmission name="${prefix}tran6">
+    <robotNamespace>/${prefix}</robotNamespace>
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="${prefix}joint_a6">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="${prefix}motor6">
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+  <!-- end of transmission list -->
+
+  <!-- Gazebo-specific link properties -->
+  <gazebo reference="${prefix}base_link">
+    <material>Gazebo/Black</material>
+    <turnGravityOff>true</turnGravityOff>
+  </gazebo>
+  <gazebo reference="${prefix}link_1">
+    <material>Gazebo/DarkGrey</material>
+    <turnGravityOff>true</turnGravityOff>
+  </gazebo>
+  <gazebo reference="${prefix}link_2">
+    <material>Gazebo/DarkGrey</material>
+    <turnGravityOff>true</turnGravityOff>
+  </gazebo>
+  <gazebo reference="${prefix}link_3">
+    <material>Gazebo/DarkGrey</material>
+    <turnGravityOff>true</turnGravityOff>
+  </gazebo>
+  <gazebo reference="${prefix}link_4">
+    <material>Gazebo/DarkGrey</material>
+    <turnGravityOff>true</turnGravityOff>
+  </gazebo>
+  <gazebo reference="${prefix}link_5">
+    <material>Gazebo/DarkGrey</material>
+    <turnGravityOff>true</turnGravityOff>
+  </gazebo>
+  <gazebo reference="${prefix}link_6">
+    <material>Gazebo/Grey</material>
+    <turnGravityOff>true</turnGravityOff>
+  </gazebo>
+
+  <!-- ros_control plugin -->
+  <gazebo>
+    <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+      <robotNamespace>/${prefix}</robotNamespace>
+      <robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>
+    </plugin>
+  </gazebo>
+
+  </xacro:macro>
+</robot>
