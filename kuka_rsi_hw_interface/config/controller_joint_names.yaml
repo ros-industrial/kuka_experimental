@@ -1,1 +1,1 @@
-controller_joint_names: ["kuka_kr10joint_a1", "kuka_kr10joint_a2", "kuka_kr10joint_a3", "kuka_kr10joint_a4", "kuka_kr10joint_a5", "kuka_kr10joint_a6"]
+controller_joint_names: ["joint_a1", "joint_a2", "joint_a3", "joint_a4", "joint_a5", "joint_a6"]
