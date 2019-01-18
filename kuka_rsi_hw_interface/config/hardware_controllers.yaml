@@ -14,5 +14,5 @@ position_trajectory_controller:
     - joint_a5
     - joint_a6
 
-  state_publish_rate: 50 # Defaults to 50
-  action_monitor_rate: 20 # Defaults to 20
+  state_publish_rate: 100 # Defaults to 50
+  action_monitor_rate: 100 # Defaults to 20

@@ -1,7 +1,5 @@
 <launch>
 
-<param name="robot_description" command="$(find xacro)/xacro.py '$(find kuka_kr10_support)/urdf/kr10r1100sixx.xacro'"/>
-
   <!-- Load the controllers -->
   <node name="controller_spawner" pkg="controller_manager" type="spawner"
     args="position_trajectory_controller joint_state_controller --shutdown-timeout 1"

@@ -2,6 +2,10 @@
 <launch>
     <arg name="sim" default="true" />
 
+    <!--param name="robot_description" command="$(find xacro)/xacro.py '$(find kuka_kr10_support)/urdf/kr10r1100sixx.xacro'"/-->
+
+<param name="robot_description" command="$(find xacro)/xacro.py '$(find fdcc)/urdf/kr10r1100sixx.urdf'"/>
+
     <rosparam file="$(find kuka_rsi_hw_interface)/test/test_params_sim.yaml" command="load" if="$(arg sim)"/>
     <rosparam file="$(find kuka_rsi_hw_interface)/test/test_params.yaml" command="load" unless="$(arg sim)"/>
 
@@ -21,6 +25,7 @@
         args="position_trajectory_controller joint_state_controller --shutdown-timeout 1"/>
     <!-- Load robot state publisher -->
     <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
+
 
     <!-- Load RSI simulation node -->
     <node name='kuka_rsi_simulator' pkg='kuka_rsi_simulator' type="kuka_rsi_simulator" args="127.0.0.1 49152" if="$(arg sim)" />
