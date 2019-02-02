@@ -9,6 +9,10 @@
   	<origin xyz="0 0 0" rpy="0 0 0" />
   </xacro:kuka_kr10_robot>
 
+  <!-- FT Senzor -->
+  <xacro:include filename="$(find kuka_kr10_gazebo)/urdf/ft_macro.xacro"/>
 
+  <!-- arm -->
+  <xacro:FT_sensor_gazebo prefix=""/>
 
 </robot>

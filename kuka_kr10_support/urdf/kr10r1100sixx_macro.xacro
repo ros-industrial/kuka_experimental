@@ -19,9 +19,12 @@
         </geometry>
       </collision>
       <inertial>
-        <mass value="14" />
-        <origin xyz="-0.0444859 -4.97e-05 0.1100921" rpy="0 0 0" />
-        <inertia ixx="0.08877213773" ixy="-0.000131033070251" ixz="-0.00150261923247" iyy="0.14293778144" iyz="-2.25256850538e-05" izz="0.126259385464" />
+        <!--mass value="14" /-->
+        <!--origin xyz="-0.0444859 -4.97e-05 0.1100921" rpy="0 0 0" /-->
+        <!--inertia ixx="0.08877213773" ixy="-0.000131033070251" ixz="-0.00150261923247" iyy="0.14293778144" iyz="-2.25256850538e-05" izz="0.126259385464" /-->    
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <mass value="10000.0"/>
+        <inertia ixx="10000.0"  ixy="0"  ixz="0" iyy="10000.0" iyz="0" izz="10000.0" />
       </inertial>
     </link>
     <link name="${prefix}link_1">
@@ -196,7 +199,13 @@
     </joint-->
 
     <!-- ROS base_link to KUKA $ROBROOT coordinate system transform -->
-    <link name="${prefix}base" />
+    <link name="${prefix}base">
+      <inertial>  
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <mass value="1000000.0"/>
+        <inertia ixx="0.0"  ixy="0"  ixz="0" iyy="0.0" iyz="0" izz="0.0" />
+      </inertial>
+    </link>
     <joint name="${prefix}base_link-base" type="fixed">
       <origin xyz="0 0 0" rpy="0 0 0"/>
       <parent link="${prefix}base_link"/>

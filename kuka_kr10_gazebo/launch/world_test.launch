@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+
+<launch>
+  
+  <arg name="args" default=""/>
+  
+  <include file="$(find kuka_kr10_gazebo)/launch/start.launch">
+    <arg name="world" value="$(find kuka_kr10_gazebo)/worlds/pipe.world"/>
+    <arg name="args" default="$(arg args)"/>
+  </include>
+
+</launch>

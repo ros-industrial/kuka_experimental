@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+
+<xacro:macro name="FT_sensor_gazebo" params="prefix">
+
+  <xacro:include filename="$(find kuka_kr10_support)/urdf/ft_sensor_macro.xacro"/>
+
+  <!-- get URDF description of Kuka kr10 model -->
+  <xacro:kuka_ft_sensor prefix="${prefix}" />
+
+  <gazebo reference="${prefix}ft_sensor_link">
+    <gravity>true</gravity>
+    <self_collide>false</self_collide>
+    <material value="Gazebo/Green" />
+  </gazebo>
+
+  <gazebo reference="${prefix}tool_link">
+    <gravity>true</gravity>
+    <self_collide>false</self_collide>
+    <material value="Gazebo/Black" />
+    <provideFeedback>true</provideFeedback>
+  </gazebo>
+
+  <!-- Enable the Joint Feedback -->
+  <gazebo reference="${prefix}ft_sensor_joint">
+    <provideFeedback>true</provideFeedback>
+  </gazebo>
+
+  <transmission name="${prefix}tran7">
+    <robotNamespace>/${prefix}</robotNamespace>
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="${prefix}ft_sensor_joint">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="${prefix}motor7">
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+
+
+  <!-- The ft_sensor plugin  -->
+  <gazebo>
+    <plugin name="ft_sensor" filename="libgazebo_ros_ft_sensor.so">
+      <updateRate>100.0</updateRate>
+      <robotNamespace>${prefix}</robotNamespace>
+      <topicName>/optoforce_node/OptoForceWrench</topicName> 
+      <jointName>${prefix}ft_sensor_joint</jointName>
+      <noise>
+        <type>gaussian</type>
+        <mean>0.0</mean>
+        <stddev>0.0001</stddev> <!-- change this to simulate noise --> 
+      </noise>
+    </plugin>
+  </gazebo>
+
+
+</xacro:macro>
+</robot>

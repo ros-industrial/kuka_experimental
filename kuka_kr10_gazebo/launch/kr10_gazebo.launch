@@ -11,10 +11,14 @@
     <remap from="/arm_controller/command" to="/joint_path_command"/>
 
     <!-- startup simulated world -->
-    <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <!--include file="$(find gazebo_ros)/launch/empty_world.launch">
       <arg name="world_name" value="worlds/empty.world"/>
       <arg name="gui" value="$(arg gui)"/>
       <arg name="paused" value="$(arg paused)"/>
+    </include-->
+    <include file="$(find kuka_kr10_gazebo)/launch/start.launch">
+      <arg name="world" value="$(find kuka_kr10_gazebo)/worlds/pipe.world"/>
+     
     </include>
   </group>
 
