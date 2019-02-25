@@ -47,6 +47,11 @@ In order to successfully launch the **kuka_eki_hw_interface** a parameter `robot
 
 Make sure that the line is added before the `kuka_eki_hw_interface` itself is loaded.
 
+##### Command Buffering Setup
+The driver currently limits the number of queued joint targets to prevent unbounded trajectory lag (error) that can occur when sufficiently dense target trajectories (temporal and/or spatial) are requested.  The size of the buffer is set via the parameter `eki/max_cmd_buf_len`.  When not present, the buffer defaults to five (5), which is the maximum number of instructions allowed in the controller's advance run (i.e., KRC internal interpolator lookahead).
+
+With the buffering active, overly dense trajectory points are dropped with the result being small and bounded trajectory lag at the expense of some positional deviation (dropped waypoints are not strictly enforced).  For paths that require exact positional accuracy buffering can be disabled by setting the limit to a sufficiently large number (e.g., 512) with the caveat that dense trajectories might result in low-than-requested velocity and subsequent time lag.  In other words, the buffering limit can be seen as a tradeoff between positional accuracy and time accuracy.
+
 ## 4. Testing
 At this point you are ready to test the EKI interface. Before the test, make sure that:
 
