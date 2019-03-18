@@ -13,8 +13,8 @@
       </attenuation>
       <direction>-0.5 0.5 -1</direction>
     </light>
-    <model name='floor_plan_simple'>
-      <pose frame=''>0.5 0 0 1.570796327 0 1.570796327</pose>
+    <model name='pipe'>
+    <pose frame=''>0.5 0 0 1.570796327 0 1.570796327</pose>
       <static>1</static>
       <link name='link'>
         <collision name='collision'>
@@ -56,9 +56,9 @@
             </script>
           </material>
         </visual>
-        <self_collide>0</self_collide>
+        <self_collide>1</self_collide>
         <kinematic>0</kinematic>
-        <gravity>1</gravity>
+        <gravity>0</gravity>
       </link>
     </model>
     <gravity>0 0 -9.8</gravity>

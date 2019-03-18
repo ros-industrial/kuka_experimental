@@ -16,6 +16,8 @@
               -P 0.0
               -Y 0.0" />
 
+  <!--include file="$(find kuka_kr10_gazebo)/launch/spawn_object.launch"/-->
+
   <!-- convert joint states to TF transforms for rviz, etc -->
   <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/>
 

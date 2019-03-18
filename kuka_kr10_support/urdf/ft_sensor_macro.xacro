@@ -51,18 +51,16 @@
 
 
     <!-- joint between arm_6_link and ft_sensor_link -->
-    <joint name="${prefix}ft_sensor_joint" type="revolute">
+    <joint name="${prefix}joint_ft_sensor" type="revolute">
       <origin xyz="0.0185 0 0" rpy="0 ${DEG2RAD * 90} 0" />
       <parent link="${prefix}link_6"/>
       <child link="${prefix}ft_sensor_link"/>
       <axis xyz="1 0 0" />
       <limit effort="0" velocity="0" lower="0" upper="0" />
-
-      <!--safety_controller k_position="20" k_velocity="25" soft_lower_limit="${-2.09 + 0.01}" soft_upper_limit="${2.09 - 0.01}" /-->
     </joint>
 
     <!-- joint between ft_sensor_link and tool_link -->
-    <joint name="${prefix}tool_joint" type="fixed">
+    <joint name="${prefix}joint_tool" type="fixed">
       <origin xyz="-0.035 -0.035 0.01875" rpy="${DEG2RAD * 90} 0 ${DEG2RAD * 90}" />
       <parent link="${prefix}ft_sensor_link"/>
       <child link="${prefix}tool_link"/>

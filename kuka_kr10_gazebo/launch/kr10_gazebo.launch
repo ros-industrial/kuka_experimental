@@ -11,15 +11,15 @@
     <remap from="/arm_controller/command" to="/joint_path_command"/>
 
     <!-- startup simulated world -->
-    <!--include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <include file="$(find gazebo_ros)/launch/empty_world.launch">
       <arg name="world_name" value="worlds/empty.world"/>
       <arg name="gui" value="$(arg gui)"/>
       <arg name="paused" value="$(arg paused)"/>
-    </include-->
-    <include file="$(find kuka_kr10_gazebo)/launch/start.launch">
+    </include>
+    <!--include file="$(find kuka_kr10_gazebo)/launch/start.launch">
       <arg name="world" value="$(find kuka_kr10_gazebo)/worlds/pipe.world"/>
      
-    </include>
+    </include-->
   </group>
 
   <group unless="$(arg remap)">
@@ -34,5 +34,7 @@
   <!-- send robot URDF to ROS param server,
        and spawn robot in Gazebo, along with necessary ROS nodes -->
   <include file="$(find kuka_kr10_gazebo)/launch/spawn_kr10.launch"/>
+
+  <node name="optoforce_filter_node" pkg="optoforce_sensor" type="sensor_filter.py" output="screen"/>
 
 </launch>

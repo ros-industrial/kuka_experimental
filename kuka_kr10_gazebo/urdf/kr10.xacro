@@ -10,9 +10,9 @@
   </xacro:kuka_kr10_robot>
 
   <!-- FT Senzor -->
-  <xacro:include filename="$(find kuka_kr10_gazebo)/urdf/ft_macro.xacro"/>
+  <!--xacro:include filename="$(find kuka_kr10_gazebo)/urdf/ft_macro.xacro"/-->
 
   <!-- arm -->
-  <xacro:FT_sensor_gazebo prefix=""/>
+  <!--xacro:FT_sensor_gazebo prefix=""/-->
 
 </robot>

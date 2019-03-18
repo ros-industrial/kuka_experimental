@@ -3,6 +3,6 @@
   <xacro:include filename="$(find kuka_kr10_support)/urdf/kr10r1100sixx_macro.xacro" />
   <xacro:kuka_kr10r1100sixx prefix=""/>
 
-  <xacro:include filename="$(find kuka_kr10_support)/urdf/ft_sensor_macro.xacro" />
-  <xacro:kuka_ft_sensor prefix=""/>
+  <!--xacro:include filename="$(find kuka_kr10_support)/urdf/ft_sensor_macro.xacro" /-->
+  <!--xacro:kuka_ft_sensor prefix=""/-->
 </robot>

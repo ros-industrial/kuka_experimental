@@ -202,14 +202,14 @@
     <link name="${prefix}base">
       <inertial>  
         <origin xyz="0 0 0" rpy="0 0 0" />
-        <mass value="1000000.0"/>
-        <inertia ixx="0.0"  ixy="0"  ixz="0" iyy="0.0" iyz="0" izz="0.0" />
+        <mass value="10000000000.0"/>
+        <inertia ixx="100000.0"  ixy="100000"  ixz="100000" iyy="100000.0" iyz="100000" izz="100000.0" />
       </inertial>
     </link>
     <joint name="${prefix}base_link-base" type="fixed">
       <origin xyz="0 0 0" rpy="0 0 0"/>
-      <parent link="${prefix}base_link"/>
-      <child link="${prefix}base"/>
+      <parent link="${prefix}base"/>
+      <child link="${prefix}base_link"/>
     </joint>
   </xacro:macro>
 </robot>

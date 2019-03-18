@@ -48,12 +48,21 @@ namespace kuka_rsi_hw_interface
 KukaHardwareInterface::KukaHardwareInterface() :
     joint_position_(6, 0.0), joint_velocity_(6, 0.0), joint_effort_(6, 0.0), joint_position_command_(6, 0.0), joint_velocity_command_(
         6, 0.0), joint_effort_command_(6, 0.0), joint_names_(6), rsi_initial_joint_positions_(6, 0.0), rsi_joint_position_corrections_(
-        6, 0.0), ipoc_(0), n_dof_(6)
+        6, 0.0), ipoc_(0), n_dof_(6), digital_output_(8,false)
 {
   in_buffer_.resize(1024);
   out_buffer_.resize(1024);
   remote_host_.resize(1024);
   remote_port_.resize(1024);
+
+  JointCommandPub = nh_.advertise<std_msgs::Float64MultiArray>("/rsi_joint_commands", 1);
+  JointCmdSub = nh_.subscribe("/command2", 1, &KukaHardwareInterface::JointCmdCallback, this);
+
+  // init
+  this->joint_position[1] = -1.5707963267948966;
+  this->joint_position[2] = 1.5707963267948966;
+  this->joint_position[4] = 1.5707963267948966;
+
 
   if (!nh_.getParam("controller_joint_names", joint_names_))
   {
@@ -89,6 +98,31 @@ KukaHardwareInterface::~KukaHardwareInterface()
 
 }
 
+void KukaHardwareInterface::JointCmdCallback    (const std_msgs::Float64MultiArray &msg)
+{
+    this->joint_position[0] = msg.data[0];
+    this->joint_position[1] = msg.data[1];
+    this->joint_position[2] = msg.data[2];
+    this->joint_position[3] = msg.data[3];
+    this->joint_position[4] = msg.data[4];
+    this->joint_position[5] = msg.data[5];
+
+}
+
+bool KukaHardwareInterface::write_8_digital_outputs(kuka_rsi_hw_interface::write_8_outputs::Request &req, kuka_rsi_hw_interface::write_8_outputs::Response &res){
+
+   digital_output_.clear();
+   digital_output_.push_back(req.out1);
+   digital_output_.push_back(req.out2);
+   digital_output_.push_back(req.out3);
+   digital_output_.push_back(req.out4);
+   digital_output_.push_back(req.out5);
+   digital_output_.push_back(req.out6);
+   digital_output_.push_back(req.out7);
+   digital_output_.push_back(req.out8);
+   return true;
+}
+
 bool KukaHardwareInterface::read(const ros::Time time, const ros::Duration period)
 {
   in_buffer_.resize(1024);
@@ -116,13 +150,31 @@ bool KukaHardwareInterface::read(const ros::Time time, const ros::Duration perio
 bool KukaHardwareInterface::write(const ros::Time time, const ros::Duration period)
 {
   out_buffer_.resize(1024);
-
+  std::cout << "RSI HW Interface write: ";
   for (std::size_t i = 0; i < n_dof_; ++i)
   {
     rsi_joint_position_corrections_[i] = (RAD2DEG * joint_position_command_[i]) - rsi_initial_joint_positions_[i];
-  }
+    std::cout << rsi_joint_position_corrections_[i] << ", " << RAD2DEG *joint_position_command_[i] <<", " << rsi_initial_joint_positions_[i]<< std::endl;
+    //rsi_joint_position_corrections_[i] = (RAD2DEG * this->joint_position[i]) - rsi_initial_joint_positions_[i];
+    //std::cout << rsi_joint_position_corrections_[i] << ", " << RAD2DEG *this->joint_position[i] <<", " << rsi_initial_joint_positions_[i]<< std::endl;
 
-  out_buffer_ = RSICommand(rsi_joint_position_corrections_, ipoc_).xml_doc;
+  }
+  std::cout << std::endl;
+  
+  
+  // testing
+  std_msgs::Float64MultiArray temp;
+  temp.data.push_back(joint_position_command_[0]);
+  temp.data.push_back(joint_position_command_[1]);
+  temp.data.push_back(joint_position_command_[2]);
+  temp.data.push_back(joint_position_command_[3]);
+  temp.data.push_back(joint_position_command_[4]);
+  temp.data.push_back(joint_position_command_[5]);
+  JointCommandPub.publish(temp);
+  
+
+
+  out_buffer_ = RSICommand(rsi_joint_position_corrections_, digital_output_, ipoc_).xml_doc;
   server_->send(out_buffer_);
 
   return true;
@@ -151,7 +203,7 @@ void KukaHardwareInterface::start()
     rsi_initial_joint_positions_[i] = rsi_state_.initial_positions[i];
   }
   ipoc_ = rsi_state_.ipoc;
-  out_buffer_ = RSICommand(rsi_joint_position_corrections_, ipoc_).xml_doc;
+  out_buffer_ = RSICommand(rsi_joint_position_corrections_, digital_output_, ipoc_).xml_doc;
   server_->send(out_buffer_);
   // Set receive timeout to 1 second
   server_->set_timeout(1000);
