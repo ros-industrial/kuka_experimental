@@ -5,8 +5,7 @@ joint_state_controller:
 
 # Joint trajectory controller
 position_trajectory_controller:
-  type: "position_controllers/JointGroupPositionController"
-#  type: "position_controllers/JointTrajectoryController"
+  type: "position_controllers/JointTrajectoryController"
   joints:
     - joint_a1
     - joint_a2

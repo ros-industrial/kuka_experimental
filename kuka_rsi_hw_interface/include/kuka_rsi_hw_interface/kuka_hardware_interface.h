@@ -69,9 +69,6 @@
 // SRV
 #include <kuka_rsi_hw_interface/write_8_outputs.h>
 
-// testing
-#include <std_msgs/Float64MultiArray.h>
-#include "trajectory_msgs/JointTrajectory.h"
 
 namespace kuka_rsi_hw_interface
 {
@@ -125,8 +122,7 @@ private:
   hardware_interface::JointStateInterface joint_state_interface_;
   hardware_interface::PositionJointInterface position_joint_interface_;
 
-  // Testing
-  ros::Publisher JointCommandPub;
+
 
 
 public:
@@ -141,13 +137,6 @@ public:
   void configure();
   bool read(const ros::Time time, const ros::Duration period);
   bool write(const ros::Time time, const ros::Duration period);
-
-  void JointCmdCallback(const std_msgs::Float64MultiArray &msg);
-
-private:
-  ros::Subscriber JointCmdSub;
-
-  float joint_position[6];
 
 };
 

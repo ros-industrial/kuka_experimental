@@ -10,33 +10,33 @@
    <!-- INDX= "nmb" Input/Output index of RSI-Object / Maximum of RSI Channels: 64  -->   
    <!-- HOLDON="1", set this output index of RSI Object to the last value  -->   
    <!-- DEF_Delay count the late packages and send it back to server  -->
-   <!-- DEF_Tech: .C = advance .T = main run / .C1 advance set function generator 1 -->
+   <!-- DEF_Tech: .T = advance .C = main run / .T1 advance set function generator 1 -->
    
    <SEND>
       <ELEMENTS>
          <ELEMENT TAG="DEF_RIst" TYPE="DOUBLE" INDX="INTERNAL" />
          <ELEMENT TAG="DEF_RSol" TYPE="DOUBLE" INDX="INTERNAL" />
-         <ELEMENT TAG="DEF_AIPos" TYPE="DOUBLE" INDX="INTERNAL" />
-         <ELEMENT TAG="DEF_ASPos" TYPE="DOUBLE" INDX="INTERNAL" />
          <ELEMENT TAG="DEF_Delay" TYPE="LONG" INDX="INTERNAL" />
+         <ELEMENT TAG="DEF_Tech.C1" TYPE="DOUBLE" INDX="INTERNAL" />
+         <ELEMENT TAG="DiL" TYPE="LONG" INDX="1" />
+         <ELEMENT TAG="Digout.o1" TYPE="BOOL" INDX="2" />
+         <ELEMENT TAG="Digout.o2" TYPE="BOOL" INDX="3" />
+         <ELEMENT TAG="Digout.o3" TYPE="BOOL" INDX="4" />
+         <ELEMENT TAG="Source1" TYPE="DOUBLE" INDX="5" />
       </ELEMENTS>
    </SEND>
    <RECEIVE>
       <ELEMENTS>
-         <ELEMENT TAG="AK.A1" TYPE="DOUBLE" INDX="1" HOLDON="1" />
-         <ELEMENT TAG="AK.A2" TYPE="DOUBLE" INDX="2" HOLDON="1" />
-         <ELEMENT TAG="AK.A3" TYPE="DOUBLE" INDX="3" HOLDON="1" />
-         <ELEMENT TAG="AK.A4" TYPE="DOUBLE" INDX="4" HOLDON="1" />
-         <ELEMENT TAG="AK.A5" TYPE="DOUBLE" INDX="5" HOLDON="1" />
-         <ELEMENT TAG="AK.A6" TYPE="DOUBLE" INDX="6" HOLDON="1" />
-	 <ELEMENT TAG="Out.01" TYPE="BOOL" INDX="7" HOLDON="1" />
-	 <ELEMENT TAG="Out.02" TYPE="BOOL" INDX="8" HOLDON="1" />
-	 <ELEMENT TAG="Out.03" TYPE="BOOL" INDX="9" HOLDON="1" />
-	 <ELEMENT TAG="Out.04" TYPE="BOOL" INDX="10" HOLDON="1" />
-	 <ELEMENT TAG="Out.05" TYPE="BOOL" INDX="11" HOLDON="1" />
-	 <ELEMENT TAG="Out.06" TYPE="BOOL" INDX="12" HOLDON="1" />
-	 <ELEMENT TAG="Out.07" TYPE="BOOL" INDX="13" HOLDON="1" />
-	 <ELEMENT TAG="Out.08" TYPE="BOOL" INDX="14" HOLDON="1" />
+         <ELEMENT TAG="DEF_EStr" TYPE="STRING" INDX="INTERNAL" />
+         <ELEMENT TAG="DEF_Tech.T2" TYPE="DOUBLE" INDX="INTERNAL" HOLDON="0" />
+         <ELEMENT TAG="RKorr.X" TYPE="DOUBLE" INDX="1" HOLDON="1" />
+         <ELEMENT TAG="RKorr.Y" TYPE="DOUBLE" INDX="2" HOLDON="1" />
+         <ELEMENT TAG="RKorr.Z" TYPE="DOUBLE" INDX="3" HOLDON="1" />
+         <ELEMENT TAG="RKorr.A" TYPE="DOUBLE" INDX="4" HOLDON="1" />
+         <ELEMENT TAG="RKorr.B" TYPE="DOUBLE" INDX="5" HOLDON="1" />
+         <ELEMENT TAG="RKorr.C" TYPE="DOUBLE" INDX="6" HOLDON="1" />
+         <ELEMENT TAG="FREE" TYPE="LONG" INDX="7" HOLDON="1" />
+         <ELEMENT TAG="DiO" TYPE="LONG" INDX="8" HOLDON="1" />
       </ELEMENTS>
    </RECEIVE>
 </ROOT>

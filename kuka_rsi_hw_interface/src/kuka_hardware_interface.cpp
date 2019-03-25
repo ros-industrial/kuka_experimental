@@ -55,15 +55,6 @@ KukaHardwareInterface::KukaHardwareInterface() :
   remote_host_.resize(1024);
   remote_port_.resize(1024);
 
-  JointCommandPub = nh_.advertise<std_msgs::Float64MultiArray>("/rsi_joint_commands", 1);
-  JointCmdSub = nh_.subscribe("/command2", 1, &KukaHardwareInterface::JointCmdCallback, this);
-
-  // init
-  this->joint_position[1] = -1.5707963267948966;
-  this->joint_position[2] = 1.5707963267948966;
-  this->joint_position[4] = 1.5707963267948966;
-
-
   if (!nh_.getParam("controller_joint_names", joint_names_))
   {
     ROS_ERROR("Cannot find required parameter 'controller_joint_names' "
@@ -95,17 +86,6 @@ KukaHardwareInterface::KukaHardwareInterface() :
 
 KukaHardwareInterface::~KukaHardwareInterface()
 {
-
-}
-
-void KukaHardwareInterface::JointCmdCallback    (const std_msgs::Float64MultiArray &msg)
-{
-    this->joint_position[0] = msg.data[0];
-    this->joint_position[1] = msg.data[1];
-    this->joint_position[2] = msg.data[2];
-    this->joint_position[3] = msg.data[3];
-    this->joint_position[4] = msg.data[4];
-    this->joint_position[5] = msg.data[5];
 
 }
 
@@ -150,29 +130,11 @@ bool KukaHardwareInterface::read(const ros::Time time, const ros::Duration perio
 bool KukaHardwareInterface::write(const ros::Time time, const ros::Duration period)
 {
   out_buffer_.resize(1024);
-  std::cout << "RSI HW Interface write: ";
+
   for (std::size_t i = 0; i < n_dof_; ++i)
   {
     rsi_joint_position_corrections_[i] = (RAD2DEG * joint_position_command_[i]) - rsi_initial_joint_positions_[i];
-    std::cout << rsi_joint_position_corrections_[i] << ", " << RAD2DEG *joint_position_command_[i] <<", " << rsi_initial_joint_positions_[i]<< std::endl;
-    //rsi_joint_position_corrections_[i] = (RAD2DEG * this->joint_position[i]) - rsi_initial_joint_positions_[i];
-    //std::cout << rsi_joint_position_corrections_[i] << ", " << RAD2DEG *this->joint_position[i] <<", " << rsi_initial_joint_positions_[i]<< std::endl;
-
   }
-  std::cout << std::endl;
-  
-  
-  // testing
-  std_msgs::Float64MultiArray temp;
-  temp.data.push_back(joint_position_command_[0]);
-  temp.data.push_back(joint_position_command_[1]);
-  temp.data.push_back(joint_position_command_[2]);
-  temp.data.push_back(joint_position_command_[3]);
-  temp.data.push_back(joint_position_command_[4]);
-  temp.data.push_back(joint_position_command_[5]);
-  JointCommandPub.publish(temp);
-  
-
 
   out_buffer_ = RSICommand(rsi_joint_position_corrections_, digital_output_, ipoc_).xml_doc;
   server_->send(out_buffer_);

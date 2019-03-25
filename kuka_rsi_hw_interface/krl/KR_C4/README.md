@@ -30,13 +30,13 @@ If your **PC** has an IP address on the same subnet as the **Windows interface**
 
 The files included in this folder specifies the data transferred via RSI. Some of the files needs to be modified to work for your specific configuration.
 
-##### ros_rsi_ethernet.xml
+##### RSI_EthernetConfig.xml
 1. Edit the `IP_NUMBER` tag so that it corresponds to the IP address (192.168.1.xx) previously added for your PC.
 2. Keep the `PORT` tag as it is (49152) or change it if you want to use another port.
 
 Note that the `rsi/listen_address` and `rsi/listen_port` parameters of the `kuka_rsi_hw_interface` must correspond to the `IP_NUMBER`and `PORT` set in these KRL files.
 
-##### ros_rsi.rsi.xml
+##### ros_rsi.rsix
 This file may be edited with application specific joint limits in degrees.
 * Edit the parameters within the RSIObject `AXISCORR` to specify joint limits such as **LowerLimA1**, **UpperLimA1** etc. Note that these limits are in reference to the start position of the robot.
 * Edit the parameters within `AXISCORRMON` to specify the overall correction limitation. If this limit is exceeded in either of the joint directions, RSI is stopped. The values of **MaxA1**, **MaxA2** etc. may be large to allow free movement within the specified joint limits in `AXISCORR`.
@@ -51,7 +51,7 @@ If you have problems with the connection to RSI shutting down now and then while
 This should only be edited if the start position specified within the file is not desirable for your application.
 
 ##### Copy files to controller
-The files **ros_rsi.rsi** and **ros_rsi.rsi.diagram** should not be edited. All files are now ready to be copied to the Kuka controller:
+The files **ros_rsi.rsi** and **ros_rsi.rsix** should not be edited. All files are now ready to be copied to the Kuka controller:
 
 1. Copy the files to a USB-stick.
 2. Plug it into the teach pad or controller.
