@@ -1,5 +1,12 @@
 manipulator:
-  kinematics_solver: kuka_cybertech_kr16_r1610_manipulator_kinematics/IKFastKinematicsPlugin
-  kinematics_solver_attempts: 3
-  kinematics_solver_search_resolution: 0.005
-  kinematics_solver_timeout: 0.005
+  kinematics_solver: moveit_opw_kinematics_plugin/MoveItOPWKinematicsPlugin
+  kinematics_solver_geometric_parameters:
+         a1:  0.16
+         a2:  -0.15
+         b:   0.000
+         c1:  0.52
+         c2:  0.78
+         c3:  0.655
+         c4:  0.153
+  kinematics_solver_joint_offsets: '[0.0, -1.57079632679, 0.0, 0.0, 0.0, 0.0]'
+  kinematics_solver_joint_sign_corrections: '[-1, 1, 1, -1, 1, -1]'
