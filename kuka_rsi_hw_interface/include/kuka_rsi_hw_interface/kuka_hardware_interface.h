@@ -127,6 +127,7 @@ private:
 
   // Testing
   ros::Publisher JointCommandPub;
+  ros::Publisher DigitalInputsStatePub;
 
 
 public:
@@ -135,6 +136,7 @@ public:
   ~KukaHardwareInterface();
 
   //Test section for adding digital output control
+  void PublishDigitalInputs(std::vector<double> &digital_inputs_state);
   bool write_8_digital_outputs(kuka_rsi_hw_interface::write_8_outputs::Request &req, kuka_rsi_hw_interface::write_8_outputs::Response &res);
 
   void start();

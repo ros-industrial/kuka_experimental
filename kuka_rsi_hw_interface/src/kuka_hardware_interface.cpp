@@ -56,6 +56,7 @@ KukaHardwareInterface::KukaHardwareInterface() :
   remote_port_.resize(1024);
 
   JointCommandPub = nh_.advertise<std_msgs::Float64MultiArray>("/rsi_joint_commands", 1);
+  DigitalInputsStatePub = nh_.advertise<std_msgs::Float64MultiArray>("/rsi_digital_inputs_state", 1);
   JointCmdSub = nh_.subscribe("/command2", 1, &KukaHardwareInterface::JointCmdCallback, this);
 
   // init
@@ -95,6 +96,24 @@ KukaHardwareInterface::KukaHardwareInterface() :
 
 KukaHardwareInterface::~KukaHardwareInterface()
 {
+
+}
+
+void KukaHardwareInterface::PublishDigitalInputs(std::vector<double> &digital_inputs_state)
+{
+
+  std_msgs::Float64MultiArray msg;
+
+  msg.data.push_back(digital_inputs_state[0]);
+  msg.data.push_back(digital_inputs_state[1]);
+  msg.data.push_back(digital_inputs_state[2]);
+  msg.data.push_back(digital_inputs_state[3]);
+  msg.data.push_back(digital_inputs_state[4]);
+  msg.data.push_back(digital_inputs_state[5]);
+  msg.data.push_back(digital_inputs_state[6]);
+  msg.data.push_back(digital_inputs_state[7]);
+
+  this->DigitalInputsStatePub.publish(msg);
 
 }
 
@@ -141,6 +160,8 @@ bool KukaHardwareInterface::read(const ros::Time time, const ros::Duration perio
   for (std::size_t i = 0; i < n_dof_; ++i)
   {
     joint_position_[i] = DEG2RAD * rsi_state_.positions[i];
+    // update digital input states
+    this->PublishDigitalInputs(rsi_state_.digital_inputs);
   }
   ipoc_ = rsi_state_.ipoc;
 
@@ -201,6 +222,8 @@ void KukaHardwareInterface::start()
     joint_position_[i] = DEG2RAD * rsi_state_.positions[i];
     joint_position_command_[i] = joint_position_[i];
     rsi_initial_joint_positions_[i] = rsi_state_.initial_positions[i];
+    // update digital input states
+    this->PublishDigitalInputs(rsi_state_.digital_inputs);
   }
   ipoc_ = rsi_state_.ipoc;
   out_buffer_ = RSICommand(rsi_joint_position_corrections_, digital_output_, ipoc_).xml_doc;
