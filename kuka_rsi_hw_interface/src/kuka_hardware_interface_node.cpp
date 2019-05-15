@@ -43,6 +43,14 @@ int main(int argc, char** argv)
 {
   ROS_INFO_STREAM_NAMED("hardware_interface", "Starting hardware interface...");
 
+// RT testing
+    int ret;
+    pthread_t this_thread = pthread_self();
+    struct sched_param params;
+
+    params.sched_priority = sched_get_priority_max(SCHED_FIFO);
+    ret = pthread_setschedparam(this_thread, SCHED_FIFO, &params);
+
   ros::init(argc, argv, "kuka_rsi_hardware_interface");
 
   ros::AsyncSpinner spinner(2);
