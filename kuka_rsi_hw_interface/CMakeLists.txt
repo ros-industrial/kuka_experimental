@@ -12,7 +12,12 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   std_msgs
   message_generation
+  trajectory_msgs
+  sensor_msgs
+  fdcc
 )
+
+
 
 find_package(Boost REQUIRED COMPONENTS system)
 find_package(TinyXML REQUIRED)
@@ -20,25 +25,30 @@ find_package(TinyXML REQUIRED)
 add_service_files(
   FILES
   write_8_outputs.srv
+  request_command.srv
 )
 
 generate_messages(
   DEPENDENCIES
   std_msgs
+  trajectory_msgs
+  sensor_msgs
 )
 
 
 catkin_package(
   INCLUDE_DIRS
     include
+    ${catkin_INCLUDE_DIRS}
   LIBRARIES
     kuka_hardware_interface
+    fdcc
   CATKIN_DEPENDS
     controller_manager
     hardware_interface
     joint_limits_interface
     roscpp
-    std_msgs
+    std_msgs    
   DEPENDS
     TinyXML
 )
@@ -49,16 +59,26 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
   ${Boost_INCLUDE_DIRS}
   ${TinyXML_INCLUDE_DIRS}
+  ${fdcc_INCLUDE_DIRS}
+  ${fdcc_lib_INCLUDE_DIRS}
 )
+
+# Eigen
+find_package(Eigen REQUIRED)
+include_directories(SYSTEM ${Boost_INCLUDE_DIR} ${EIGEN_INCLUDE_DIRS} ${RBDL_INCLUDE_DIRS})
+include_directories(include ${catkin_INCLUDE_DIRS})
+link_directories(${catkin_LIBRARY_DIRS})
 
 add_library(kuka_hardware_interface
   src/kuka_hardware_interface.cpp
 )
 
 target_link_libraries(kuka_hardware_interface
+  fdcc_lib
   ${catkin_LIBRARIES}
   ${Boost_LIBRARIES}
   ${TinyXML_LIBRARIES}
+  ${EIGEN_LIBRARIES}
 )
 
 add_executable(kuka_hardware_interface_node

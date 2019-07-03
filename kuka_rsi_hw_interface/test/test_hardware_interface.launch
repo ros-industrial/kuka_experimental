@@ -2,6 +2,8 @@
 <launch>
     <arg name="sim" default="true" />
 
+	<include file="$(find optoforce_sensor)/launch/onrobot_hex_sensor.launch"/>
+
     <!--param name="robot_description" command="$(find xacro)/xacro.py '$(find kuka_kr10_support)/urdf/kr10r1100sixx.xacro'"/-->
 
 <param name="robot_description" command="$(find xacro)/xacro.py '$(find fdcc)/urdf/kr10r1100sixx.urdf'"/>

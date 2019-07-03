@@ -69,7 +69,12 @@
 
 // SRV
 #include <kuka_rsi_hw_interface/write_8_outputs.h>
+#include <kuka_rsi_hw_interface/request_command.h>
 
+#include <trajectory_msgs/JointTrajectory.h>
+#include <trajectory_msgs/JointTrajectoryPoint.h>
+
+#include <fdcc/fdcc.h>
 
 namespace kuka_rsi_hw_interface
 {
@@ -130,6 +135,11 @@ private:
 
   ros::Subscriber JointCmdSub;
 
+  ros::ServiceClient RSI_cmdSrv;
+
+  int dummySrvCnt;
+
+
 
 
 public:
@@ -139,16 +149,19 @@ public:
 
   //Test section for adding digital output control
   void PublishDigitalInputs(std::vector<double> &digital_inputs_state);
-  void JointCmdCallback    (const std_msgs::Float64MultiArray &msg);
+  void JointCmdCallback    (const trajectory_msgs::JointTrajectory &msg);
   bool write_8_digital_outputs(kuka_rsi_hw_interface::write_8_outputs::Request &req, kuka_rsi_hw_interface::write_8_outputs::Response &res);
 
   void start();
   void configure();
   bool read(const ros::Time time, const ros::Duration period);
-  bool write(const ros::Time time, const ros::Duration period);
+  bool write(const ros::Time time, const ros::Duration period, std::vector<float> v);
 
   double joint_position[6];
+  int seq_temp;
+  int seq_old;
 
+  
 };
 
 } // namespace kuka_rsi_hw_interface
