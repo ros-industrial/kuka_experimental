@@ -73,27 +73,27 @@
 
   <!-- Gazebo-specific link properties -->
   <gazebo reference="${prefix}base_link">
-    <material>Gazebo/Black</material>
+    <material>Gazebo/Grey</material>
     <turnGravityOff>true</turnGravityOff>
   </gazebo>
   <gazebo reference="${prefix}link_1">
-    <material>Gazebo/DarkGrey</material>
+    <material>Gazebo/Orange</material>
     <turnGravityOff>true</turnGravityOff>
   </gazebo>
   <gazebo reference="${prefix}link_2">
-    <material>Gazebo/DarkGrey</material>
+    <material>Gazebo/Orange</material>
     <turnGravityOff>true</turnGravityOff>
   </gazebo>
   <gazebo reference="${prefix}link_3">
-    <material>Gazebo/DarkGrey</material>
+    <material>Gazebo/Orange</material>
     <turnGravityOff>true</turnGravityOff>
   </gazebo>
   <gazebo reference="${prefix}link_4">
-    <material>Gazebo/DarkGrey</material>
+    <material>Gazebo/Orange</material>
     <turnGravityOff>true</turnGravityOff>
   </gazebo>
   <gazebo reference="${prefix}link_5">
-    <material>Gazebo/DarkGrey</material>
+    <material>Gazebo/Orange</material>
     <turnGravityOff>true</turnGravityOff>
   </gazebo>
   <gazebo reference="${prefix}link_6">
