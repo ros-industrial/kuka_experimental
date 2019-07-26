@@ -1,0 +1,211 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://wiki.ros.org/xacro">
+  <xacro:include filename="$(find kuka_resources)/urdf/common_constants.xacro"/>
+  <xacro:include filename="$(find kuka_resources)/urdf/common_materials.xacro"/>
+
+  <xacro:macro name="kuka_kr210r2700extra" params="prefix">
+    <link name="${prefix}base_link">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://kuka_kr210_support/meshes/kr210r2700extra/visual/base_link.dae" />
+        </geometry>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://kuka_kr210_support/meshes/kr210r2700extra/collision/base_link.stl" />
+        </geometry>
+      </collision>
+    </link>
+    <link name="${prefix}link_1">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://kuka_kr210_support/meshes/kr210r2700extra/visual/link_1.dae" />
+        </geometry>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://kuka_kr210_support/meshes/kr210r2700extra/collision/link_1.stl" />
+        </geometry>
+      </collision>
+    </link>
+    <link name="${prefix}link_2">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://kuka_kr210_support/meshes/kr210r2700extra/visual/link_2.dae"/>
+        </geometry>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://kuka_kr210_support/meshes/kr210r2700extra/collision/link_2.stl" />
+        </geometry>
+      </collision>
+    </link>
+    <link name="${prefix}link_3">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://kuka_kr210_support/meshes/kr210r2700extra/visual/link_3.dae" />
+        </geometry>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://kuka_kr210_support/meshes/kr210r2700extra/collision/link_3.stl" />
+        </geometry>
+      </collision>
+    </link>
+    <link name="${prefix}link_4">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://kuka_kr210_support/meshes/kr210r2700extra/visual/link_4.dae" />
+        </geometry>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://kuka_kr210_support/meshes/kr210r2700extra/collision/link_4.stl" />
+        </geometry>
+      </collision>
+    </link>
+    <link name="${prefix}link_5">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://kuka_kr210_support/meshes/kr210r2700extra/visual/link_5.dae" />
+        </geometry>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://kuka_kr210_support/meshes/kr210r2700extra/collision/link_5.stl" />
+        </geometry>
+      </collision>
+    </link>
+    <link name="${prefix}link_6">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://kuka_kr210_support/meshes/kr210r2700extra/visual/link_6.dae" />
+        </geometry>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://kuka_kr210_support/meshes/kr210r2700extra/collision/link_6.stl" />
+        </geometry>
+      </collision>
+    </link>
+    <!-- This frame corresponds to the $FLANGE coordinate system in KUKA KRC controllers. -->
+    <link name="${prefix}tool0"/>
+
+    <joint name="${prefix}joint_a1" type="revolute">
+      <origin xyz="0 0 0.675" rpy="0 0 0"/>
+      <parent link="${prefix}base_link"/>
+      <child link="${prefix}link_1"/>
+      <axis xyz="0 0 -1"/>
+      <limit effort="0" lower="${-185 * DEG2RAD}" upper="${185 * DEG2RAD}" velocity="${123 * DEG2RAD}"/>
+    </joint>
+    <joint name="${prefix}joint_a2" type="revolute">
+      <origin xyz="0.350 0 0" rpy="0 0 0"/>
+      <parent link="${prefix}link_1"/>
+      <child link="${prefix}link_2"/>
+      <axis xyz="0 1 0"/>
+      <limit effort="0" lower="${-140 * DEG2RAD}" upper="${-5 * DEG2RAD}" velocity="${115 * DEG2RAD}"/>
+    </joint>
+    <joint name="${prefix}joint_a3" type="revolute">
+      <origin xyz="1.150 0 0" rpy="0 0 0"/>
+      <parent link="${prefix}link_2"/>
+      <child link="${prefix}link_3"/>
+      <axis xyz="0 1 0"/>
+      <limit effort="0" lower="${-120 * DEG2RAD}" upper="${155 * DEG2RAD}" velocity="${112 * DEG2RAD}"/>
+    </joint>
+    <joint name="${prefix}joint_a4" type="revolute">
+      <origin xyz="0 0 -0.041" rpy="0 0 0"/>
+      <parent link="${prefix}link_3"/>
+      <child link="${prefix}link_4"/>
+      <axis xyz="-1 0 0"/>
+      <limit effort="0" lower="${-350 * DEG2RAD}" upper="${350 * DEG2RAD}" velocity="${179 * DEG2RAD}"/>
+    </joint>
+    <joint name="${prefix}joint_a5" type="revolute">
+      <origin xyz="1.200 0 0" rpy="0 0 0"/>
+      <parent link="${prefix}link_4"/>
+      <child link="${prefix}link_5"/>
+      <axis xyz="0 1 0"/>
+      <limit effort="0" lower="${-125 * DEG2RAD}" upper="${125 * DEG2RAD}" velocity="${172 * DEG2RAD}"/>
+    </joint>
+    <joint name="${prefix}joint_a6" type="revolute">
+      <origin xyz="0.215 0 0" rpy="0 0 0"/>
+      <parent link="${prefix}link_5"/>
+      <child link="${prefix}link_6"/>
+      <axis xyz="-1 0 0"/>
+      <limit effort="0" lower="${-350 * DEG2RAD}" upper="${350 * DEG2RAD}" velocity="${219 * DEG2RAD}"/>
+    </joint>
+    <joint name="${prefix}joint_a6-tool0" type="fixed">
+      <parent link="${prefix}link_6"/>
+      <child link="${prefix}tool0"/>
+      <origin xyz="0 0 0" rpy="0 ${90 * DEG2RAD} 0"/>
+    </joint>
+
+    <!-- ROS base_link to KUKA $ROBROOT coordinate system transform -->
+    <link name="${prefix}base" />
+    <joint name="${prefix}base_link-base" type="fixed">
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <parent link="${prefix}base_link"/>
+      <child link="${prefix}base"/>
+    </joint>
+
+
+    <!-- link name="${prefix}balancer">
+      <visual>
+        <origin xyz="-0.092 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://kuka_kr210_support/meshes/kr210r2700extra/visual/balancer.dae"/>
+        </geometry>
+      </visual>
+      <collision>
+        <origin xyz="-0.092 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://kuka_kr210_support/meshes/kr210r2700extra/collision/balancer.stl"/>
+        </geometry>
+      </collision>
+    </link>
+    <link name="${prefix}piston">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://kuka_kr210_support/meshes/kr210r2700extra/visual/piston.dae"/>
+        </geometry>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://kuka_kr210_support/meshes/kr210r2700extra/collision/piston.stl"/>
+        </geometry>
+      </collision>
+    </link>
+
+
+    <joint name="${prefix}balancer_joint" type="continuous">
+      <origin xyz="-0.450 0 -0.067" rpy="0 0 0"/>
+      <parent link="${prefix}link_1"/>
+      <child link="${prefix}balancer"/>
+      <axis xyz="0 1 0"/>
+      <mimic joint="${prefix}joint_a2" multiplier="-0.22" offset="${-22 * DEG2RAD}" />
+    </joint>
+    <joint name="${prefix}piston_joint" type="continuous">
+      <origin xyz="-0.01 0 0.2" rpy="0 0 0"/>
+      <parent link="${prefix}link_2"/>
+      <child link="${prefix}piston"/>
+      <axis xyz="0 1 0"/>
+      <mimic joint="${prefix}joint_a2" multiplier="-1.25" offset="${-22 * DEG2RAD}" />
+    </joint -->
+
+  </xacro:macro>
+</robot>
