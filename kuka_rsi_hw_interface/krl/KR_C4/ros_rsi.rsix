@@ -1,0 +1,81 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- Do not change! The content of this file is generated. -->
+<!-- Generated with RSIVisual WorkVisual plugin. -->
+<!-- RobotSensorInterface 4.0 B3083 -->
+<RsiContext xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="0.1.0">
+  <RsiObjects>
+    <RsiObject ObjTypeId="33" ObjType="AxisCorr" ObjId="AxisCorr_1">
+      <Inputs>
+        <Input InIdx="0" OutObjId="Ethernet_1" OutIdx="0" />
+        <Input InIdx="1" OutObjId="Ethernet_1" OutIdx="1" />
+        <Input InIdx="2" OutObjId="Ethernet_1" OutIdx="2" />
+        <Input InIdx="3" OutObjId="Ethernet_1" OutIdx="3" />
+        <Input InIdx="4" OutObjId="Ethernet_1" OutIdx="4" />
+        <Input InIdx="5" OutObjId="Ethernet_1" OutIdx="5" />
+      </Inputs>
+      <Parameters>
+        <Parameter Name="LowerLimA1" ParamId="0" ParamValue="-90.0" />
+        <Parameter Name="LowerLimA2" ParamId="1" ParamValue="-90.0" />
+        <Parameter Name="LowerLimA3" ParamId="2" ParamValue="-90.0" />
+        <Parameter Name="LowerLimA4" ParamId="3" ParamValue="-90.0" />
+        <Parameter Name="LowerLimA5" ParamId="4" ParamValue="-90.0" />
+        <Parameter Name="LowerLimA6" ParamId="5" ParamValue="-90.0" />
+        <Parameter Name="UpperLimA1" ParamId="6" ParamValue="90.0" />
+        <Parameter Name="UpperLimA2" ParamId="7" ParamValue="90.0" />
+        <Parameter Name="UpperLimA3" ParamId="8" ParamValue="90.0" />
+        <Parameter Name="UpperLimA4" ParamId="9" ParamValue="90.0" />
+        <Parameter Name="UpperLimA5" ParamId="10" ParamValue="90.0" />
+        <Parameter Name="UpperLimA6" ParamId="11" ParamValue="90.0" />
+      </Parameters>
+    </RsiObject>
+    <RsiObject ObjTypeId="64" ObjType="Ethernet" ObjId="Ethernet_1">
+      <Parameters>
+        <Parameter IsRuntime="false" Name="ConfigFile" ParamId="0" ParamValue="ros_rsi_ethernet.xml" />
+        <Parameter Name="Timeout" ParamId="0" ParamValue="100" />
+        <Parameter Name="Flag" ParamId="3" ParamValue="1" />
+        <Parameter Name="Precision" ParamId="7" ParamValue="4" />
+      </Parameters>
+    </RsiObject>
+    <RsiObject ObjTypeId="82" ObjType="AxisCorrMon" ObjId="AxisCorrMon_1">
+      <Parameters>
+        <Parameter Name="MaxA1" ParamId="0" ParamValue="90.0" />
+        <Parameter Name="MaxA2" ParamId="1" ParamValue="90.0" />
+        <Parameter Name="MaxA3" ParamId="2" ParamValue="90.0" />
+        <Parameter Name="MaxA4" ParamId="3" ParamValue="90.0" />
+        <Parameter Name="MaxA5" ParamId="4" ParamValue="90.0" />
+        <Parameter Name="MaxA6" ParamId="5" ParamValue="90.0" />
+        <Parameter Name="MaxE1" ParamId="6" ParamValue="6.0" />
+        <Parameter Name="MaxE2" ParamId="7" ParamValue="6.0" />
+        <Parameter Name="MaxE3" ParamId="8" ParamValue="6.0" />
+        <Parameter Name="MaxE4" ParamId="9" ParamValue="6.0" />
+        <Parameter Name="MaxE5" ParamId="10" ParamValue="6.0" />
+        <Parameter Name="MaxE6" ParamId="11" ParamValue="6.0" />
+      </Parameters>
+    </RsiObject>
+
+  </RsiObjects>
+  <Editor>
+    <Comments />
+    <Connectors />
+    <FunctionBlocks />
+    <Groups />
+    <Links>
+      <Link From="Ethernet_1" FromPort="Out1" Points="-337.48,-160.5;-209.48,-160.5;-81.48,-160.5;-81.48,-160.5;356,-160.5;372,-160.5" To="AxisCorr_1" ToPort="CorrA1" />
+      <Link From="Ethernet_1" FromPort="Out2" Points="-337.48,-130.5;-217.48,-130.5;-97.48,-130.5;-97.48,-130.5;356,-130.5;372,-130.5" To="AxisCorr_1" ToPort="CorrA2" />
+      <Link From="Ethernet_1" FromPort="Out3" Points="-337.48,-100.5;-225.48,-100.5;-113.48,-100.5;-113.48,-100.5;356,-100.5;372,-100.5" To="AxisCorr_1" ToPort="CorrA3" />
+      <Link From="Ethernet_1" FromPort="Out4" Points="-337.48,-70.5;-233.48,-70.5;-129.48,-70.5;-129.48,-70.5;356,-70.5;372,-70.5" To="AxisCorr_1" ToPort="CorrA4" />
+      <Link From="Ethernet_1" FromPort="Out5" Points="-337.48,-40.5;-241.48,-40.5;-145.48,-40.5;-145.48,-40.5;356,-40.5;372,-40.5" To="AxisCorr_1" ToPort="CorrA5" />
+      <Link From="Ethernet_1" FromPort="Out6" Points="-337.48,-10.5;-249.48,-10.5;-161.48,-10.5;-161.48,-10.5;356,-10.5;372,-10.5" To="AxisCorr_1" ToPort="CorrA6" />
+
+    </Links>
+    <Nodes>
+      <Node Location="390,-180" Name="AxisCorr_1" Type="AxisCorr" />
+      <Node Location="-516,-180" Name="Ethernet_1" NumberOfInputs="1" NumberOfOutputs="17" Type="Ethernet" />
+      <Node Location="636,-174" Name="AxisCorrMon_1" Type="AxisCorrMon" />
+
+    </Nodes>
+    <Toolboxes>
+      <Toolbox Name="RSI" Version="1.4.0" />
+    </Toolboxes>
+  </Editor>
+</RsiContext>

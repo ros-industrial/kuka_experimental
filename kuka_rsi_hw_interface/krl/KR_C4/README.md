@@ -36,7 +36,8 @@ The files included in this folder specifies the data transferred via RSI. Some o
 
 Note that the `rsi/listen_address` and `rsi/listen_port` parameters of the `kuka_rsi_hw_interface` must correspond to the `IP_NUMBER`and `PORT` set in these KRL files.
 
-##### ros_rsi.rsi.xml
+##### ros_rsi.rsi.xml for RSI 3.x OR ros_rsi.rsix for RSI 4.x
+Note: from KSS 8.5 the version of RSI is changed to 4.x and the format of the file is a little changed. The new file extension on RSI 4.x is .rsix. So to use this driver on KSS 8.5 and above use ros_rsi.rsix instead of ros_rsi.rsi.xml
 This file may be edited with application specific joint limits in degrees.
 * Edit the parameters within the RSIObject `AXISCORR` to specify joint limits such as **LowerLimA1**, **UpperLimA1** etc. Note that these limits are in reference to the start position of the robot.
 * Edit the parameters within `AXISCORRMON` to specify the overall correction limitation. If this limit is exceeded in either of the joint directions, RSI is stopped. The values of **MaxA1**, **MaxA2** etc. may be large to allow free movement within the specified joint limits in `AXISCORR`.
@@ -58,6 +59,8 @@ The files **ros_rsi.rsi** and **ros_rsi.rsi.diagram** should not be edited. All 
 3. Log in as **Expert** or **Administrator**.
 4. Copy the `ros_rsi.src` file to `KRC:\R1\Program`.
 5. Copy the rest of the files to `C:\KRC\ROBOTER\Config\User\Common\SensorInterface`.
+  - for RSI 3.x : Copy ros_rsi.rsi.xml  to the above folder
+  - for RSI 4.x : Copy ros_rsi.rsix  to the above folder
 
 ## 3. Configure the kuka_rsi_hw_interface
 The **kuka_rsi_hardware_interface** needs to be configured in order to successfully communicate with RSI. Inside `/kuka_rsi_hw_interface/test` and `/kuka_rsi_hw_interface/config` in this repository is a set of `*.yaml` files. These configuration files may be loaded into a launch-file used to start the **kuka_rsi_hardware_interface** with correct parameters, such as:
