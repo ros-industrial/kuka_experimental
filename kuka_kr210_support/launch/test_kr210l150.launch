@@ -1,5 +1,7 @@
+<?xml version="1.0" ?>
 <launch>
-  <include file="$(find kuka_kr210_support)/launch/load_kr210l150.launch" />
+  <arg name="variant" default="" />
+  <include file="$(find kuka_kr210_support)/launch/load_kr210l150.launch" pass_all_args="true" />
   <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
     <param name="use_gui" value="true" />
   </node>
