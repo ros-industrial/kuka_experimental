@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="flange_type" default="basic" />
+  <param name="robot_description" command="$(find xacro)/xacro --inorder '$(find kuka_lbr_iiwa_support)/urdf/lbr_iiwa_7_r800.xacro' flange_type:=$(arg flange_type)" />
+</launch>

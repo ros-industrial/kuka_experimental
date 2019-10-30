@@ -1,0 +1,9 @@
+<launch>
+  <group ns="load_lbr_iiwa_14_r820__">
+    <include file="$(find kuka_lbr_iiwa_support)/launch/load_lbr_iiwa_14_r820.launch"/>
+  </group>
+
+  <group ns="test_lbr_iiwa_14_r820__">
+    <include file="$(find kuka_lbr_iiwa_support)/launch/test_lbr_iiwa_14_r820.launch"/>
+  </group>
+</launch>

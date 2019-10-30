@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://wiki.ros.org/xacro">
+  <xacro:macro name="kuka_lbr_iiwa_flange_link" params="prefix flange_type" >
+    <link name="${prefix}link_7">
+      <visual>
+	<origin xyz="0 0 0" rpy="0 0 0" />
+	<geometry>
+          <mesh filename="package://kuka_lbr_iiwa_support/meshes/lbr_iiwa_7_r800/visual/flange_${flange_type}.stl" />
+	</geometry>
+	<xacro:material_kuka_ral_silver_gray />
+      </visual>
+      <collision>
+	<origin xyz="0 0 0" rpy="0 0 0" />
+	<geometry>
+          <mesh filename="package://kuka_lbr_iiwa_support/meshes/lbr_iiwa_7_r800/collision/flange_${flange_type}.stl" />
+	</geometry>
+      </collision>
+    </link>
+  </xacro:macro>
+
+  <xacro:macro name="kuka_lbr_iiwa_flange_joint" params="prefix flange_type">
+    <joint name="${prefix}joint_a7" type="revolute">
+      <xacro:if value="${flange_type == 'basic'}">
+	<origin xyz="0 0 0.126" rpy="0 0 0" />
+      </xacro:if>
+      <xacro:if value="${flange_type == 'pneumatic_touch'}">
+	<origin xyz="0 0 0.152" rpy="0 0 0" />
+      </xacro:if>
+      <parent link="${prefix}link_6" />
+      <child link="${prefix}link_7" />
+      <axis xyz="0 0 1" />
+      <limit lower="${radians(-175)}" upper="${radians(175)}" effort="0" velocity="${radians(135)}" />
+    </joint>
+  </xacro:macro>
+</robot>
