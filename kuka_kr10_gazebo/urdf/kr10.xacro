@@ -1,0 +1,15 @@
+<?xml version="1.0" ?>
+<robot name="kuka_kr10_gazebo" xmlns:xacro="http://wiki.ros.org/xacro">
+  <!-- kr10 -->
+  <xacro:include filename="$(find kuka_kr10_gazebo)/urdf/kr10_macro.xacro"/>
+
+  <xacro:kuka_kr10_robot prefix=""/>
+
+  <!-- Fix robot to Gazebo world -->
+  <link name="world"/>
+  <joint name="world-base_link-fixed" type="fixed">
+    <parent link="world"/>
+    <child link="base_link"/>
+    <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+  </joint>
+</robot>
