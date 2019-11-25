@@ -1,5 +1,6 @@
 <launch>
-  <include file="$(find kuka_lbr_iiwa_support)/launch/load_lbr_iiwa_14_r820.launch" />
+  <arg name="flange_type" default="basic" />
+  <include file="$(find kuka_lbr_iiwa_support)/launch/load_lbr_iiwa_14_r820.launch" pass_all_args="true" />
   <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
     <param name="use_gui" value="true" />
   </node>

@@ -1,13 +1,20 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://wiki.ros.org/xacro">
+  <xacro:include filename="$(find kuka_resources)/urdf/common_materials.xacro"/>
+  <xacro:include filename="$(find kuka_lbr_iiwa_support)/urdf/lbr_iiwa_flanges_macro.xacro"/>
+
+  <!-- current support for the following values: basic, pneumatic_touch -->
+  <xacro:arg name="flange_type" default="basic" />
+  
   <xacro:macro name="kuka_lbr_iiwa_14_r820" params="prefix">
     <!-- link list -->
     <link name="${prefix}base_link">
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
-          <mesh filename="package://kuka_lbr_iiwa_support/meshes/lbr_iiwa_14_r820/visual/base_link.dae" />
+          <mesh filename="package://kuka_lbr_iiwa_support/meshes/lbr_iiwa_14_r820/visual/base_link.stl" />
         </geometry>
+	<xacro:material_kuka_ral_pearly_white />
       </visual>
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0" />
@@ -20,8 +27,9 @@
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
-          <mesh filename="package://kuka_lbr_iiwa_support/meshes/lbr_iiwa_14_r820/visual/link_1.dae" />
+          <mesh filename="package://kuka_lbr_iiwa_support/meshes/lbr_iiwa_14_r820/visual/link_1.stl" />
         </geometry>
+	<xacro:material_kuka_ral_pearly_white />
       </visual>
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0" />
@@ -34,8 +42,9 @@
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
-          <mesh filename="package://kuka_lbr_iiwa_support/meshes/lbr_iiwa_14_r820/visual/link_2.dae" />
+          <mesh filename="package://kuka_lbr_iiwa_support/meshes/lbr_iiwa_14_r820/visual/link_2.stl" />
         </geometry>
+	<xacro:material_kuka_ral_pearly_white />
       </visual>
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0" />
@@ -48,8 +57,9 @@
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
-          <mesh filename="package://kuka_lbr_iiwa_support/meshes/lbr_iiwa_14_r820/visual/link_3.dae" />
+          <mesh filename="package://kuka_lbr_iiwa_support/meshes/lbr_iiwa_14_r820/visual/link_3.stl" />
         </geometry>
+	<xacro:material_kuka_ral_pearly_white />
       </visual>
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0" />
@@ -62,8 +72,9 @@
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
-          <mesh filename="package://kuka_lbr_iiwa_support/meshes/lbr_iiwa_14_r820/visual/link_4.dae" />
+          <mesh filename="package://kuka_lbr_iiwa_support/meshes/lbr_iiwa_14_r820/visual/link_4.stl" />
         </geometry>
+	<xacro:material_kuka_ral_pearly_white />
       </visual>
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0" />
@@ -76,8 +87,9 @@
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
-          <mesh filename="package://kuka_lbr_iiwa_support/meshes/lbr_iiwa_14_r820/visual/link_5.dae" />
+          <mesh filename="package://kuka_lbr_iiwa_support/meshes/lbr_iiwa_14_r820/visual/link_5.stl" />
         </geometry>
+	<xacro:material_kuka_ral_pearly_white />
       </visual>
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0" />
@@ -90,85 +102,68 @@
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
-          <mesh filename="package://kuka_lbr_iiwa_support/meshes/lbr_iiwa_14_r820/visual/link_6.dae" />
+          <mesh filename="package://kuka_lbr_iiwa_support/meshes/lbr_iiwa_14_r820/visual/link_6.stl" />
         </geometry>
+	<xacro:material_kuka_ral_pearly_white />
       </visual>
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
           <mesh filename="package://kuka_lbr_iiwa_support/meshes/lbr_iiwa_14_r820/collision/link_6.stl" />
         </geometry>
+
       </collision>
     </link>
-    <link name="${prefix}link_7">
-      <visual>
-        <origin xyz="0 0 0" rpy="0 0 0" />
-        <geometry>
-          <mesh filename="package://kuka_lbr_iiwa_support/meshes/lbr_iiwa_14_r820/visual/link_7.dae" />
-        </geometry>
-      </visual>
-      <collision>
-        <origin xyz="0 0 0" rpy="0 0 0" />
-        <geometry>
-          <mesh filename="package://kuka_lbr_iiwa_support/meshes/lbr_iiwa_14_r820/collision/link_7.stl" />
-        </geometry>
-      </collision>
-    </link>
+    <xacro:kuka_lbr_iiwa_flange_link prefix="${prefix}" flange_type="$(arg flange_type)"/>
     <link name="${prefix}tool0" />
     <!-- end of link list -->
 
     <!-- joint list -->
     <joint name="${prefix}joint_a1" type="revolute">
-      <origin xyz="0 0 0" rpy="0 0 0" />
+      <origin xyz="0 0 0.36" rpy="0 0 0" />
       <parent link="${prefix}base_link" />
       <child link="${prefix}link_1" />
       <axis xyz="0 0 1" />
-      <limit lower="-2.9668" upper="2.9668" effort="0" velocity="1.4834" />
+      <limit lower="${radians(-170)}" upper="${radians(170)}" effort="0" velocity="${radians(85)}" />
     </joint>
     <joint name="${prefix}joint_a2" type="revolute">
-      <origin xyz="-0.00043624 0 0.36" rpy="0 0 0" />
+      <origin xyz="0 0 0" rpy="0 0 0" />
       <parent link="${prefix}link_1" />
       <child link="${prefix}link_2" />
       <axis xyz="0 1 0" />
-      <limit lower="-2.0942" upper="2.0942" effort="0" velocity="1.4834" />
+      <limit lower="${radians(-120)}" upper="${radians(120)}" effort="0" velocity="${radians(85)}" />
     </joint>
     <joint name="${prefix}joint_a3" type="revolute">
-      <origin xyz="0 0 0" rpy="0 0 0" />
+      <origin xyz="0 0 0.42" rpy="0 0 0" />
       <parent link="${prefix}link_2" />
       <child link="${prefix}link_3" />
       <axis xyz="0 0 1" />
-      <limit lower="-2.9668" upper="2.9668" effort="0" velocity="1.7452" />
+      <limit lower="${radians(-170)}" upper="${radians(170)}" effort="0" velocity="${radians(100)}" />
     </joint>
     <joint name="${prefix}joint_a4" type="revolute">
-      <origin xyz="0.00043624 0 0.42" rpy="0 0 0" />
+      <origin xyz="0 0 0" rpy="0 0 0" />
       <parent link="${prefix}link_3" />
       <child link="${prefix}link_4" />
       <axis xyz="0 -1 0" />
-      <limit lower="-2.0942" upper="2.0942" effort="0" velocity="1.3089" />
+      <limit lower="${radians(-120)}" upper="${radians(120)}" effort="0" velocity="${radians(75)}" />
     </joint>
     <joint name="${prefix}joint_a5" type="revolute">
-      <origin xyz="0 0 0" rpy="0 0 0" />
+      <origin xyz="0 0 0.40" rpy="0 0 0" />
       <parent link="${prefix}link_4" />
       <child link="${prefix}link_5" />
       <axis xyz="0 0 1" />
-      <limit lower="-2.9668" upper="2.9668" effort="0" velocity="2.2688" />
+      <limit lower="${radians(-170)}" upper="${radians(170)}" effort="0" velocity="${radians(130)}" />
     </joint>
     <joint name="${prefix}joint_a6" type="revolute">
-      <origin xyz="0 0 0.4" rpy="0 0 0" />
+      <origin xyz="0 0 0" rpy="0 0 0" />
       <parent link="${prefix}link_5" />
       <child link="${prefix}link_6" />
       <axis xyz="0 1 0" />
-      <limit lower="-2.0942" upper="2.0942" effort="0" velocity="2.356" />
+      <limit lower="${radians(-120)}" upper="${radians(120)}" effort="0" velocity="${radians(-135)}" />
     </joint>
-    <joint name="${prefix}joint_a7" type="revolute">
-      <origin xyz="0 0 0" rpy="0 0 0" />
-      <parent link="${prefix}link_6" />
-      <child link="${prefix}link_7" />
-      <axis xyz="0 0 1" />
-      <limit lower="-3.0541" upper="3.0541" effort="0" velocity="2.356" />
-    </joint>
+    <xacro:kuka_lbr_iiwa_flange_joint prefix="${prefix}" flange_type="$(arg flange_type)"/>
     <joint name="${prefix}joint_a7-tool0" type="fixed">
-      <origin xyz="0 0 0.126" rpy="0 0 0" />
+      <origin xyz="0 0 0" rpy="0 0 0" />
       <parent link="${prefix}link_7" />
       <child link="${prefix}tool0" />
       <axis xyz="0 0 0" />
