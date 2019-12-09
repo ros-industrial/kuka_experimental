@@ -1,0 +1,9 @@
+<launch>
+  <group ns="load_kr16_r1610__">
+    <include file="$(find kuka_cybertech_kr16_r1610_support)/launch/load_kr16_r1610.launch"/>
+  </group>
+
+  <group ns="test_kr16_r1610__">
+    <include file="$(find kuka_cybertech_kr16_r1610_support)/launch/test_kr16_r1610.launch"/>
+  </group>
+</launch>

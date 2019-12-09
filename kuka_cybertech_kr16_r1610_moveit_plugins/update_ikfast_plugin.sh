@@ -1,0 +1,1 @@
+rosrun moveit_kinematics create_ikfast_moveit_plugin.py kuka_cybertech_kr16_r1610 manipulator kuka_cybertech_kr16_r1610_moveit_plugins /home/sis/Mikado/src/kuka_experimental/kuka_cybertech_kr16_r1610_moveit_plugins/src/kuka_cybertech_kr16_r1610_manipulator_ikfast_solver.cpp

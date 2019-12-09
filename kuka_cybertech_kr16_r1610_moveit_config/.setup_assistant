@@ -1,0 +1,11 @@
+moveit_setup_assistant_config:
+  URDF:
+    package: kuka_cybertech_kr16_r1610_support
+    relative_path: urdf/kr16_r1610.urdf
+    xacro_args: "--inorder "
+  SRDF:
+    relative_path: config/kuka_kr16_r1610.srdf
+  CONFIG:
+    author_name: Simon Schmeißer
+    author_email: simon.schmeisser@isys-vision.de
+    generated_timestamp: 1537538591
