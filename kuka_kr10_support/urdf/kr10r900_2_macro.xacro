@@ -1,0 +1,182 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://wiki.ros.org/xacro">
+  <xacro:include filename="$(find kuka_resources)/urdf/common_constants.xacro"/>
+  <xacro:include filename="$(find kuka_resources)/urdf/common_materials.xacro"/>
+
+  <xacro:macro name="kuka_kr10r900_2" params="prefix">
+    <link name="${prefix}base_link">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://kuka_kr10_support/meshes/kr10r900_2/visual/base_link.stl" />
+        </geometry>
+        <xacro:material_kuka_ral_gray_aluminium />
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://kuka_kr10_support/meshes/kr10r900_2/collision/base_link.stl" />
+        </geometry>
+      </collision>
+    </link>
+    <link name="${prefix}link_1">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://kuka_kr10_support/meshes/kr10r900_2/visual/link_1.stl" />
+        </geometry>
+        <xacro:material_kuka_ral_traffic_white />
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://kuka_kr10_support/meshes/kr10r900_2/collision/link_1.stl" />
+        </geometry>
+      </collision>
+    </link>
+    <link name="${prefix}link_2">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://kuka_kr10_support/meshes/kr10r900_2/visual/link_2.stl"/>
+        </geometry>
+        <xacro:material_kuka_ral_traffic_white />
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://kuka_kr10_support/meshes/kr10r900_2/collision/link_2.stl" />
+        </geometry>
+      </collision>
+    </link>
+    <link name="${prefix}link_3">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://kuka_kr10_support/meshes/kr10r900_2/visual/link_3.stl" />
+        </geometry>
+        <xacro:material_kuka_ral_traffic_white />
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://kuka_kr10_support/meshes/kr10r900_2/collision/link_3.stl" />
+        </geometry>
+      </collision>
+    </link>
+    <link name="${prefix}link_4">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://kuka_kr10_support/meshes/kr10r900_2/visual/link_4.stl" />
+        </geometry>
+        <xacro:material_kuka_ral_traffic_white />
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://kuka_kr10_support/meshes/kr10r900_2/collision/link_4.stl" />
+        </geometry>
+      </collision>
+    </link>
+    <link name="${prefix}link_5">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://kuka_kr10_support/meshes/kr10r900_2/visual/link_5.stl" />
+        </geometry>
+        <xacro:material_kuka_ral_traffic_white />
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://kuka_kr10_support/meshes/kr10r900_2/collision/link_5.stl" />
+        </geometry>
+      </collision>
+    </link>
+    <link name="${prefix}link_6">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://kuka_kr10_support/meshes/kr10r900_2/visual/link_6.stl" />
+        </geometry>
+        <xacro:material_kuka_black />
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://kuka_kr10_support/meshes/kr10r900_2/collision/link_6.stl" />
+        </geometry>
+      </collision>
+    </link>
+    
+
+    <joint name="${prefix}joint_a1" type="revolute">
+      <origin xyz="0 0 0.400" rpy="0 0 0"/>
+      <parent link="${prefix}base_link"/>
+      <child link="${prefix}link_1"/>
+      <axis xyz="0 0 -1"/>
+      <limit effort="0" lower="${radians(-170)}" upper="${radians(170)}" velocity="${radians(300)}"/>
+    </joint>
+    <joint name="${prefix}joint_a2" type="revolute">
+      <origin xyz="0.025 0 0" rpy="0 0 0"/>
+      <parent link="${prefix}link_1"/>
+      <child link="${prefix}link_2"/>
+      <axis xyz="0 1 0"/>
+      <limit effort="0" lower="${radians(-190)}" upper="${radians(45)}" velocity="${radians(225)}"/>
+    </joint>
+    <joint name="${prefix}joint_a3" type="revolute">
+      <origin xyz="0.455 0 0" rpy="0 0 0"/>
+      <parent link="${prefix}link_2"/>
+      <child link="${prefix}link_3"/>
+      <axis xyz="0 1 0"/>
+      <limit effort="0" lower="${radians(-120)}" upper="${radians(156)}" velocity="${radians(330)}"/>
+    </joint>
+    <joint name="${prefix}joint_a4" type="revolute">
+      <origin xyz="0 0 0.025" rpy="0 0 0"/>
+      <parent link="${prefix}link_3"/>
+      <child link="${prefix}link_4"/>
+      <axis xyz="-1 0 0"/>
+      <limit effort="0" lower="${radians(-185)}" upper="${radians(185)}" velocity="${radians(360)}"/>
+    </joint>
+    <joint name="${prefix}joint_a5" type="revolute">
+      <origin xyz="0.420 0 0" rpy="0 0 0"/>
+      <parent link="${prefix}link_4"/>
+      <child link="${prefix}link_5"/>
+      <axis xyz="0 1 0"/>
+      <limit effort="0" lower="${radians(-120)}" upper="${radians(120)}" velocity="${radians(360)}"/>
+    </joint>
+    <joint name="${prefix}joint_a6" type="revolute">
+      <origin xyz="0.090 0 0" rpy="0 0 0"/>
+      <parent link="${prefix}link_5"/>
+      <child link="${prefix}link_6"/>
+      <axis xyz="-1 0 0"/>
+      <limit effort="0" lower="${radians(-350)}" upper="${radians(350)}" velocity="${radians(433)}"/>
+    </joint>
+
+    <!-- ROS-Industrial 'base' frame: base_link to KUKA $ROBROOT coordinate system transform -->
+    <link name="${prefix}base" />
+    <joint name="${prefix}base_link-base" type="fixed">
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <parent link="${prefix}base_link"/>
+      <child link="${prefix}base"/>
+    </joint>
+    
+    <!-- ROS-Industrial 'flange' frame: attachment point for EEF models -->
+    <link name="${prefix}flange" />
+    <joint name="${prefix}joint_6-flange" type="fixed">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <parent link="${prefix}link_6" />
+      <child link="${prefix}flange" />
+    </joint>
+    
+    <!-- ROS-Industrial 'tool0' frame: all-zeros tool frame -->
+    <!-- This frame corresponds to the $FLANGE coordinate system in KUKA KRC controllers. -->
+    <link name="${prefix}tool0"/>
+    <joint name="${prefix}joint_a6-tool0" type="fixed">
+      <parent link="${prefix}link_6"/>
+      <child link="${prefix}tool0"/>
+      <origin xyz="0 0 0" rpy="0 ${pi/2.0} 0"/>
+    </joint>
+  </xacro:macro>
+</robot>
