@@ -105,7 +105,13 @@
 
   <!-- RAL 9002 - gray white  -->
   <xacro:property name="colour_kuka_ral_gray_white"       value="${215/255} ${213/255} ${203/255} 1.0" />
+  
+  <!-- RAL 9007 - grey aluminium -->
+  <xacro:property name="colour_kuka_ral_gray_aluminium"   value="${135/255} ${133/255} ${129/255} 1.0" />
 
   <!-- RAL 9010 - pure white  -->
   <xacro:property name="colour_kuka_ral_pure_white"       value="${241/255} ${236/255} ${255/255} 1.0" />
+  
+  <!-- RAL 9016 - traffic white -->
+  <xacro:property name="colour_kuka_ral_traffic_white"    value="${241/255}  ${240/255} ${234/255} 1.0" />
 </robot>

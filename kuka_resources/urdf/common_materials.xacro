@@ -182,9 +182,21 @@
     </material>
   </xacro:macro>
 
+  <xacro:macro name="material_kuka_ral_gray_aluminium">
+    <material name="">
+      <color rgba="${colour_kuka_ral_gray_aluminium}"/>
+    </material>
+  </xacro:macro>
+
   <xacro:macro name="material_kuka_ral_pure_white">
     <material name="">
       <color rgba="${colour_kuka_ral_pure_white}"/>
+    </material>
+  </xacro:macro>
+
+  <xacro:macro name="material_kuka_ral_traffic_white">
+    <material name="">
+      <color rgba="${colour_kuka_ral_traffic_white}"/>
     </material>
   </xacro:macro>
 </robot>
