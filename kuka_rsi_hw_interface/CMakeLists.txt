@@ -11,6 +11,7 @@ find_package(catkin REQUIRED COMPONENTS
   realtime_tools
   roscpp
   std_msgs
+  kuka_rsi_hw_interface_msgs
 )
 
 find_package(Boost REQUIRED COMPONENTS system)

@@ -22,4 +22,8 @@
   <depend>realtime_tools</depend>
   <depend>roscpp</depend>
   <depend>std_msgs</depend>
+  <depend>kuka_rsi_hw_interface_msgs</depend>
+<export>
+    <hardware_interface plugin="${prefix}/kuka_rsi_hardware_interface_plugin.xml"/>
+  </export>
 </package>
