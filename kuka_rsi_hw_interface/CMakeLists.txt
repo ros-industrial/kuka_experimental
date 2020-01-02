@@ -42,6 +42,7 @@ catkin_package(
     ${catkin_INCLUDE_DIRS}
   LIBRARIES
     kuka_hardware_interface
+    kuka_position_interface
     fdcc
   CATKIN_DEPENDS
     controller_manager
@@ -73,7 +74,19 @@ add_library(kuka_hardware_interface
   src/kuka_hardware_interface.cpp
 )
 
+add_library(kuka_position_interface
+  src/kuka_position_interface.cpp
+)
+
 target_link_libraries(kuka_hardware_interface
+  fdcc_lib
+  ${catkin_LIBRARIES}
+  ${Boost_LIBRARIES}
+  ${TinyXML_LIBRARIES}
+  ${EIGEN_LIBRARIES}
+)
+
+target_link_libraries(kuka_position_interface
   fdcc_lib
   ${catkin_LIBRARIES}
   ${Boost_LIBRARIES}
@@ -85,16 +98,26 @@ add_executable(kuka_hardware_interface_node
   src/kuka_hardware_interface_node.cpp
 )
 
-target_link_libraries(kuka_hardware_interface_node
+target_link_libraries(kuka_hardware_interface_node 
   kuka_hardware_interface
 )
 
+add_executable(kuka_position_interface_node
+  src/kuka_position_interface_node.cpp
+)
+
+target_link_libraries(kuka_position_interface_node 
+  kuka_position_interface
+)
+
 install(
-  TARGETS kuka_hardware_interface
+  TARGETS kuka_hardware_interface kuka_position_interface
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   RUNTIME DESTINATION ${CATKIN_GLOBAL_BIN_DESTINATION})
 
 install(
-  TARGETS kuka_hardware_interface_node
+  TARGETS kuka_hardware_interface_node kuka_position_interface_node
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
+
+
