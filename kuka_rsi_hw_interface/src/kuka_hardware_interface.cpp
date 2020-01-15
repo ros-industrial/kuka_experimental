@@ -77,13 +77,18 @@ KukaHardwareInterface::KukaHardwareInterface()
                                                                                &joint_velocity_[i], &joint_effort_[i]));
 
     // Create joint position control interface
-    position_joint_interface_.registerHandle(hardware_interface::JointHandle(
-        joint_state_interface_.getHandle(joint_names_[i]), &joint_position_command_[i]));
+    // position_joint_interface_.registerHandle(hardware_interface::JointHandle(
+    //    joint_state_interface_.getHandle(joint_names_[i]), &joint_position_command_[i]));
+
+    // Create joint velocity control interface
+    position_velocity_joint_interface_.registerHandle(hardware_interface::PosVelJointHandle(
+        joint_state_interface_.getHandle(joint_names_[i]), &joint_position_command_[i], &joint_velocity_command_[i]));
   }
 
   // Register interfaces
   registerInterface(&joint_state_interface_);
-  registerInterface(&position_joint_interface_);
+  // registerInterface(&position_joint_interface_);
+  registerInterface(&position_velocity_joint_interface_);
 
   ROS_INFO_STREAM_NAMED("hardware_interface", "Loaded kuka_rsi_hardware_interface");
 }
