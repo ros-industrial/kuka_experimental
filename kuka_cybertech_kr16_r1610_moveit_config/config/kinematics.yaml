@@ -1,6 +1,6 @@
 manipulator:
   kinematics_solver: moveit_opw_kinematics_plugin/MoveItOPWKinematicsPlugin
-  kinematics_solver_geometric_parameters:
+  opw_kinematics_geometric_parameters:
          a1:  0.16
          a2:  -0.15
          b:   0.000
@@ -8,5 +8,5 @@ manipulator:
          c2:  0.78
          c3:  0.655
          c4:  0.153
-  kinematics_solver_joint_offsets: [0.0, -1.57079632679, 0.0, 0.0, 0.0, 0.0]
-  kinematics_solver_joint_sign_corrections: [-1, 1, 1, -1, 1, -1]
+  opw_kinematics_joint_offsets: [0.0, -1.57079632679, 0.0, 0.0, 0.0, 0.0]
+  opw_kinematics_joint_sign_corrections: [-1, 1, 1, -1, 1, -1]
