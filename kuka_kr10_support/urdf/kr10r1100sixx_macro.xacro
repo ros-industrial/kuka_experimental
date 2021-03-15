@@ -117,47 +117,47 @@
       <parent link="${prefix}base_link"/>
       <child link="${prefix}link_1"/>
       <axis xyz="0 0 -1"/>
-      <limit effort="0" lower="${-DEG2RAD * 170}" upper="${DEG2RAD * 170}" velocity="${DEG2RAD * 360}"/>
+      <limit effort="0" lower="${radians()}" upper="${radians()}" velocity="${radians()}"/>
     </joint>
     <joint name="${prefix}joint_a2" type="revolute">
       <origin xyz="0.025 0 0" rpy="0 0 0"/>
       <parent link="${prefix}link_1"/>
       <child link="${prefix}link_2"/>
       <axis xyz="0 1 0"/>
-      <limit effort="0" lower="${-DEG2RAD * 190}" upper="${DEG2RAD * 45}" velocity="${DEG2RAD * 300}"/>
+      <limit effort="0" lower="${radians()}" upper="${radians()}" velocity="${radians()}"/>
     </joint>
     <joint name="${prefix}joint_a3" type="revolute">
       <origin xyz="0.560 0 0" rpy="0 0 0"/>
       <parent link="${prefix}link_2"/>
       <child link="${prefix}link_3"/>
       <axis xyz="0 1 0"/>
-      <limit effort="0" lower="${-DEG2RAD * 120}" upper="${DEG2RAD * 156}" velocity="${DEG2RAD * 360}"/>
+      <limit effort="0" lower="${radians()}" upper="${radians()}" velocity="${radians()}"/>
     </joint>
     <joint name="${prefix}joint_a4" type="revolute">
       <origin xyz="0 0 0.035" rpy="0 0 0"/>
       <parent link="${prefix}link_3"/>
       <child link="${prefix}link_4"/>
       <axis xyz="-1 0 0"/>
-      <limit effort="0" lower="${-DEG2RAD * 185}" upper="${DEG2RAD * 185}" velocity="${DEG2RAD * 381}"/>
+      <limit effort="0" lower="${radians()}" upper="${radians()}" velocity="${radians()}"/>
     </joint>
     <joint name="${prefix}joint_a5" type="revolute">
       <origin xyz="0.515 0 0" rpy="0 0 0"/>
       <parent link="${prefix}link_4"/>
       <child link="${prefix}link_5"/>
       <axis xyz="0 1 0"/>
-      <limit effort="0" lower="${-DEG2RAD * 120}" upper="${DEG2RAD * 120}" velocity="${DEG2RAD * 388}"/>
+      <limit effort="0" lower="${radians()}" upper="${radians()}" velocity="${radians()}"/>
     </joint>
     <joint name="${prefix}joint_a6" type="revolute">
       <origin xyz="0.080 0 0" rpy="0 0 0"/>
       <parent link="${prefix}link_5"/>
       <child link="${prefix}link_6"/>
       <axis xyz="-1 0 0"/>
-      <limit effort="0" lower="${-DEG2RAD * 350}" upper="${DEG2RAD * 350}" velocity="${DEG2RAD * 615}"/>
+      <limit effort="0" lower="${radians()}" upper="${radians()}" velocity="${radians()}"/>
     </joint>
     <joint name="${prefix}joint_a6-tool0" type="fixed">
       <parent link="${prefix}link_6"/>
       <child link="${prefix}tool0"/>
-      <origin xyz="0 0 0" rpy="0 ${DEG2RAD * 90} 0"/>
+      <origin xyz="0 0 0" rpy="0 ${radians(90)} 0"/>
     </joint>
 
     <!-- ROS base_link to KUKA $ROBROOT coordinate system transform -->
