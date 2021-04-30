@@ -9,11 +9,12 @@
     <p>
       This package contains configuration data, 3D models and launch files
       for KUKA KR 150 manipulators. This currently includes the -2 variant
-      only.
+      and the R3100 prime version.
     </p>
     <p><b>Specifications</b>:</p>
     <ul>
       <li>KR 150-2 - Default</li>
+      <li>KR 150 R3100 prime - Default</li>
     </ul>
     <p>
       Joint limits and maximum joint velocities are based on the information
@@ -21,6 +22,9 @@
       All urdfs are based on the default motion and joint velocity limits,
       unless noted otherwise.
     </p>
+      Joint limits and maximum joint velocities of kr150 R3100 prime are based on the information
+      found in the online datasheet <a href="0000182743_DE.pdf 05.05.2021">here</a>. All urdfs are based on the default motion and joint velocity limits,
+      unless noted otherwise.
     <p>
       Before using any of the configuration files and / or meshes included
       in this package, be sure to check they are correct for the particular
