@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://wiki.ros.org/xacro">
+  <xacro:include filename="$(find kuka_resources)/urdf/common_constants.xacro"/>
+  <xacro:include filename="$(find kuka_resources)/urdf/common_materials.xacro"/>
+
+  <xacro:macro name="spatula_tool" params="prefix">
+
+    <link name="${prefix}spatula_tool_link">
+      <visual>
+        <origin xyz="-0.05 0.0 0.0" rpy="0 0 ${DEG2RAD * 0}"/>
+        <geometry>
+          <box size="0.1 0.002 0.1"/>
+        </geometry>
+        <xacro:material_kuka_orange />
+      </visual>
+      <collision>
+        <origin xyz="-0.05 0.0 0.0" rpy="0 0 ${DEG2RAD * 0}"/>
+        <geometry>
+          <box size="0.1 0.002 0.1"/>
+        </geometry>
+      </collision>
+      <inertial>
+        <mass value="5.6" />
+        <origin xyz="0.0157906 0.0019162 -0.0002449" rpy="0 0 0" />
+        <inertia ixx="0.00402901710341" ixy="0.000210543968708" ixz="4.6068390983e-05" iyy="0.00668778512296" iyz="1.26910167997e-06" izz="0.00711775677213" />
+      </inertial>
+    </link>
+
+
+
+    <!-- joint between arm_6_link and endorse_tool_link -->
+    <joint name="${prefix}joint_spatula_tool" type="fixed">
+      <origin xyz="0.25 -0.1 0.0" rpy="0 0 ${DEG2RAD * -45}" />
+      <parent link="${prefix}link_6"/>
+      <child link="${prefix}spatula_tool_link"/>
+      <axis xyz="1 0 0" />
+      <limit effort="0" velocity="0" lower="0" upper="0" />
+    </joint>
+
+
+
+  </xacro:macro>
+</robot>

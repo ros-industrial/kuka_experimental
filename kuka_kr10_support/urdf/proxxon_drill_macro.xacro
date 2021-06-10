@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://wiki.ros.org/xacro">
+  <xacro:include filename="$(find kuka_resources)/urdf/common_constants.xacro"/>
+  <xacro:include filename="$(find kuka_resources)/urdf/common_materials.xacro"/>
+
+  <xacro:macro name="proxxon_drilling_tool" params="prefix">
+
+    <link name="${prefix}drilling_tool_link">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://kuka_kr10_support/meshes/kr10r1100sixx/visual/proxxon_drilling.stl" scale="0.001 0.001 0.001" />
+        </geometry>
+        <xacro:material_kuka_orange />
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://kuka_kr10_support/meshes/kr10r1100sixx/collision/proxxon_drilling.stl" scale="0.001 0.001 0.001" />
+        </geometry>
+      </collision>
+      <inertial>
+        <mass value="50" />
+        <origin xyz="0.05 0.00 -0.00" rpy="0 0 0" />
+        <inertia ixx="0.00402901710341" ixy="0.000210543968708" ixz="4.6068390983e-05" iyy="0.00668778512296" iyz="1.26910167997e-06" izz="0.00711775677213" />
+      </inertial>
+    </link>
+
+
+
+    <!-- joint between arm_6_link and drilling_tool_link -->
+    <joint name="${prefix}joint_drilling_tool_link" type="fixed">
+      <origin xyz="0.0375 0 0" rpy="${DEG2RAD * 0} ${DEG2RAD * 0} ${DEG2RAD * 90}" />
+      <parent link="${prefix}link_6"/>
+      <child link="${prefix}drilling_tool_link"/>
+      <axis xyz="1 0 0" />
+      <limit effort="0" velocity="0" lower="0" upper="0" />
+    </joint>
+
+
+  </xacro:macro>
+</robot>
