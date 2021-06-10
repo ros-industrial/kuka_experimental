@@ -5,6 +5,6 @@
   <node name="joint_state_controller_spawner" pkg="controller_manager" type="spawner" args="joint_state_controller" />
 
   <!-- load the arm controller -->
-  <rosparam file="$(find kuka_kr10_gazebo)/config/kr10_arm_controller.yaml" command="load" />
-  <node name="kuka_kr10_controller_spawner" pkg="controller_manager" type="spawner" args="arm_controller" />
+  <!--rosparam file="$(find kuka_kr10_gazebo)/config/kr10_arm_controller.yaml" command="load" /-->
+  <!--node name="kuka_kr10_controller_spawner" pkg="controller_manager" type="spawner" args="arm_controller" /-->
 </launch>

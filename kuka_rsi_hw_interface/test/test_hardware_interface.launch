@@ -6,7 +6,7 @@
 
     <!--param name="robot_description" command="$(find xacro)/xacro.py '$(find kuka_kr10_support)/urdf/kr10r1100sixx.xacro'"/-->
 
-<param name="robot_description" command="$(find xacro)/xacro.py '$(find fdcc)/urdf/kr10r1100sixx.urdf'"/>
+<param name="robot_description" command="$(find xacro)/xacro.py '$(find fdcc)/urdf/kuka_proxxon_drilling.urdf'"/>
 
     <rosparam file="$(find kuka_rsi_hw_interface)/test/test_params_sim.yaml" command="load" if="$(arg sim)"/>
     <rosparam file="$(find kuka_rsi_hw_interface)/test/test_params.yaml" command="load" unless="$(arg sim)"/>
