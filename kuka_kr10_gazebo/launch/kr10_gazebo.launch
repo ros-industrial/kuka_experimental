@@ -35,6 +35,6 @@
        and spawn robot in Gazebo, along with necessary ROS nodes -->
   <include file="$(find kuka_kr10_gazebo)/launch/spawn_kr10.launch"/>
 
-  <node name="optoforce_filter_node" pkg="optoforce_sensor" type="sensor_filter.py" output="screen"/>
+  <!--node name="optoforce_filter_node" pkg="optoforce_sensor" type="sensor_filter.py" output="screen"/-->
 
 </launch>

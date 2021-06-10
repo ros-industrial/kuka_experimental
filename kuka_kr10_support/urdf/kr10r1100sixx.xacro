@@ -3,9 +3,16 @@
   <xacro:include filename="$(find kuka_kr10_support)/urdf/kr10r1100sixx_macro.xacro" />
   <xacro:kuka_kr10r1100sixx prefix=""/>
   
-  <xacro:include filename="$(find kuka_kr10_support)/urdf/endorse_tool_macro.xacro" />
-  <xacro:endorse_tool prefix=""/>
+  <!--xacro:include filename="$(find kuka_kr10_support)/urdf/endorse_tool_macro.xacro" /-->
+  <!--xacro:endorse_tool prefix=""/-->
+
+  <!--xacro:include filename="$(find kuka_kr10_support)/urdf/spatula_tool.xacro" /-->
+  <!--xacro:spatula_tool prefix=""/-->
 
   <!--xacro:include filename="$(find kuka_kr10_support)/urdf/ft_sensor_macro.xacro" /-->
   <!--xacro:kuka_ft_sensor prefix=""/-->
+
+  <xacro:include filename="$(find kuka_kr10_support)/urdf/proxxon_drill_macro.xacro" />
+  <xacro:proxxon_drilling_tool prefix=""/>
+
 </robot>

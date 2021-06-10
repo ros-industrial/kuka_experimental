@@ -16,9 +16,13 @@
   <!--xacro:FT_sensor_gazebo prefix=""/-->
 
   <!-- ENDORSE Tool -->
-  <xacro:include filename="$(find kuka_kr10_gazebo)/urdf/endorse_tool_macro.xacro"/>
+  <!--xacro:include filename="$(find kuka_kr10_gazebo)/urdf/endorse_tool_macro.xacro"/-->
+
+  <!-- Proxxon Drilling Tool -->
+  <xacro:include filename="$(find kuka_kr10_gazebo)/urdf/proxxon_drill_macro.xacro"/>
+  
 
   <!-- tool -->
-  <xacro:endorse_tool_gazebo prefix=""/>
+  <xacro:proxxon_drilling_tool_gazebo prefix=""/>
 
 </robot>
