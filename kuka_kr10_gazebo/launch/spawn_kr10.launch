@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- send robot urdf to ROS param server -->
+  <include file="$(find kuka_kr10_gazebo)/launch/load_kr10.launch"/>
+
+  <!-- push robot_description to factory and spawn robot in gazebo -->
+  <node name="spawn_gazebo_model" pkg="gazebo_ros" type="spawn_model"
+        output="screen" respawn="false"
+        args="-urdf
+              -param robot_description
+              -model kuka_kr10
+              -x 0.0
+              -y 0.0
+              -z 0.0
+              -R 0.0
+              -P 0.0
+              -Y 0.0" />
+
+  <!--include file="$(find kuka_kr10_gazebo)/launch/spawn_object.launch"/-->
+
+  <!-- convert joint states to TF transforms for rviz, etc -->
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/>
+
+  <!-- init and start Gazebo ros_control interface -->
+  <include file="$(find kuka_kr10_gazebo)/launch/kr10_control.launch"/>
+
+</launch>

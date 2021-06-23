@@ -1,7 +1,7 @@
 <ROOT>
    <CONFIG>
-      <IP_NUMBER>ip.address.of.rospc</IP_NUMBER>   <!-- IP-number of the external socket -->
-      <PORT>49152</PORT>                   <!-- Port-number of the external socket -->      
+      <IP_NUMBER>192.168.1.25</IP_NUMBER>   <!-- IP-number of the external socket -->
+      <PORT>59152</PORT>                   <!-- Port-number of the external socket -->      
       <SENTYPE>ImFree</SENTYPE>        <!-- The name of your system send in <Sen Type="" > -->     
       <ONLYSEND>FALSE</ONLYSEND>       <!-- TRUE means the client don't expect answers. Do not send anything to robot -->
    </CONFIG>
@@ -29,6 +29,14 @@
          <ELEMENT TAG="AK.A4" TYPE="DOUBLE" INDX="4" HOLDON="1" />
          <ELEMENT TAG="AK.A5" TYPE="DOUBLE" INDX="5" HOLDON="1" />
          <ELEMENT TAG="AK.A6" TYPE="DOUBLE" INDX="6" HOLDON="1" />
+	 <ELEMENT TAG="Out.01" TYPE="BOOL" INDX="7" HOLDON="1" />
+	 <ELEMENT TAG="Out.02" TYPE="BOOL" INDX="8" HOLDON="1" />
+	 <ELEMENT TAG="Out.03" TYPE="BOOL" INDX="9" HOLDON="1" />
+	 <ELEMENT TAG="Out.04" TYPE="BOOL" INDX="10" HOLDON="1" />
+	 <ELEMENT TAG="Out.05" TYPE="BOOL" INDX="11" HOLDON="1" />
+	 <ELEMENT TAG="Out.06" TYPE="BOOL" INDX="12" HOLDON="1" />
+	 <ELEMENT TAG="Out.07" TYPE="BOOL" INDX="13" HOLDON="1" />
+	 <ELEMENT TAG="Out.08" TYPE="BOOL" INDX="14" HOLDON="1" />
       </ELEMENTS>
    </RECEIVE>
 </ROOT>

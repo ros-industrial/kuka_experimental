@@ -43,9 +43,17 @@ int main(int argc, char** argv)
 {
   ROS_INFO_STREAM_NAMED("hardware_interface", "Starting hardware interface...");
 
+// RT testing
+    int ret;
+    pthread_t this_thread = pthread_self();
+    struct sched_param params;
+
+    params.sched_priority = sched_get_priority_max(SCHED_FIFO);
+    ret = pthread_setschedparam(this_thread, SCHED_FIFO, &params);
+
   ros::init(argc, argv, "kuka_rsi_hardware_interface");
 
-  ros::AsyncSpinner spinner(2);
+  ros::AsyncSpinner spinner(20);
   spinner.start();
 
   ros::NodeHandle nh;
@@ -59,7 +67,15 @@ int main(int argc, char** argv)
   auto stopwatch_last = std::chrono::steady_clock::now();
   auto stopwatch_now = stopwatch_last;
 
+    // Advertise digital output service
+  ros::ServiceServer server = nh.advertiseService(ros::names::append(ros::this_node::getName(),"/write_8_digital_outputs"), &kuka_rsi_hw_interface::KukaHardwareInterface::write_8_digital_outputs,&kuka_rsi_hw_interface);
+    
   controller_manager::ControllerManager controller_manager(&kuka_rsi_hw_interface, nh);
+
+  FDCC fdcc_node;
+  std::vector<float> v;
+  std::vector<float> v1;
+    
 
   kuka_rsi_hw_interface.start();
 
@@ -69,10 +85,21 @@ int main(int argc, char** argv)
   period.fromSec(std::chrono::duration_cast<std::chrono::duration<double>>(stopwatch_now - stopwatch_last).count());
   stopwatch_last = stopwatch_now;
 
+  
+
+  v1.push_back(kuka_rsi_hw_interface.joint_position[0]);
+  v1.push_back(kuka_rsi_hw_interface.joint_position[1]);
+  v1.push_back(kuka_rsi_hw_interface.joint_position[2]);
+  v1.push_back(kuka_rsi_hw_interface.joint_position[3]);
+  v1.push_back(kuka_rsi_hw_interface.joint_position[4]);
+  v1.push_back(kuka_rsi_hw_interface.joint_position[5]);
+
   // Run as fast as possible
   while (ros::ok())
   //while (!g_quit)
   {
+
+    //std::cout << "Main loop." << std::endl;
     // Receive current state from robot
     if (!kuka_rsi_hw_interface.read(timestamp, period))
     {
@@ -89,8 +116,23 @@ int main(int argc, char** argv)
     // Update the controllers
     controller_manager.update(timestamp, period);
 
+
+    // check self collision
+    v = fdcc_node.ControlLoopTrigger();
+
+    //if (fdcc_node.checkSelfCollision())
+    //  return 0;
+
+    //std::cout << "V= " << v[0] << ", " << v[1] << ", " << v[2] << ", " << v[3] << ", " << v[4] << ", " << v[5] << std::endl;
+
     // Send new setpoint to robot
-    kuka_rsi_hw_interface.write(timestamp, period);
+    if (fdcc_node.checkSelfCollision() == false)
+      kuka_rsi_hw_interface.write(timestamp, period, v);
+    else
+    {
+      ROS_INFO("SELF COLLISION!!!");
+      //spinner.stop();
+    }
   }
 
   spinner.stop();

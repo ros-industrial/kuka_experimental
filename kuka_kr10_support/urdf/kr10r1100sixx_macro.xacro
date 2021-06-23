@@ -18,6 +18,14 @@
           <mesh filename="package://kuka_kr10_support/meshes/kr10r1100sixx/collision/base_link.stl" />
         </geometry>
       </collision>
+      <inertial>
+        <!--mass value="14" /-->
+        <!--origin xyz="-0.0444859 -4.97e-05 0.1100921" rpy="0 0 0" /-->
+        <!--inertia ixx="0.08877213773" ixy="-0.000131033070251" ixz="-0.00150261923247" iyy="0.14293778144" iyz="-2.25256850538e-05" izz="0.126259385464" /-->    
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <mass value="10000.0"/>
+        <inertia ixx="10000.0"  ixy="0"  ixz="0" iyy="10000.0" iyz="0" izz="10000.0" />
+      </inertial>
     </link>
     <link name="${prefix}link_1">
       <visual>
@@ -33,6 +41,11 @@
           <mesh filename="package://kuka_kr10_support/meshes/kr10r1100sixx/collision/link_1.stl" />
         </geometry>
       </collision>
+      <inertial>
+        <mass value="11.2" />
+        <origin xyz="0.0146723 5.46e-05 -0.0557645" rpy="0 0 0" />
+        <inertia ixx="0.10800091083" ixy="0.000256908100066" ixz="-0.00448959204754" iyy="0.0892932854513" iyz="-0.000186133409604" izz="0.0838171097348" />
+      </inertial>
     </link>
     <link name="${prefix}link_2">
       <visual>
@@ -48,6 +61,11 @@
           <mesh filename="package://kuka_kr10_support/meshes/kr10r1100sixx/collision/link_2.stl" />
         </geometry>
       </collision>
+      <inertial>
+        <mass value="8.4" />
+        <origin xyz="0.2482357 -0.0029221 0.0079418" rpy="0 0 0" />
+        <inertia ixx="0.0365241429014" ixy="0.00223732223794" ixz="-0.00177293915942" iyy="0.378539351981" iyz="2.8964263294e-06" izz="0.392538210121" />
+      </inertial>
     </link>
     <link name="${prefix}link_3">
       <visual>
@@ -63,6 +81,11 @@
           <mesh filename="package://kuka_kr10_support/meshes/kr10r1100sixx/collision/link_3.stl" />
         </geometry>
       </collision>
+      <inertial>
+        <mass value="8.4" />
+        <origin xyz="0.0160924 2.38e-05 0.0105013" rpy="0 0 0" />
+        <inertia ixx="0.0238712171376" ixy="1.72719757663e-06" ixz="-0.00409828855491" iyy="0.0325090200419" iyz="-1.11535979101e-05" izz="0.0287380207905" />
+      </inertial>
     </link>
     <link name="${prefix}link_4">
       <visual>
@@ -78,6 +101,11 @@
           <mesh filename="package://kuka_kr10_support/meshes/kr10r1100sixx/collision/link_4.stl" />
         </geometry>
       </collision>
+      <inertial>
+        <mass value="5.6" />
+        <origin xyz="0.301148 -0.0004543 0.000235" rpy="0 0 0" />
+        <inertia ixx="0.0101469645454" ixy="0.000122992246096" ixz="-8.45337146292e-05" iyy="0.070495864179" iyz="8.8953596453e-07" izz="0.0717697213772" />
+      </inertial>
     </link>
     <link name="${prefix}link_5">
       <visual>
@@ -93,6 +121,11 @@
           <mesh filename="package://kuka_kr10_support/meshes/kr10r1100sixx/collision/link_5.stl" />
         </geometry>
       </collision>
+      <inertial>
+        <mass value="5.6" />
+        <origin xyz="0.0157906 0.0019162 -0.0002449" rpy="0 0 0" />
+        <inertia ixx="0.00402901710341" ixy="0.000210543968708" ixz="4.6068390983e-05" iyy="0.00668778512296" iyz="1.26910167997e-06" izz="0.00711775677213" />
+      </inertial>
     </link>
     <link name="${prefix}link_6">
       <visual>
@@ -108,9 +141,14 @@
           <mesh filename="package://kuka_kr10_support/meshes/kr10r1100sixx/collision/link_6.stl" />
         </geometry>
       </collision>
+      <inertial>
+        <mass value="2.8" />
+        <origin xyz="-0.0075312 1e-07 -0.0009341" rpy="0 0 0" />
+        <inertia ixx="0.000603033772181" ixy="-0.0" ixz="-4.00686891815e-06" iyy="-4.00686891815e-06" iyz="-0.0" izz="0.000340583858042" />
+      </inertial>
     </link>
     <!-- This frame corresponds to the $FLANGE coordinate system in KUKA KRC controllers. -->
-    <link name="${prefix}tool0"/>
+    <!--link name="${prefix}tool0"/-->
 
     <joint name="${prefix}joint_a1" type="revolute">
       <origin xyz="0 0 0.400" rpy="0 0 0"/>
@@ -138,7 +176,8 @@
       <parent link="${prefix}link_3"/>
       <child link="${prefix}link_4"/>
       <axis xyz="-1 0 0"/>
-      <limit effort="0" lower="${-DEG2RAD * 185}" upper="${DEG2RAD * 185}" velocity="${DEG2RAD * 381}"/>
+      <!--limit effort="0" lower="${-DEG2RAD * 185}" upper="${DEG2RAD * 185}" velocity="${DEG2RAD * 381}"/-->
+	<limit effort="0" lower="${-DEG2RAD * 120}" upper="${DEG2RAD * 120}" velocity="${DEG2RAD * 381}"/>
     </joint>
     <joint name="${prefix}joint_a5" type="revolute">
       <origin xyz="0.515 0 0" rpy="0 0 0"/>
@@ -154,18 +193,24 @@
       <axis xyz="-1 0 0"/>
       <limit effort="0" lower="${-DEG2RAD * 350}" upper="${DEG2RAD * 350}" velocity="${DEG2RAD * 615}"/>
     </joint>
-    <joint name="${prefix}joint_a6-tool0" type="fixed">
+    <!--joint name="${prefix}joint_a6-tool0" type="fixed">
       <parent link="${prefix}link_6"/>
       <child link="${prefix}tool0"/>
       <origin xyz="0 0 0" rpy="0 ${DEG2RAD * 90} 0"/>
-    </joint>
+    </joint-->
 
     <!-- ROS base_link to KUKA $ROBROOT coordinate system transform -->
-    <link name="${prefix}base" />
+    <link name="${prefix}base">
+      <inertial>  
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <mass value="10000000000.0"/>
+        <inertia ixx="100000.0"  ixy="100000"  ixz="100000" iyy="100000.0" iyz="100000" izz="100000.0" />
+      </inertial>
+    </link>
     <joint name="${prefix}base_link-base" type="fixed">
       <origin xyz="0 0 0" rpy="0 0 0"/>
-      <parent link="${prefix}base_link"/>
-      <child link="${prefix}base"/>
+      <parent link="${prefix}base"/>
+      <child link="${prefix}base_link"/>
     </joint>
   </xacro:macro>
 </robot>

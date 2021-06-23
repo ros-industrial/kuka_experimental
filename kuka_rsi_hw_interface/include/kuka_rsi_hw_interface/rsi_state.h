@@ -56,7 +56,8 @@ public:
     positions(6, 0.0),
     initial_positions(6, 0.0),
     cart_position(6, 0.0),
-    initial_cart_position(6, 0.0)
+    initial_cart_position(6, 0.0),
+    digital_inputs(8, 0)
   {
     xml_doc_.resize(1024);
   }
@@ -70,6 +71,8 @@ public:
   std::vector<double> cart_position;
   // RSol
   std::vector<double> initial_cart_position;
+  // DiL
+  std::vector<double> digital_inputs;
   // IPOC
   unsigned long long ipoc;
 
@@ -80,7 +83,8 @@ RSIState::RSIState(std::string xml_doc) :
   positions(6, 0.0),
   initial_positions(6, 0.0),
   cart_position(6, 0.0),
-  initial_cart_position(6, 0.0)
+  initial_cart_position(6, 0.0),
+  digital_inputs(8, 0)
 {
   // Parse message from robot
   TiXmlDocument bufferdoc;
@@ -119,6 +123,16 @@ RSIState::RSIState(std::string xml_doc) :
   RSol_el->Attribute("A", &initial_cart_position[3]);
   RSol_el->Attribute("B", &initial_cart_position[4]);
   RSol_el->Attribute("C", &initial_cart_position[5]);
+  // Extract digital input state byte
+  TiXmlElement* Digin_el = rob->FirstChildElement("Digin");
+  Digin_el->Attribute("i1", &digital_inputs[0]);
+  Digin_el->Attribute("i2", &digital_inputs[1]);
+  Digin_el->Attribute("i3", &digital_inputs[2]);
+  Digin_el->Attribute("i4", &digital_inputs[3]);
+  Digin_el->Attribute("i5", &digital_inputs[4]);
+  Digin_el->Attribute("i6", &digital_inputs[5]);
+  Digin_el->Attribute("i7", &digital_inputs[6]);
+  Digin_el->Attribute("i8", &digital_inputs[7]);
   // Get the IPOC timestamp
   TiXmlElement* ipoc_el = rob->FirstChildElement("IPOC");
   ipoc = std::stoull(ipoc_el->FirstChild()->Value());

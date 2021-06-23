@@ -1,0 +1,3 @@
+sensor_msgs/JointState joint_state
+---
+trajectory_msgs/JointTrajectoryPoint joint_command

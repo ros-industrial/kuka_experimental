@@ -1,0 +1,59 @@
+<?xml version="1.0" ?>
+<robot name="pipe1_object" xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <!-- urdf -->
+  <link name="object_base">
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <cylinder length="0.001" radius="0.1"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <cylinder length="0.001" radius="0.1"/>
+      </geometry>
+    </visual>
+    <inertial>
+      <mass value="100000" />
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <inertia ixx="1000" ixy="0" ixz="0" iyy="1000" iyz="0" izz="1000" />
+    </inertial>
+  </link>
+  <link name="pipe1">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://kuka_kr10_gazebo/meshes/pipe.dae" />
+      </geometry>
+      <material name="Gazebo/Gray" />
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://kuka_kr10_gazebo/meshes/pipe.dae" />
+      </geometry>
+      <material name="Gazebo/Gray" />
+    </collision>
+  </link>
+
+  <joint name="object_base_joint" type="fixed">
+    <origin xyz="0 -0.375 0" rpy="1.570796327 0 1.570796327"/>
+    <parent link="object_base"/>
+    <child link="pipe1"/>
+  </joint>
+
+
+
+  <!-- Gazebo-specific link properties -->
+  <gazebo reference="object_base">
+    <material>Gazebo/Gray</material>
+    <turnGravityOff>false</turnGravityOff>
+  </gazebo>
+  <gazebo reference="pipe1">
+    <material>Gazebo/Gray</material>
+    <turnGravityOff>false</turnGravityOff>
+  </gazebo>
+
+</robot>

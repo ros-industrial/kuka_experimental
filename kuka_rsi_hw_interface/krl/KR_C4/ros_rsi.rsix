@@ -1,0 +1,210 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- Do not change! The content of this file is generated. -->
+<!-- Generated with RSIVisual WorkVisual plugin. -->
+<!-- RobotSensorInterface 4.0 B3083 -->
+<RsiContext xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="0.1.0">
+  <RsiObjects>
+    <RsiObject ObjTypeId="33" ObjType="AxisCorr" ObjId="AxisCorr_1">
+      <Inputs>
+        <Input InIdx="0" OutObjId="Ethernet_1" OutIdx="0" />
+        <Input InIdx="1" OutObjId="Ethernet_1" OutIdx="1" />
+        <Input InIdx="2" OutObjId="Ethernet_1" OutIdx="2" />
+        <Input InIdx="3" OutObjId="Ethernet_1" OutIdx="3" />
+        <Input InIdx="4" OutObjId="Ethernet_1" OutIdx="4" />
+        <Input InIdx="5" OutObjId="Ethernet_1" OutIdx="5" />
+      </Inputs>
+      <Parameters>
+        <Parameter Name="LowerLimA1" ParamId="0" ParamValue="-170" />
+        <Parameter Name="LowerLimA2" ParamId="1" ParamValue="-190" />
+        <Parameter Name="LowerLimA3" ParamId="2" ParamValue="-120" />
+        <Parameter Name="LowerLimA4" ParamId="3" ParamValue="-185" />
+        <Parameter Name="LowerLimA5" ParamId="4" ParamValue="-210" />
+        <Parameter Name="LowerLimA6" ParamId="5" ParamValue="-350" />
+        <Parameter Name="UpperLimA1" ParamId="6" ParamValue="170" />
+        <Parameter Name="UpperLimA2" ParamId="7" ParamValue="45" />
+        <Parameter Name="UpperLimA3" ParamId="8" ParamValue="156" />
+        <Parameter Name="UpperLimA4" ParamId="9" ParamValue="30" />
+        <Parameter Name="UpperLimA5" ParamId="10" ParamValue="120" />
+        <Parameter Name="UpperLimA6" ParamId="11" ParamValue="350" />
+      </Parameters>
+    </RsiObject>
+    <RsiObject ObjTypeId="64" ObjType="Ethernet" ObjId="Ethernet_1">
+      <Parameters>
+        <Parameter IsRuntime="false" Name="ConfigFile" ParamId="0" ParamValue="ros_rsi_ethernet.xml" />
+        <Parameter Name="Timeout" ParamId="0" ParamValue="100" />
+        <Parameter Name="Flag" ParamId="3" ParamValue="1" />
+        <Parameter Name="Precision" ParamId="7" ParamValue="4" />
+      </Parameters>
+    </RsiObject>
+    <RsiObject ObjTypeId="82" ObjType="AxisCorrMon" ObjId="AxisCorrMon_1">
+      <Parameters>
+        <Parameter Name="MaxA1" ParamId="0" ParamValue="345" />
+        <Parameter Name="MaxA2" ParamId="1" ParamValue="240" />
+        <Parameter Name="MaxA3" ParamId="2" ParamValue="280" />
+        <Parameter Name="MaxA4" ParamId="3" ParamValue="375" />
+        <Parameter Name="MaxA5" ParamId="4" ParamValue="245" />
+        <Parameter Name="MaxA6" ParamId="5" ParamValue="705" />
+        <Parameter Name="MaxE1" ParamId="6" ParamValue="6" />
+        <Parameter Name="MaxE2" ParamId="7" ParamValue="6" />
+        <Parameter Name="MaxE3" ParamId="8" ParamValue="6" />
+        <Parameter Name="MaxE4" ParamId="9" ParamValue="6" />
+        <Parameter Name="MaxE5" ParamId="10" ParamValue="6" />
+        <Parameter Name="MaxE6" ParamId="11" ParamValue="6" />
+      </Parameters>
+    </RsiObject>
+    <RsiObject ObjTypeId="14" ObjType="Map2DigOut" ObjId="Map2DigOut_1">
+      <Inputs>
+        <Input InIdx="0" OutObjId="Ethernet_1" OutIdx="6" />
+      </Inputs>
+      <Parameters>
+        <Parameter Name="Index" ParamId="0" ParamValue="1" />
+        <Parameter Name="DataType" ParamId="1" ParamValue="0" />
+      </Parameters>
+    </RsiObject>
+    <RsiObject ObjTypeId="14" ObjType="Map2DigOut" ObjId="Map2DigOut_2">
+      <Inputs>
+        <Input InIdx="0" OutObjId="Ethernet_1" OutIdx="7" />
+      </Inputs>
+      <Parameters>
+        <Parameter Name="Index" ParamId="0" ParamValue="2" />
+        <Parameter Name="DataType" ParamId="1" ParamValue="0" />
+      </Parameters>
+    </RsiObject>
+    <RsiObject ObjTypeId="14" ObjType="Map2DigOut" ObjId="Map2DigOut_3">
+      <Inputs>
+        <Input InIdx="0" OutObjId="Ethernet_1" OutIdx="8" />
+      </Inputs>
+      <Parameters>
+        <Parameter Name="Index" ParamId="0" ParamValue="3" />
+        <Parameter Name="DataType" ParamId="1" ParamValue="0" />
+      </Parameters>
+    </RsiObject>
+    <RsiObject ObjTypeId="14" ObjType="Map2DigOut" ObjId="Map2DigOut_4">
+      <Inputs>
+        <Input InIdx="0" OutObjId="Ethernet_1" OutIdx="9" />
+      </Inputs>
+      <Parameters>
+        <Parameter Name="Index" ParamId="0" ParamValue="4" />
+        <Parameter Name="DataType" ParamId="1" ParamValue="0" />
+      </Parameters>
+    </RsiObject>
+    <RsiObject ObjTypeId="14" ObjType="Map2DigOut" ObjId="Map2DigOut_5">
+      <Inputs>
+        <Input InIdx="0" OutObjId="Ethernet_1" OutIdx="10" />
+      </Inputs>
+      <Parameters>
+        <Parameter Name="Index" ParamId="0" ParamValue="5" />
+        <Parameter Name="DataType" ParamId="1" ParamValue="0" />
+      </Parameters>
+    </RsiObject>
+    <RsiObject ObjTypeId="14" ObjType="Map2DigOut" ObjId="Map2DigOut_6">
+      <Inputs>
+        <Input InIdx="0" OutObjId="Ethernet_1" OutIdx="11" />
+      </Inputs>
+      <Parameters>
+        <Parameter Name="Index" ParamId="0" ParamValue="6" />
+        <Parameter Name="DataType" ParamId="1" ParamValue="0" />
+      </Parameters>
+    </RsiObject>
+    <RsiObject ObjTypeId="14" ObjType="Map2DigOut" ObjId="Map2DigOut_7">
+      <Inputs>
+        <Input InIdx="0" OutObjId="Ethernet_1" OutIdx="12" />
+      </Inputs>
+      <Parameters>
+        <Parameter Name="Index" ParamId="0" ParamValue="7" />
+        <Parameter Name="DataType" ParamId="1" ParamValue="0" />
+      </Parameters>
+    </RsiObject>
+    <RsiObject ObjTypeId="14" ObjType="Map2DigOut" ObjId="Map2DigOut_8">
+      <Inputs>
+        <Input InIdx="0" OutObjId="Ethernet_1" OutIdx="13" />
+      </Inputs>
+      <Parameters>
+        <Parameter Name="Index" ParamId="0" ParamValue="8" />
+        <Parameter Name="DataType" ParamId="1" ParamValue="0" />
+      </Parameters>
+    </RsiObject>
+    <RsiObject ObjTypeId="55" ObjType="Monitor" ObjId="Monitor_1">
+      <Inputs>
+        <Input InIdx="0" OutObjId="Ethernet_1" OutIdx="0" />
+        <Input InIdx="1" OutObjId="Ethernet_1" OutIdx="1" />
+        <Input InIdx="2" OutObjId="Ethernet_1" OutIdx="2" />
+        <Input InIdx="3" OutObjId="Ethernet_1" OutIdx="3" />
+        <Input InIdx="4" OutObjId="Ethernet_1" OutIdx="4" />
+        <Input InIdx="5" OutObjId="Ethernet_1" OutIdx="5" />
+        <Input InIdx="6" OutObjId="Ethernet_1" OutIdx="6" />
+        <Input InIdx="7" OutObjId="Ethernet_1" OutIdx="7" />
+        <Input InIdx="8" OutObjId="Ethernet_1" OutIdx="8" />
+        <Input InIdx="9" OutObjId="Ethernet_1" OutIdx="9" />
+        <Input InIdx="10" OutObjId="Ethernet_1" OutIdx="10" />
+        <Input InIdx="11" OutObjId="Ethernet_1" OutIdx="11" />
+        <Input InIdx="12" OutObjId="Ethernet_1" OutIdx="12" />
+        <Input InIdx="13" OutObjId="Ethernet_1" OutIdx="13" />
+        <Input InIdx="14" OutObjId="Ethernet_1" OutIdx="14" />
+        <Input InIdx="15" OutObjId="Ethernet_1" OutIdx="15" />
+      </Inputs>
+      <Parameters>
+        <Parameter Name="Refresh" ParamId="0" ParamValue="1" />
+        <Parameter Name="Timeout" ParamId="1" ParamValue="50" />
+        <Parameter Name="ReqTimeZero" ParamId="2" ParamValue="1" />
+        <Parameter IsRuntime="false" Name="IP" ParamId="0" ParamValue="192.168.0.1" />
+        <Parameter IsRuntime="false" Name="Channel" ParamId="1" ParamValue="1" />
+      </Parameters>
+    </RsiObject>
+  </RsiObjects>
+  <Editor>
+    <Comments />
+    <Connectors />
+    <FunctionBlocks />
+    <Groups />
+    <Links>
+      <Link From="Ethernet_1" FromPort="Out1" Points="-337.48,-160.5;-209.48,-160.5;-81.48,-160.5;-81.48,-160.5;356,-160.5;372,-160.5" To="AxisCorr_1" ToPort="CorrA1" />
+      <Link From="Ethernet_1" FromPort="Out2" Points="-337.48,-130.5;-217.48,-130.5;-97.48,-130.5;-97.48,-130.5;356,-130.5;372,-130.5" To="AxisCorr_1" ToPort="CorrA2" />
+      <Link From="Ethernet_1" FromPort="Out3" Points="-337.48,-100.5;-225.48,-100.5;-113.48,-100.5;-113.48,-100.5;356,-100.5;372,-100.5" To="AxisCorr_1" ToPort="CorrA3" />
+      <Link From="Ethernet_1" FromPort="Out4" Points="-337.48,-70.5;-233.48,-70.5;-129.48,-70.5;-129.48,-70.5;356,-70.5;372,-70.5" To="AxisCorr_1" ToPort="CorrA4" />
+      <Link From="Ethernet_1" FromPort="Out5" Points="-337.48,-40.5;-241.48,-40.5;-145.48,-40.5;-145.48,-40.5;356,-40.5;372,-40.5" To="AxisCorr_1" ToPort="CorrA5" />
+      <Link From="Ethernet_1" FromPort="Out6" Points="-337.48,-10.5;-249.48,-10.5;-161.48,-10.5;-161.48,-10.5;356,-10.5;372,-10.5" To="AxisCorr_1" ToPort="CorrA6" />
+      <Link From="Ethernet_1" FromPort="Out7" Points="-337.48,19.5;-257.48,19.5;-177.48,19.5;-177.48,211.5;356,211.5;372,211.5" To="Map2DigOut_1" ToPort="In1" />
+      <Link From="Ethernet_1" FromPort="Out8" Points="-337.48,49.5;-265.48,49.5;-193.48,49.5;-193.48,331.5;356,331.5;372,331.5" To="Map2DigOut_2" ToPort="In1" />
+      <Link From="Ethernet_1" FromPort="Out9" Points="-337.48,79.5;-273.48,79.5;-209.48,79.5;-209.48,451.5;356,451.5;372,451.5" To="Map2DigOut_3" ToPort="In1" />
+      <Link From="Ethernet_1" FromPort="Out10" Points="-337.48,109.5;-281.48,109.5;-225.48,109.5;-225.48,577.5;356,577.5;372,577.5" To="Map2DigOut_4" ToPort="In1" />
+      <Link From="Ethernet_1" FromPort="Out11" Points="-337.48,139.5;-289.48,139.5;-241.48,139.5;-241.48,703.5;356,703.5;372,703.5" To="Map2DigOut_5" ToPort="In1" />
+      <Link From="Ethernet_1" FromPort="Out12" Points="-337.48,169.5;-297.48,169.5;-257.48,169.5;-257.48,823.5;356,823.5;372,823.5" To="Map2DigOut_6" ToPort="In1" />
+      <Link From="Ethernet_1" FromPort="Out13" Points="-337.48,199.5;-305.48,199.5;-273.48,199.5;-273.48,949.5;356,949.5;372,949.5" To="Map2DigOut_7" ToPort="In1" />
+      <Link From="Ethernet_1" FromPort="Out14" Points="-337.48,229.5;-313.48,229.5;-289.48,229.5;-289.48,1075.5;356,1075.5;372,1075.5" To="Map2DigOut_8" ToPort="In1" />
+      <Link From="Ethernet_1" FromPort="Out1" Points="-337.48,-160.5;-325.48,-160.5;-313.48,-160.5;-313.48,-718.5;356,-718.5;372,-718.5" To="Monitor_1" ToPort="In1" />
+      <Link From="Ethernet_1" FromPort="Out2" Points="-337.48,-130.5;-317.48,-130.5;-297.48,-130.5;-297.48,-688.5;356,-688.5;372,-688.5" To="Monitor_1" ToPort="In2" />
+      <Link From="Ethernet_1" FromPort="Out3" Points="-337.48,-100.5;-309.48,-100.5;-281.48,-100.5;-281.48,-658.5;356,-658.5;372,-658.5" To="Monitor_1" ToPort="In3" />
+      <Link From="Ethernet_1" FromPort="Out4" Points="-337.48,-70.5;-301.48,-70.5;-265.48,-70.5;-265.48,-628.5;356,-628.5;372,-628.5" To="Monitor_1" ToPort="In4" />
+      <Link From="Ethernet_1" FromPort="Out5" Points="-337.48,-40.5;-293.48,-40.5;-249.48,-40.5;-249.48,-598.5;356,-598.5;372,-598.5" To="Monitor_1" ToPort="In5" />
+      <Link From="Ethernet_1" FromPort="Out6" Points="-337.48,-10.5;-285.48,-10.5;-233.48,-10.5;-233.48,-568.5;356,-568.5;372,-568.5" To="Monitor_1" ToPort="In6" />
+      <Link From="Ethernet_1" FromPort="Out7" Points="-337.48,19.5;-277.48,19.5;-217.48,19.5;-217.48,-538.5;356,-538.5;372,-538.5" To="Monitor_1" ToPort="In7" />
+      <Link From="Ethernet_1" FromPort="Out8" Points="-337.48,49.5;-269.48,49.5;-201.48,49.5;-201.48,-508.5;356,-508.5;372,-508.5" To="Monitor_1" ToPort="In8" />
+      <Link From="Ethernet_1" FromPort="Out9" Points="-337.48,79.5;-261.48,79.5;-185.48,79.5;-185.48,-478.5;356,-478.5;372,-478.5" To="Monitor_1" ToPort="In9" />
+      <Link From="Ethernet_1" FromPort="Out10" Points="-337.48,109.5;-253.48,109.5;-169.48,109.5;-169.48,-448.5;356,-448.5;372,-448.5" To="Monitor_1" ToPort="In10" />
+      <Link From="Ethernet_1" FromPort="Out11" Points="-337.48,139.5;-245.48,139.5;-153.48,139.5;-153.48,-418.5;356,-418.5;372,-418.5" To="Monitor_1" ToPort="In11" />
+      <Link From="Ethernet_1" FromPort="Out12" Points="-337.48,169.5;-237.48,169.5;-137.48,169.5;-137.48,-388.5;356,-388.5;372,-388.5" To="Monitor_1" ToPort="In12" />
+      <Link From="Ethernet_1" FromPort="Out13" Points="-337.48,199.5;-229.48,199.5;-121.48,199.5;-121.48,-358.5;356,-358.5;372,-358.5" To="Monitor_1" ToPort="In13" />
+      <Link From="Ethernet_1" FromPort="Out14" Points="-337.48,229.5;-221.48,229.5;-105.48,229.5;-105.48,-328.5;356,-328.5;372,-328.5" To="Monitor_1" ToPort="In14" />
+      <Link From="Ethernet_1" FromPort="Out15" Points="-337.48,259.5;-213.48,259.5;-89.48,259.5;-89.48,-298.5;356,-298.5;372,-298.5" To="Monitor_1" ToPort="In15" />
+      <Link From="Ethernet_1" FromPort="Out16" Points="-337.48,289.5;-205.48,289.5;-73.48,289.5;-73.48,-268.5;356,-268.5;372,-268.5" To="Monitor_1" ToPort="In16" />
+    </Links>
+    <Nodes>
+      <Node Location="390,-180" Name="AxisCorr_1" Type="AxisCorr" />
+      <Node Location="-516,-180" Name="Ethernet_1" NumberOfInputs="1" NumberOfOutputs="17" Type="Ethernet" />
+      <Node Location="636,-174" Name="AxisCorrMon_1" Type="AxisCorrMon" />
+      <Node Location="390,192" Name="Map2DigOut_1" Type="Map2DigOut" />
+      <Node Location="390,312" Name="Map2DigOut_2" Type="Map2DigOut" />
+      <Node Location="390,432" Name="Map2DigOut_3" Type="Map2DigOut" />
+      <Node Location="390,558" Name="Map2DigOut_4" Type="Map2DigOut" />
+      <Node Location="390,684" Name="Map2DigOut_5" Type="Map2DigOut" />
+      <Node Location="390,804" Name="Map2DigOut_6" Type="Map2DigOut" />
+      <Node Location="390,930" Name="Map2DigOut_7" Type="Map2DigOut" />
+      <Node Location="390,1056" Name="Map2DigOut_8" Type="Map2DigOut" />
+      <Node Location="390,-738" Name="Monitor_1" NumberOfInputs="17" Type="Monitor" />
+    </Nodes>
+    <Toolboxes>
+      <Toolbox Name="RSI" Version="1.3.0" />
+    </Toolboxes>
+  </Editor>
+</RsiContext>
