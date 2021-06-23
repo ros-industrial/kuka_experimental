@@ -1,4 +1,4 @@
 <?xml version="1.0"?>
 <launch>
-  <param name="robot_description" command="$(find xacro)/xacro.py '$(find kuka_kr10_support)/urdf/kr10r1100sixx.xacro'"/>
+  <param name="robot_description" command="$(find xacro)/xacro --inorder '$(find kuka_kr10_support)/urdf/kr10r1100sixx.xacro'"/>
 </launch>
