@@ -10,4 +10,8 @@
   <group ns="test_kr16_r1610_2__">
     <include file="$(find kuka_kr16_support)/launch/test_kr16_r1610_2.launch"/>
   </group>
+    
+  <group ns="test_kr16_r2010_2__">
+    <include file="$(find kuka_kr16_support)/launch/test_kr16_r2010_2.launch"/>
+  </group>
 </launch>
