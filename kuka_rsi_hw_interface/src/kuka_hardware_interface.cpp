@@ -60,37 +60,6 @@ KukaHardwareInterface::KukaHardwareInterface()
   out_buffer_.resize(1024);
   remote_host_.resize(1024);
   remote_port_.resize(1024);
-
-  if (!nh_.getParam("controller_joint_names", joint_names_))
-  {
-    ROS_ERROR("Cannot find required parameter 'controller_joint_names' "
-              "on the parameter server.");
-    throw std::runtime_error("Cannot find required parameter "
-                             "'controller_joint_names' on the parameter server.");
-  }
-
-  // Create ros_control interfaces
-  for (std::size_t i = 0; i < n_dof_; ++i)
-  {
-    // Create joint state interface for all joints
-    joint_state_interface_.registerHandle(hardware_interface::JointStateHandle(joint_names_[i], &joint_position_[i],
-                                                                               &joint_velocity_[i], &joint_effort_[i]));
-
-    // Create joint position control interface
-    // position_joint_interface_.registerHandle(hardware_interface::JointHandle(
-    //    joint_state_interface_.getHandle(joint_names_[i]), &joint_position_command_[i]));
-
-    // Create joint velocity control interface
-    position_velocity_joint_interface_.registerHandle(hardware_interface::PosVelJointHandle(
-        joint_state_interface_.getHandle(joint_names_[i]), &joint_position_command_[i], &joint_velocity_command_[i]));
-  }
-
-  // Register interfaces
-  registerInterface(&joint_state_interface_);
-  // registerInterface(&position_joint_interface_);
-  registerInterface(&position_velocity_joint_interface_);
-
-  ROS_INFO_STREAM_NAMED("hardware_interface", "Loaded kuka_rsi_hardware_interface");
 }
 
 KukaHardwareInterface::~KukaHardwareInterface()
@@ -104,9 +73,12 @@ void KukaHardwareInterface::read(const ros::Time& time, const ros::Duration& per
     start();
     first_time_ = false;
   }
-  in_buffer_.resize(1024);
-
-  server_->recv(in_buffer_);
+  // in_buffer_.resize(1024);
+  // recv is a blocking action if the buffer is empty
+  if (server_->recv(in_buffer_) <= 0)
+  {
+    ROS_FATAL("Failed to read state from robot!");
+  }
 
   rsi_state_ = RSIState(in_buffer_);
   for (std::size_t i = 0; i < n_dof_; ++i)
@@ -152,7 +124,7 @@ bool KukaHardwareInterface::read()
 
 void KukaHardwareInterface::write(const ros::Time& time, const ros::Duration& period)
 {
-  out_buffer_.resize(1024);
+  // out_buffer_.resize(1024);
 
   for (std::size_t i = 0; i < n_dof_; ++i)
   {
@@ -175,7 +147,11 @@ void KukaHardwareInterface::write(const ros::Time& time, const ros::Duration& pe
   }
 
   out_buffer_ = RSICommand(rsi_joint_position_corrections_, ipoc_).xml_doc;
-  server_->send(out_buffer_);
+  // send is a blocking action if the buffer is full
+  if (server_->send(out_buffer_) <= 0)
+  {
+    ROS_FATAL("Failed to write state to robot!");
+  }
 
   // return true;
 }
@@ -236,7 +212,50 @@ void KukaHardwareInterface::configure()
 
 bool KukaHardwareInterface::init(ros::NodeHandle& root_nh, ros::NodeHandle& robot_hw_nh)
 {
+  if (robot_hw_nh.hasParam("joints"))
+
+  {
+    XmlRpc::XmlRpcValue joint_list;
+    robot_hw_nh.getParam("joints", joint_list);
+    ROS_INFO_STREAM_NAMED("hardware_interface", joint_list);
+    if (joint_list.size() != n_dof_)
+    {
+      ROS_ERROR_STREAM("Number of provided joints are not equal to 6.");
+    }
+
+    for (std::size_t i = 0; i < n_dof_; ++i)
+    {
+      joint_names_[i] = (std::string)(joint_list[i]["name"]);
+    }
+
+    // Create ros_control interfaces
+    for (std::size_t i = 0; i < n_dof_; ++i)
+    {
+      // Create joint state interface for all joints
+      joint_state_interface_.registerHandle(hardware_interface::JointStateHandle(
+          joint_names_[i], &joint_position_[i], &joint_velocity_[i], &joint_effort_[i]));
+
+      // Create joint position control interface
+      // position_joint_interface_.registerHandle(hardware_interface::JointHandle(
+      //    joint_state_interface_.getHandle(joint_names_[i]), &joint_position_command_[i]));
+
+      // Create joint velocity control interface
+      position_velocity_joint_interface_.registerHandle(hardware_interface::PosVelJointHandle(
+          joint_state_interface_.getHandle(joint_names_[i]), &joint_position_command_[i], &joint_velocity_command_[i]));
+    }
+
+    // Register interfaces
+    registerInterface(&joint_state_interface_);
+    // registerInterface(&position_joint_interface_);
+    registerInterface(&position_velocity_joint_interface_);
+  }
+  else
+  {
+    ROS_ERROR_STREAM("joints not found in parameters");
+    return false;
+  }
   configure();
+  ROS_INFO_STREAM_NAMED("hardware_interface", "Loaded kuka_rsi_hardware_interface");
   // start();
   return true;
 }
