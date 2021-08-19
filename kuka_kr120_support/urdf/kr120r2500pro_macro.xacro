@@ -145,9 +145,8 @@
         </geometry>
       </collision>
     </link>
-    <!-- tool 0 -->
-    <!-- This frame corresponds to the $FLANGE coordinate system in KUKA KRC controllers. -->
-    <link name="${prefix}tool0"/>
+    <!-- Following REP199, this frame shall be use to attach EEF or other equipment -->
+    <link name="${prefix}flange" />
     <!-- END LINKS -->
 
     <!-- JOINTS -->
@@ -200,10 +199,10 @@
       <limit effort="0" lower="${-DEG2RAD * 350}" upper="${DEG2RAD * 350}" velocity="${DEG2RAD * 615}"/>
     </joint>
     <!-- tool frame - fixed frame -->
-    <joint name="${prefix}joint_a6-tool0" type="fixed">
+    <joint name="${prefix}joint_a6-flange" type="fixed">
       <parent link="${prefix}link_6"/>
-      <child link="${prefix}tool0"/>
-      <origin xyz="0.215 0 0" rpy="0 ${DEG2RAD * 90} 0"/>
+      <child link="${prefix}flange"/>
+      <origin xyz="0.215 0 0" rpy="0 0 0"/>
     </joint>
     <!-- END JOINTS -->
 
@@ -215,6 +214,13 @@
       <child link="${prefix}base"/>
     </joint>
 
+    <!-- This frame corresponds to the $TOOL coordinate system in KUKA KRC controllers -->
+    <link name="${prefix}tool0" />
+    <joint name="${prefix}flange-tool0" type="fixed">
+      <parent link="${prefix}flange"/>
+      <child link="${prefix}tool0"/>
+      <origin xyz="0 0 0" rpy="0 ${pi*0.5} 0"/>
+    </joint>
   </xacro:macro>
 </robot>
 

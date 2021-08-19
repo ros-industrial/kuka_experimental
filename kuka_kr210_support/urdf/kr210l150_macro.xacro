@@ -160,8 +160,8 @@
         </geometry>
       </collision>
     </link>
-    <!-- This frame corresponds to the $FLANGE coordinate system in KUKA KRC controllers. -->
-    <link name="${prefix}tool0"/>
+    <!-- This frame corresponds to the $TOOL coordinate system in KUKA KRC controllers. -->
+    <link name="${prefix}flange"/>
 
     <!-- joints -->
     <joint name="${prefix}joint_a1" type="revolute">
@@ -206,10 +206,26 @@
       <axis xyz="1 0 0"/>
       <limit lower="${-350*deg}" upper="${350*deg}" effort="0" velocity="${219*deg}"/>
     </joint>
-    <joint name="${prefix}link_6-tool0" type="fixed">
+    <joint name="${prefix}link_6-flange" type="fixed">
       <parent link="${prefix}link_6"/>
-      <child link="${prefix}tool0"/>
+      <child link="${prefix}flange"/>
       <origin xyz="0.0375 0 -0.00023924" rpy="0 0 0"/>
+    </joint>
+
+    <!-- ROS base_link to KUKA $ROBROOT coordinate system transform -->
+    <link name="${prefix}base" />
+    <joint name="${prefix}base_link-base" type="fixed">
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <parent link="${prefix}base_link"/>
+      <child link="${prefix}base"/>
+    </joint>
+
+    <!-- This frame corresponds to the $TOOL coordinate system in KUKA KRC controllers -->
+    <link name="${prefix}tool0" />
+    <joint name="${prefix}flange-tool0" type="fixed">
+      <parent link="${prefix}flange"/>
+      <child link="${prefix}tool0"/>
+      <origin xyz="0 0 0" rpy="0 ${pi*0.5} 0"/>
     </joint>
 
     <!-- rename 'Link1' to 'link_1', maintain bw-compatibility -->
