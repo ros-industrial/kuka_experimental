@@ -23,7 +23,7 @@ jobs:
     env:
       CCACHE_DIR: "${{ github.workspace }}/.ccache"
       CATKIN_LINT: true
-      CATKIN_LINT_ARGS: --ignore launch_depend
+      CATKIN_LINT_ARGS: --ignore launch_depend --ignore uninstalled_include_path --ignore critical_var_append
 
     steps:
       - name: Fetch repository
