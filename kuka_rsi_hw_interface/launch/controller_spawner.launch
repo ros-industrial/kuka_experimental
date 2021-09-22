@@ -1,4 +1,5 @@
 <launch>
+
   <!-- Load the controllers -->
   <node name="controller_spawner" pkg="controller_manager" type="spawner"
     args="position_trajectory_controller joint_state_controller --shutdown-timeout 1"

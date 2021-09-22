@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://wiki.ros.org/xacro">
+  <xacro:include filename="$(find kuka_resources)/urdf/common_constants.xacro"/>
+  <xacro:include filename="$(find kuka_resources)/urdf/common_materials.xacro"/>
+
+  <xacro:macro name="kuka_ft_sensor" params="prefix">
+
+    <link name="${prefix}ft_sensor_link">
+      <inertial>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <mass value="0.245"/>
+        <inertia ixx="0.0001" ixy="0" ixz="0" iyy="0.0001" iyz="0" izz="0.00015" />
+      </inertial>
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <cylinder length="0.0375" radius="0.035"/>
+        </geometry>
+        <material name="Gazebo/Gray" />
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <cylinder length="0.0375" radius="0.035"/>
+        </geometry>
+      </collision>
+    </link>
+
+    <link name="${prefix}tool_link">
+      <inertial>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <mass value="0.100"/>
+        <inertia ixx="0.001" ixy="0" ixz="0" iyy="0.001" iyz="0" izz="0.001" />
+      </inertial>
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://kuka_kr10_support/meshes/kr10r1100sixx/visual/pipe_tool.stl" scale="0.001 0.001 0.001" />
+        </geometry>
+        <xacro:material_kuka_orange />
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://kuka_kr10_support/meshes/kr10r1100sixx/visual/pipe_tool.stl" scale="0.001 0.001 0.001" />
+        </geometry>
+      </collision>
+    </link>
+
+
+
+
+    <!-- joint between arm_6_link and ft_sensor_link -->
+    <joint name="${prefix}joint_ft_sensor" type="revolute">
+      <origin xyz="0.0185 0 0" rpy="0 ${DEG2RAD * 90} 0" />
+      <parent link="${prefix}link_6"/>
+      <child link="${prefix}ft_sensor_link"/>
+      <axis xyz="1 0 0" />
+      <limit effort="0" velocity="0" lower="0" upper="0" />
+    </joint>
+
+    <!-- joint between ft_sensor_link and tool_link -->
+    <joint name="${prefix}joint_tool" type="fixed">
+      <origin xyz="-0.035 -0.035 0.01875" rpy="${DEG2RAD * 90} 0 ${DEG2RAD * 90}" />
+      <parent link="${prefix}ft_sensor_link"/>
+      <child link="${prefix}tool_link"/>
+      <axis xyz="0 0 1" />
+      <limit effort="0" velocity="0" lower="0" upper="0" />
+    </joint>
+
+
+  </xacro:macro>
+</robot>

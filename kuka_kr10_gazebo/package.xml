@@ -1,0 +1,40 @@
+<package>
+  <name>kuka_kr10_gazebo</name>
+  <version>0.0.1</version>
+  <description>
+    <p>
+      ROS-Industrial Gazebo support package for the Kuka kr10 (and variants).
+    </p>
+    <p>
+      This package contains the configuration data and launch files required
+      to simulate the Kuka kr10 manipulator in Gazebo. This includes the base
+      model, and the kr10.
+    </p>
+    <p>
+      Before using any of the configuration files included in this package, be
+      sure to check they are correct for the particular robot model and
+      configuration you intend to use them with.
+    </p>
+  </description>
+  <author email="schindlbeck@imr.uni-hannover.de">Christopher Schindlbeck (Leibniz University Hannover)</author>
+  <maintainer email="g.a.vanderhoorn@tudelft.nl">G.A. vd. Hoorn (TU Delft Robotics Institute)</maintainer>
+  <license>Apache2.0</license>
+
+  <url type="website">http://wiki.ros.org/kuka_experimental</url>
+  <url type="bugtracker">https://github.com/ros-industrial/kuka_experimental/issues</url>
+  <url type="repository">https://github.com/ros-industrial/kuka_experimental</url>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <run_depend>kuka_resources</run_depend>
+  <run_depend>kuka_kr10_support</run_depend>
+  <run_depend>gazebo</run_depend>
+  <run_depend>gazebo_ros</run_depend>
+  <run_depend>gazebo_ros_control</run_depend>
+  <run_depend>gazebo_ros_pkgs</run_depend>
+  <run_depend>joint_state_controller</run_depend>
+  <run_depend>position_controllers</run_depend>
+  <run_depend>joint_trajectory_controller</run_depend>
+  <run_depend>robot_state_publisher</run_depend>
+  <run_depend>ros_controllers</run_depend>
+</package>

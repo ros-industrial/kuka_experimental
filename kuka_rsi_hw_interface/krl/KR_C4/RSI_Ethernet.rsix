@@ -1,0 +1,148 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<RsiContext xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="0.1.0">
+  <RsiObjects>
+    <RsiObject ObjTypeId="29" ObjType="DigIn" ObjId="DIGIN1">
+      <Parameters>
+        <Parameter Name="Index" ParamId="0" ParamValue="1" />
+        <Parameter Name="DataType" ParamId="1" ParamValue="1" />
+      </Parameters>
+    </RsiObject>
+    <RsiObject ObjTypeId="43" ObjType="DigOut" ObjId="DIGOUT1">
+      <Parameters>
+        <Parameter Name="Index" ParamId="0" ParamValue="1" />
+        <Parameter Name="DataType" ParamId="1" ParamValue="0" />
+      </Parameters>
+    </RsiObject>
+    <RsiObject ObjTypeId="43" ObjType="DigOut" ObjId="DIGOUT2">
+      <Parameters>
+        <Parameter Name="Index" ParamId="0" ParamValue="2" />
+        <Parameter Name="DataType" ParamId="1" ParamValue="0" />
+      </Parameters>
+    </RsiObject>
+    <RsiObject ObjTypeId="43" ObjType="DigOut" ObjId="DIGOUT3">
+      <Parameters>
+        <Parameter Name="Index" ParamId="0" ParamValue="3" />
+        <Parameter Name="DataType" ParamId="1" ParamValue="0" />
+      </Parameters>
+    </RsiObject>
+    <RsiObject ObjTypeId="45" ObjType="Source" ObjId="SOURCE1">
+      <Parameters>
+        <Parameter Name="Type" ParamId="0" ParamValue="1" />
+        <Parameter Name="Offset" ParamId="1" ParamValue="0" />
+        <Parameter Name="Amplitude" ParamId="2" ParamValue="50" />
+        <Parameter Name="Period" ParamId="3" ParamValue="5" />
+      </Parameters>
+    </RsiObject>
+    <RsiObject ObjTypeId="27" ObjType="PosCorr" ObjId="POSCORR1">
+      <Inputs>
+        <Input InIdx="0" OutObjId="ETHERNET1" OutIdx="0" />
+        <Input InIdx="1" OutObjId="ETHERNET1" OutIdx="1" />
+        <Input InIdx="2" OutObjId="ETHERNET1" OutIdx="2" />
+        <Input InIdx="3" OutObjId="ETHERNET1" OutIdx="3" />
+        <Input InIdx="4" OutObjId="ETHERNET1" OutIdx="4" />
+        <Input InIdx="5" OutObjId="ETHERNET1" OutIdx="5" />
+      </Inputs>
+      <Parameters>
+        <Parameter Name="LowerLimX" ParamId="0" ParamValue="-5" />
+        <Parameter Name="LowerLimY" ParamId="1" ParamValue="-5" />
+        <Parameter Name="LowerLimZ" ParamId="2" ParamValue="-5" />
+        <Parameter Name="UpperLimX" ParamId="3" ParamValue="5" />
+        <Parameter Name="UpperLimY" ParamId="4" ParamValue="5" />
+        <Parameter Name="UpperLimZ" ParamId="5" ParamValue="5" />
+        <Parameter Name="MaxRotAngle" ParamId="6" ParamValue="5" />
+        <Parameter Name="LastCorrStat" ParamId="7" ParamValue="0" />
+        <Parameter Name="LastCorrX" ParamId="8" ParamValue="0" />
+        <Parameter Name="LastCorrY" ParamId="9" ParamValue="0" />
+        <Parameter Name="LastCorrZ" ParamId="10" ParamValue="0" />
+        <Parameter Name="LastCorrA" ParamId="11" ParamValue="0" />
+        <Parameter Name="LastCorrB" ParamId="12" ParamValue="0" />
+        <Parameter Name="LastCorrC" ParamId="13" ParamValue="0" />
+        <Parameter IsRuntime="false" Name="RefCorrSys" ParamId="0" ParamValue="1" />
+      </Parameters>
+    </RsiObject>
+    <RsiObject ObjTypeId="14" ObjType="Map2DigOut" ObjId="MAP2DIGOUT1">
+      <Inputs>
+        <Input InIdx="0" OutObjId="ETHERNET1" OutIdx="7" />
+      </Inputs>
+      <Parameters>
+        <Parameter Name="Index" ParamId="0" ParamValue="2" />
+        <Parameter Name="DataType" ParamId="1" ParamValue="1" />
+      </Parameters>
+    </RsiObject>
+    <RsiObject ObjTypeId="17" ObjType="Map2Sen_PRea" ObjId="MAP2SEN_PREA1">
+      <Inputs>
+        <Input InIdx="0" OutObjId="ETHERNET1" OutIdx="0" />
+      </Inputs>
+      <Parameters>
+        <Parameter Name="Index" ParamId="0" ParamValue="1" />
+      </Parameters>
+    </RsiObject>
+    <RsiObject ObjTypeId="17" ObjType="Map2Sen_PRea" ObjId="MAP2SEN_PREA2">
+      <Inputs>
+        <Input InIdx="0" OutObjId="ETHERNET1" OutIdx="1" />
+      </Inputs>
+      <Parameters>
+        <Parameter Name="Index" ParamId="0" ParamValue="2" />
+      </Parameters>
+    </RsiObject>
+    <RsiObject ObjTypeId="17" ObjType="Map2Sen_PRea" ObjId="MAP2SEN_PREA3">
+      <Inputs>
+        <Input InIdx="0" OutObjId="ETHERNET1" OutIdx="2" />
+      </Inputs>
+      <Parameters>
+        <Parameter Name="Index" ParamId="0" ParamValue="3" />
+      </Parameters>
+    </RsiObject>
+    <RsiObject ObjTypeId="64" ObjType="Ethernet" ObjId="ETHERNET1">
+      <Inputs>
+        <Input InIdx="1" OutObjId="DIGOUT1" OutIdx="0" />
+        <Input InIdx="2" OutObjId="DIGOUT2" OutIdx="0" />
+        <Input InIdx="3" OutObjId="DIGOUT3" OutIdx="0" />
+        <Input InIdx="4" OutObjId="SOURCE1" OutIdx="0" />
+        <Input InIdx="0" OutObjId="DIGIN1" OutIdx="0" />
+      </Inputs>
+      <Parameters>
+        <Parameter IsRuntime="false" Name="ConfigFile" ParamId="0" ParamValue="RSI_EthernetConfig.xml" />
+        <Parameter Name="Timeout" ParamId="0" ParamValue="100" />
+        <Parameter Name="Flag" ParamId="3" ParamValue="1" />
+        <Parameter Name="Precision" ParamId="7" ParamValue="1" />
+      </Parameters>
+    </RsiObject>
+  </RsiObjects>
+  <Editor>
+    <Toolboxes>
+      <Toolbox Name="RSI" Version="1.0.0" />
+    </Toolboxes>
+    <Links>
+      <Link From="ETHERNET1" FromPort="Out1" Points="621.516666666667,223.5;677.516666666667,223.5;733.516666666667,223.5;733.516666666667,223.5;932,223.5;948,223.5" To="POSCORR1" ToPort="CorrX" />
+      <Link From="ETHERNET1" FromPort="Out2" Points="621.516666666667,253.5;669.516666666667,253.5;717.516666666667,253.5;717.516666666667,253.5;932,253.5;948,253.5" To="POSCORR1" ToPort="CorrY" />
+      <Link From="ETHERNET1" FromPort="Out3" Points="621.516666666667,283.5;661.516666666667,283.5;701.516666666667,283.5;701.516666666667,283.5;932,283.5;948,283.5" To="POSCORR1" ToPort="CorrZ" />
+      <Link From="ETHERNET1" FromPort="Out4" Points="621.516666666667,313.5;653.516666666667,313.5;685.516666666667,313.5;685.516666666667,313.5;932,313.5;948,313.5" To="POSCORR1" ToPort="CorrA" />
+      <Link From="ETHERNET1" FromPort="Out5" Points="621.516666666667,343.5;645.516666666667,343.5;669.516666666667,343.5;669.516666666667,343.5;932,343.5;948,343.5" To="POSCORR1" ToPort="CorrB" />
+      <Link From="ETHERNET1" FromPort="Out6" Points="621.516666666667,373.5;637.516666666667,373.5;653.516666666667,373.5;653.516666666667,373.5;932,373.5;948,373.5" To="POSCORR1" ToPort="CorrC" />
+      <Link From="ETHERNET1" FromPort="Out8" Points="621.516666666667,433.5;629.516666666667,433.5;637.516666666667,433.5;637.516666666667,847.5;776,847.5;792,847.5" To="MAP2DIGOUT1" ToPort="In1" />
+      <Link From="ETHERNET1" FromPort="Out1" Points="621.516666666667,223.5;677.516666666667,223.5;733.516666666667,223.5;733.516666666667,595.5;776,595.5;792,595.5" To="MAP2SEN_PREA1" ToPort="In1" />
+      <Link From="ETHERNET1" FromPort="Out2" Points="621.516666666667,253.5;669.516666666667,253.5;717.516666666667,253.5;717.516666666667,679.5;776,679.5;792,679.5" To="MAP2SEN_PREA2" ToPort="In1" />
+      <Link From="ETHERNET1" FromPort="Out3" Points="621.516666666667,283.5;661.516666666667,283.5;701.516666666667,283.5;701.516666666667,763.5;776,763.5;792,763.5" To="MAP2SEN_PREA3" ToPort="In1" />
+      <Link From="DIGOUT1" FromPort="Out1" Points="205.08,253.5;213.08,253.5;221.08,253.5;221.08,253.5;416,253.5;432,253.5" To="ETHERNET1" ToPort="In2" />
+      <Link From="DIGOUT2" FromPort="Out1" Points="205.08,361.5;217.08,361.5;229.08,361.5;229.08,283.5;416,283.5;432,283.5" To="ETHERNET1" ToPort="In3" />
+      <Link From="DIGOUT3" FromPort="Out1" Points="205.08,469.5;217.08,469.5;245.08,469.5;245.08,313.5;416,313.5;432,313.5" To="ETHERNET1" ToPort="In4" />
+      <Link From="SOURCE1" FromPort="Out1" Points="203.596666666667,577.5;215.596666666667,577.5;259.596666666667,577.5;259.596666666667,343.5;416,343.5;432,343.5" To="ETHERNET1" ToPort="In5" />
+      <Link From="DIGIN1" FromPort="Out1" Points="205.08,145.5;213.08,145.5;221.08,145.5;221.08,223.5;416,223.5;432,223.5" To="ETHERNET1" ToPort="In1" />
+    </Links>
+    <Nodes>
+      <Node Location="36,126" Name="DIGIN1" Type="DigIn" />
+      <Node Location="36,234" Name="DIGOUT1" Type="DigOut" />
+      <Node Location="36,342" Name="DIGOUT2" Type="DigOut" />
+      <Node Location="36,450" Name="DIGOUT3" Type="DigOut" />
+      <Node Location="24,558" Name="SOURCE1" Type="Source" />
+      <Node Location="966,204" Name="POSCORR1" Type="PosCorr" />
+      <Node Location="810,828" Name="MAP2DIGOUT1" Type="Map2DigOut" />
+      <Node Location="810,576" Name="MAP2SEN_PREA1" Type="Map2Sen_PRea" />
+      <Node Location="810,660" Name="MAP2SEN_PREA2" Type="Map2Sen_PRea" />
+      <Node Location="810,744" Name="MAP2SEN_PREA3" Type="Map2Sen_PRea" />
+      <Node Location="450,204" Name="ETHERNET1" NumberOfInputs="6" NumberOfOutputs="9" Type="Ethernet" />
+    </Nodes>
+    <Comments />
+  </Editor>
+</RsiContext>

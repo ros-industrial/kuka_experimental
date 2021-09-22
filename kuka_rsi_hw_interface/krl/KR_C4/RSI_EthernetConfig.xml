@@ -1,0 +1,42 @@
+<ROOT>
+   <CONFIG>
+      <IP_NUMBER>192.168.1.25</IP_NUMBER>   <!-- IP-number of the external socket -->
+      <PORT>59152</PORT>                   <!-- Port-number of the external socket -->      
+      <SENTYPE>ImFree</SENTYPE>        <!-- The name of your system send in <Sen Type="" > -->     
+      <ONLYSEND>FALSE</ONLYSEND>       <!-- TRUE means the client don't expect answers. Do not send anything to robot -->
+   </CONFIG>
+   <!-- RSI Data: TYPE=  "BOOL", "STRING", "LONG", "DOUBLE" -->
+   <!-- INDX= "INTERNAL" switch on internal read values. Needed by DEF_... -->
+   <!-- INDX= "nmb" Input/Output index of RSI-Object / Maximum of RSI Channels: 64  -->   
+   <!-- HOLDON="1", set this output index of RSI Object to the last value  -->   
+   <!-- DEF_Delay count the late packages and send it back to server  -->
+   <!-- DEF_Tech: .T = advance .C = main run / .T1 advance set function generator 1 -->
+   
+   <SEND>
+      <ELEMENTS>
+         <ELEMENT TAG="DEF_RIst" TYPE="DOUBLE" INDX="INTERNAL" />
+         <ELEMENT TAG="DEF_RSol" TYPE="DOUBLE" INDX="INTERNAL" />
+         <ELEMENT TAG="DEF_Delay" TYPE="LONG" INDX="INTERNAL" />
+         <ELEMENT TAG="DEF_Tech.C1" TYPE="DOUBLE" INDX="INTERNAL" />
+         <ELEMENT TAG="DiL" TYPE="LONG" INDX="1" />
+         <ELEMENT TAG="Digout.o1" TYPE="BOOL" INDX="2" />
+         <ELEMENT TAG="Digout.o2" TYPE="BOOL" INDX="3" />
+         <ELEMENT TAG="Digout.o3" TYPE="BOOL" INDX="4" />
+         <ELEMENT TAG="Source1" TYPE="DOUBLE" INDX="5" />
+      </ELEMENTS>
+   </SEND>
+   <RECEIVE>
+      <ELEMENTS>
+         <ELEMENT TAG="DEF_EStr" TYPE="STRING" INDX="INTERNAL" />
+         <ELEMENT TAG="DEF_Tech.T2" TYPE="DOUBLE" INDX="INTERNAL" HOLDON="0" />
+         <ELEMENT TAG="RKorr.X" TYPE="DOUBLE" INDX="1" HOLDON="1" />
+         <ELEMENT TAG="RKorr.Y" TYPE="DOUBLE" INDX="2" HOLDON="1" />
+         <ELEMENT TAG="RKorr.Z" TYPE="DOUBLE" INDX="3" HOLDON="1" />
+         <ELEMENT TAG="RKorr.A" TYPE="DOUBLE" INDX="4" HOLDON="1" />
+         <ELEMENT TAG="RKorr.B" TYPE="DOUBLE" INDX="5" HOLDON="1" />
+         <ELEMENT TAG="RKorr.C" TYPE="DOUBLE" INDX="6" HOLDON="1" />
+         <ELEMENT TAG="FREE" TYPE="LONG" INDX="7" HOLDON="1" />
+         <ELEMENT TAG="DiO" TYPE="LONG" INDX="8" HOLDON="1" />
+      </ELEMENTS>
+   </RECEIVE>
+</ROOT>

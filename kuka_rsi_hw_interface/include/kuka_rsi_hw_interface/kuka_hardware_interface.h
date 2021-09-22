@@ -47,6 +47,7 @@
 // ROS
 #include <ros/ros.h>
 #include <std_msgs/String.h>
+#include <std_msgs/Float64MultiArray.h>
 
 
 // ros_control
@@ -65,6 +66,15 @@
 // RSI
 #include <kuka_rsi_hw_interface/rsi_state.h>
 #include <kuka_rsi_hw_interface/rsi_command.h>
+
+// SRV
+#include <kuka_rsi_hw_interface/write_8_outputs.h>
+#include <kuka_rsi_hw_interface/request_command.h>
+
+#include <trajectory_msgs/JointTrajectory.h>
+#include <trajectory_msgs/JointTrajectoryPoint.h>
+
+#include <fdcc/fdcc.h>
 
 namespace kuka_rsi_hw_interface
 {
@@ -90,6 +100,7 @@ private:
   std::vector<double> joint_position_command_;
   std::vector<double> joint_velocity_command_;
   std::vector<double> joint_effort_command_;
+  std::vector<bool> digital_output_;
 
   // RSI
   RSIState rsi_state_;
@@ -117,16 +128,40 @@ private:
   hardware_interface::JointStateInterface joint_state_interface_;
   hardware_interface::PositionJointInterface position_joint_interface_;
 
+
+  // Testing
+  ros::Publisher JointCommandPub;
+  ros::Publisher DigitalInputsStatePub;
+
+  ros::Subscriber JointCmdSub;
+
+  ros::ServiceClient RSI_cmdSrv;
+
+  int dummySrvCnt;
+
+
+
+
 public:
 
   KukaHardwareInterface();
   ~KukaHardwareInterface();
 
+  //Test section for adding digital output control
+  void PublishDigitalInputs(std::vector<double> &digital_inputs_state);
+  void JointCmdCallback    (const trajectory_msgs::JointTrajectory &msg);
+  bool write_8_digital_outputs(kuka_rsi_hw_interface::write_8_outputs::Request &req, kuka_rsi_hw_interface::write_8_outputs::Response &res);
+
   void start();
   void configure();
   bool read(const ros::Time time, const ros::Duration period);
-  bool write(const ros::Time time, const ros::Duration period);
+  bool write(const ros::Time time, const ros::Duration period, std::vector<float> v);
 
+  double joint_position[6];
+  int seq_temp;
+  int seq_old;
+
+  
 };
 
 } // namespace kuka_rsi_hw_interface

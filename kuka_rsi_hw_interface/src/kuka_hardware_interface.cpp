@@ -41,6 +41,8 @@
 
 #include <stdexcept>
 
+#include <pthread.h>
+#include <sched.h>
 
 namespace kuka_rsi_hw_interface
 {
@@ -48,12 +50,48 @@ namespace kuka_rsi_hw_interface
 KukaHardwareInterface::KukaHardwareInterface() :
     joint_position_(6, 0.0), joint_velocity_(6, 0.0), joint_effort_(6, 0.0), joint_position_command_(6, 0.0), joint_velocity_command_(
         6, 0.0), joint_effort_command_(6, 0.0), joint_names_(6), rsi_initial_joint_positions_(6, 0.0), rsi_joint_position_corrections_(
-        6, 0.0), ipoc_(0), n_dof_(6)
+        6, 0.0), ipoc_(0), n_dof_(6), digital_output_(8,false)
 {
+/*
   in_buffer_.resize(1024);
   out_buffer_.resize(1024);
   remote_host_.resize(1024);
   remote_port_.resize(1024);
+*/
+  in_buffer_.resize(2048);
+  out_buffer_.resize(2048);
+  remote_host_.resize(2048);
+  remote_port_.resize(2048);
+
+  JointCommandPub = nh_.advertise<std_msgs::Float64MultiArray>("/rsi_joint_commands", 1);
+  DigitalInputsStatePub = nh_.advertise<std_msgs::Float64MultiArray>("/rsi_digital_inputs_state", 1);
+  //JointCmdSub = nh_.subscribe("/command2", 1, &KukaHardwareInterface::JointCmdCallback, this);
+
+  //RSI_cmdSrv = nh_.serviceClient<kuka_rsi_hw_interface::request_command>("/rsi_request_command");
+
+  ros::Time::init();
+  // init
+  this->joint_position[0] = 0;
+  this->joint_position[1] = -1.5707963267948966;
+  this->joint_position[2] = 1.5707963267948966;
+  this->joint_position[3] = 0;
+  this->joint_position[4] = 1.5707963267948966;
+  this->joint_position[5] = 0;
+
+  this->seq_temp = 0;
+  this->seq_old = 0;
+
+  
+
+/*
+      // RT testing
+    int ret;
+    pthread_t this_thread = pthread_self();
+    struct sched_param params;
+
+    params.sched_priority = sched_get_priority_max(SCHED_RR);
+    ret = pthread_setschedparam(this_thread, SCHED_RR, &params);
+*/
 
   if (!nh_.getParam("controller_joint_names", joint_names_))
   {
@@ -89,9 +127,71 @@ KukaHardwareInterface::~KukaHardwareInterface()
 
 }
 
+
+void KukaHardwareInterface::PublishDigitalInputs(std::vector<double> &digital_inputs_state)
+{
+
+  std_msgs::Float64MultiArray msg;
+
+  msg.data.push_back(digital_inputs_state[0]);
+  msg.data.push_back(digital_inputs_state[1]);
+  msg.data.push_back(digital_inputs_state[2]);
+  msg.data.push_back(digital_inputs_state[3]);
+  msg.data.push_back(digital_inputs_state[4]);
+  msg.data.push_back(digital_inputs_state[5]);
+  msg.data.push_back(digital_inputs_state[6]);
+  msg.data.push_back(digital_inputs_state[7]);
+
+  this->DigitalInputsStatePub.publish(msg);
+
+}
+
+void KukaHardwareInterface::JointCmdCallback    (const trajectory_msgs::JointTrajectory &msg)
+{
+
+/*
+    this->joint_position[0] = msg.points[0].positions[0];
+    this->joint_position[1] = msg.points[0].positions[1];
+    this->joint_position[2] = msg.points[0].positions[2];
+    this->joint_position[3] = msg.points[0].positions[3];
+    this->joint_position[4] = msg.points[0].positions[4];
+    this->joint_position[5] = msg.points[0].positions[5];
+
+    this->seq_temp = msg.header.seq;
+*/
+/*    this->joint_position[1] = msg.data[1];
+    this->joint_position[2] = msg.data[2];
+    this->joint_position[3] = msg.data[3];
+    this->joint_position[4] = msg.data[4];
+    this->joint_position[5] = msg.data[5];
+*/
+}
+
+
+bool KukaHardwareInterface::write_8_digital_outputs(kuka_rsi_hw_interface::write_8_outputs::Request &req, kuka_rsi_hw_interface::write_8_outputs::Response &res){
+
+  /*
+   digital_output_.clear();
+   digital_output_.push_back(req.out1);
+   digital_output_.push_back(req.out2);
+   digital_output_.push_back(req.out3);
+   digital_output_.push_back(req.out4);
+   digital_output_.push_back(req.out5);
+   digital_output_.push_back(req.out6);
+   digital_output_.push_back(req.out7);
+   digital_output_.push_back(req.out8);
+  */
+
+  if (req.ID >= 0 && req.ID < 8)
+    digital_output_[req.ID] = req.value;
+
+   return true;
+}
+
 bool KukaHardwareInterface::read(const ros::Time time, const ros::Duration period)
 {
-  in_buffer_.resize(1024);
+  //in_buffer_.resize(1024);
+  in_buffer_.resize(2048);
 
   if (server_->recv(in_buffer_) == 0)
   {
@@ -107,22 +207,74 @@ bool KukaHardwareInterface::read(const ros::Time time, const ros::Duration perio
   for (std::size_t i = 0; i < n_dof_; ++i)
   {
     joint_position_[i] = DEG2RAD * rsi_state_.positions[i];
+    // update digital input states
+    this->PublishDigitalInputs(rsi_state_.digital_inputs);
   }
   ipoc_ = rsi_state_.ipoc;
 
   return true;
 }
 
-bool KukaHardwareInterface::write(const ros::Time time, const ros::Duration period)
+bool KukaHardwareInterface::write(const ros::Time time, const ros::Duration period, std::vector<float> v)
 {
-  out_buffer_.resize(1024);
+  //in_buffer_.resize(1024);
+  in_buffer_.resize(2048);
+
+  
+  this->joint_position[0] = v[0];
+  this->joint_position[1] = v[1];
+  this->joint_position[2] = v[2];
+  this->joint_position[3] = v[3];
+  this->joint_position[4] = v[4];
+  this->joint_position[5] = v[5];
+
+ /* 
+  //std::cout << "Seq_tem, seq_old: " << this->seq_temp << ", " << this->seq_old << std::endl;
+  ros::Rate r(1.0/0.00001);
+  int i = 0;
+  
+  ros::Time loop_time_start = ros::Time::now();
+  
+
+
+  while (this->seq_temp == this->seq_old && this->seq_temp >= 5 && i < 1000 )
+  {
+    i++;
+    ros::spinOnce();
+    r.sleep();
+    ros::Time loop_time_end = ros::Time::now();
+    std::cout << "Waiting time: " << (loop_time_end-loop_time_start).toSec() << std::endl;
+  }
+
+  this->seq_old = this->seq_temp;
+*/
 
   for (std::size_t i = 0; i < n_dof_; ++i)
   {
-    rsi_joint_position_corrections_[i] = (RAD2DEG * joint_position_command_[i]) - rsi_initial_joint_positions_[i];
+    //rsi_joint_position_corrections_[i] = (RAD2DEG * joint_position_command_[i]) - rsi_initial_joint_positions_[i];
+  
+    rsi_joint_position_corrections_[i] = (RAD2DEG * this->joint_position[i]) - rsi_initial_joint_positions_[i];
+    //std::cout << rsi_joint_position_corrections_[i] << ", " << RAD2DEG *this->joint_position[i] <<", " << rsi_initial_joint_positions_[i]<< std::endl;
+
   }
 
-  out_buffer_ = RSICommand(rsi_joint_position_corrections_, ipoc_).xml_doc;
+  // testing
+  std_msgs::Float64MultiArray temp;
+  /*  temp.data.push_back(joint_position_command_[0]);
+  temp.data.push_back(joint_position_command_[1]);
+  temp.data.push_back(joint_position_command_[2]);
+  temp.data.push_back(joint_position_command_[3]);
+  temp.data.push_back(joint_position_command_[4]);
+  temp.data.push_back(joint_position_command_[5]);*/
+  temp.data.push_back(this->joint_position[0]);
+  temp.data.push_back(this->joint_position[1]);
+  temp.data.push_back(this->joint_position[2]);
+  temp.data.push_back(this->joint_position[3]);
+  temp.data.push_back(this->joint_position[4]);
+  temp.data.push_back(this->joint_position[5]);
+  JointCommandPub.publish(temp);
+
+  out_buffer_ = RSICommand(rsi_joint_position_corrections_, digital_output_, ipoc_).xml_doc;
   server_->send(out_buffer_);
 
   return true;
@@ -130,6 +282,8 @@ bool KukaHardwareInterface::write(const ros::Time time, const ros::Duration peri
 
 void KukaHardwareInterface::start()
 {
+
+
   // Wait for connection from robot
   server_.reset(new UDPServer(local_host_, local_port_));
 
@@ -149,13 +303,20 @@ void KukaHardwareInterface::start()
     joint_position_[i] = DEG2RAD * rsi_state_.positions[i];
     joint_position_command_[i] = joint_position_[i];
     rsi_initial_joint_positions_[i] = rsi_state_.initial_positions[i];
+    // update digital input states
+    this->PublishDigitalInputs(rsi_state_.digital_inputs);
   }
+
+  //this->fdcc_node.run();
+
   ipoc_ = rsi_state_.ipoc;
-  out_buffer_ = RSICommand(rsi_joint_position_corrections_, ipoc_).xml_doc;
+  out_buffer_ = RSICommand(rsi_joint_position_corrections_, digital_output_, ipoc_).xml_doc;
   server_->send(out_buffer_);
   // Set receive timeout to 1 second
   server_->set_timeout(1000);
   ROS_INFO_STREAM_NAMED("kuka_hardware_interface", "Got connection from robot");
+
+
 
 }
 

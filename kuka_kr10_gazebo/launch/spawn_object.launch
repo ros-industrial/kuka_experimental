@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<launch>
+
+	<!-- send table urdf to param server -->
+	<param name="object_description" command="$(find xacro)/xacro --inorder '$(find kuka_kr10_gazebo)/objects/pipe1.urdf.xacro'"/>
+
+	<!-- push object_description to factory and spawn robot in gazebo -->
+  	<node name="spawn_gazebo_object" pkg="gazebo_ros" type="spawn_model"
+        output="screen" respawn="false"
+        args="-urdf
+              -param object_description
+              -model pipe1_object
+              -x 0.0
+              -y 0.35
+              -z 0.0
+              -R 0.0
+              -P 0.0
+              -Y 1.5707" />
+
+
+</launch>
