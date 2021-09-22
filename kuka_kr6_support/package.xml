@@ -32,6 +32,9 @@
       in this package, be sure to check they are correct for the particular
       robot model and configuration you intend to use them with.
     </p>
+    <p>
+      Note: the KR6 R900-2 urdf reuses meshes from the <em>kuka_kr10_support</em> package because of their identical appearance.
+    </p>
   </description>
   <author>G.A. vd. Hoorn (TU Delft Robotics Institute)</author>
   <author>Brett Hemes (3M)</author>
