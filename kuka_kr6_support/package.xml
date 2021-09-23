@@ -18,7 +18,7 @@
       <li>KR 6 R900-2 - Default</li>
     </ul>
     <p>
-      Joint limits and maximum joint velocities are based on the information
+      Joint limits and maximum joint velocities for sixx models are based on the information
       in the <em>KUKA Roboter GmbH - KR AGILUS sixx - With W and C Variants -
       Specification</em> version <em>Spez KR AGILUS sixx V12, 26.03.2015</em>.
       Joint limits and maximum joint velocities for R900-2 are based on the information
