@@ -1,8 +1,5 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://wiki.ros.org/xacro">
-  <property name="pi" value="3.141592654"/>
-  <!--degrees to radians-->
-  <property name="deg" value="0.017453293"/>
 
   <xacro:macro name="kuka_kr210l150" params="prefix">
     <!-- links -->
@@ -13,7 +10,7 @@
         <inertia ixx="89.282" ixy="-0.47721" ixz="0.85562" iyy="107.51" iyz="0.0067576" izz="172.02"/>
       </inertial>
       <visual>
-        <origin xyz="0 0 0" rpy="${-pi/2} 0 0"/>
+        <origin xyz="0 0 0" rpy="${-radians(90)} 0 0"/>
         <geometry>
           <mesh filename="package://kuka_kr210_support/meshes/kr210l150/visual/base_link.dae"/>
         </geometry>
@@ -22,7 +19,7 @@
         </material>
       </visual>
       <collision>
-        <origin xyz="0 0 0" rpy="${-pi/2} 0 0"/>
+        <origin xyz="0 0 0" rpy="${-radians(90)} 0 0"/>
         <geometry>
           <mesh filename="package://kuka_kr210_support/meshes/kr210l150/collision/base_link.stl"/>
         </geometry>
@@ -57,7 +54,7 @@
         <inertia ixx="180.42" ixy="-0.83462" ixz="0.32549" iyy="177.68" iyz="-20.82" izz="20.495"/>
       </inertial>
       <visual>
-        <origin xyz="0 0 0" rpy="${-pi/2} 0 0"/>
+        <origin xyz="0 0 0" rpy="${-radians(90)} 0 0"/>
         <geometry>
           <mesh filename="package://kuka_kr210_support/meshes/kr210l150/visual/link_2.dae"/>
         </geometry>
@@ -79,7 +76,7 @@
         <inertia ixx="11.887" ixy="-0.12154" ixz="-1.3604" iyy="98.805" iyz="-0.056505" izz="96.251"/>
       </inertial>
       <visual>
-        <origin xyz="0 0 0" rpy="${-pi/2} 0 0"/>
+        <origin xyz="0 0 0" rpy="${-radians(90)} 0 0"/>
         <geometry>
           <mesh filename="package://kuka_kr210_support/meshes/kr210l150/visual/link_3.dae"/>
         </geometry>
@@ -101,7 +98,7 @@
         <inertia ixx="1.8001" ixy="-0.18515" ixz="0.00051232" iyy="5.514" iyz="0.00070469" izz="6.3498"/>
       </inertial>
       <visual>
-        <origin xyz="0 0 0" rpy="${-pi/2} 0 0"/>
+        <origin xyz="0 0 0" rpy="${-radians(90)} 0 0"/>
         <geometry>
           <mesh filename="package://kuka_kr210_support/meshes/kr210l150/visual/link_4.dae"/>
         </geometry>
@@ -123,7 +120,7 @@
         <inertia ixx="0.3938" ixy="-0.085332" ixz="1.7223E-06" iyy="0.68945" iyz="-7.0292E-06" izz="0.67292"/>
       </inertial>
       <visual>
-        <origin xyz="0 0 0" rpy="${-pi/2} 0 0"/>
+        <origin xyz="0 0 0" rpy="${-radians(90)} 0 0"/>
         <geometry>
           <mesh filename="package://kuka_kr210_support/meshes/kr210l150/visual/link_5.dae"/>
         </geometry>
@@ -169,42 +166,42 @@
       <parent link="${prefix}base_link"/>
       <child link="${prefix}link_1"/>
       <axis xyz="0 0 1"/>
-      <limit lower="${-185*deg}" upper="${185*deg}" effort="0" velocity="${123*deg}"/>
+      <limit lower="${radians(-185)}" upper="${radians(185)}" effort="0" velocity="${radians(123)}"/>
     </joint>
     <joint name="${prefix}joint_a2" type="revolute">
       <origin xyz="0.35277 -0.037476 0.4192" rpy="0 0 0"/>
       <parent link="${prefix}link_1"/>
       <child link="${prefix}link_2"/>
       <axis xyz="0 1 0"/>
-      <limit lower="${-45*deg}" upper="${85*deg}" effort="0" velocity="${115*deg}"/>
+      <limit lower="${radians(-45)}" upper="${radians(85)}" effort="0" velocity="${radians(115)}"/>
     </joint>
     <joint name="${prefix}joint_a3" type="revolute">
       <origin xyz="-9.8483E-05 -0.1475 1.2499" rpy="0 0 0"/>
       <parent link="${prefix}link_2"/>
       <child link="${prefix}link_3"/>
       <axis xyz="0 1 0"/>
-      <limit lower="${-210*deg}" upper="${(155-90)*deg}" effort="0" velocity="${112*deg}"/>
+      <limit lower="${radians(-210)}" upper="${radians(65)}" effort="0" velocity="${radians(112)}"/>
     </joint>
     <joint name="${prefix}joint_a4" type="revolute">
       <origin xyz="0.95795 0.184 -0.055059" rpy="0 0 0"/>
       <parent link="${prefix}link_3"/>
       <child link="${prefix}link_4"/>
       <axis xyz="1 0 0"/>
-      <limit lower="${-350*deg}" upper="${350*deg}" effort="0" velocity="${179*deg}"/>
+      <limit lower="${radians(-350)}" upper="${radians(350)}" effort="0" velocity="${radians(179)}"/>
     </joint>
     <joint name="${prefix}joint_a5" type="revolute">
       <origin xyz="0.542 0 0" rpy="0 0 0"/>
       <parent link="${prefix}link_4"/>
       <child link="${prefix}link_5"/>
       <axis xyz="0 1 0"/>
-      <limit lower="${-125*deg}" upper="${125*deg}" effort="0" velocity="${172*deg}"/>
+      <limit lower="${radians(-125)}" upper="${radians(125)}" effort="0" velocity="${radians(172)}"/>
     </joint>
     <joint name="${prefix}joint_a6" type="revolute">
       <origin xyz="0.1925 0 0" rpy="0 0 0"/>
       <parent link="${prefix}link_5"/>
       <child link="${prefix}link_6"/>
       <axis xyz="1 0 0"/>
-      <limit lower="${-350*deg}" upper="${350*deg}" effort="0" velocity="${219*deg}"/>
+      <limit lower="${radians(-350)}" upper="${radians(350)}" effort="0" velocity="${radians(219)}"/>
     </joint>
     <joint name="${prefix}link_6-flange" type="fixed">
       <parent link="${prefix}link_6"/>
@@ -225,7 +222,7 @@
     <joint name="${prefix}flange-tool0" type="fixed">
       <parent link="${prefix}flange"/>
       <child link="${prefix}tool0"/>
-      <origin xyz="0 0 0" rpy="0 ${pi*0.5} 0"/>
+      <origin xyz="0 0 0" rpy="0 ${radians(90)} 0"/>
     </joint>
 
     <!-- rename 'Link1' to 'link_1', maintain bw-compatibility -->

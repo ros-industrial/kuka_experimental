@@ -183,7 +183,7 @@
     <joint name="${prefix}flange-tool0" type="fixed">
       <parent link="${prefix}flange"/>
       <child link="${prefix}tool0"/>
-      <origin xyz="0 0 0" rpy="0 ${pi*0.5} 0"/>
+      <origin xyz="0 0 0" rpy="0 ${radians(90)} 0"/>
     </joint>
     
   </xacro:macro>
