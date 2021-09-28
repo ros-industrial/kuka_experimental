@@ -3,9 +3,6 @@ name: CI - Ubuntu Trusty
 on:
   # direct pushes to protected branches are not supported
   pull_request:
-  # run every day, at 6am UTC
-  schedule:
-    - cron: '0 6 * * *'
   # allow manually starting this workflow
   workflow_dispatch:
 
