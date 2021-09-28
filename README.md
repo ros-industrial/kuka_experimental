@@ -1,6 +1,5 @@
 # Kuka experimental
 
-[![Build Status: Ubuntu Xenial (Actions)](https://github.com/ros-industrial/kuka_experimental/workflows/CI%20-%20Ubuntu%20Xenial/badge.svg?branch=melodic-devel)](https://github.com/ros-industrial/kuka_experimental/actions?query=workflow%3A%22CI+-+Ubuntu+Xenial%22)
 [![Build Status: Ubuntu Bionic (Actions)](https://github.com/ros-industrial/kuka_experimental/workflows/CI%20-%20Ubuntu%20Bionic/badge.svg?branch=melodic-devel)](https://github.com/ros-industrial/kuka_experimental/actions?query=workflow%3A%22CI+-+Ubuntu+Bionic%22)
 [![Build Status: Ubuntu Focal (Actions)](https://github.com/ros-industrial/kuka_experimental/workflows/CI%20-%20Ubuntu%20Focal/badge.svg?branch=melodic-devel)](https://github.com/ros-industrial/kuka_experimental/actions?query=workflow%3A%22CI+-+Ubuntu+Focal%22)
 
