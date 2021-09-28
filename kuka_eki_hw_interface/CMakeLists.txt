@@ -17,10 +17,6 @@ find_package(TinyXML REQUIRED)
 
 
 catkin_package(
-  INCLUDE_DIRS
-    include
-  LIBRARIES
-    kuka_eki_hw_interface
   CATKIN_DEPENDS
     controller_manager
     hardware_interface
