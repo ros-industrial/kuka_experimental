@@ -1,6 +1,5 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://wiki.ros.org/xacro">
-  <property name="pi" value="3.141592654"/>
 
   <xacro:macro name="kuka_kr210l150" params="prefix">
     <!-- links -->
@@ -11,7 +10,7 @@
         <inertia ixx="89.282" ixy="-0.47721" ixz="0.85562" iyy="107.51" iyz="0.0067576" izz="172.02"/>
       </inertial>
       <visual>
-        <origin xyz="0 0 0" rpy="${-pi/2} 0 0"/>
+        <origin xyz="0 0 0" rpy="${-radians(90)} 0 0"/>
         <geometry>
           <mesh filename="package://kuka_kr210_support/meshes/kr210l150/visual/base_link.dae"/>
         </geometry>
@@ -20,7 +19,7 @@
         </material>
       </visual>
       <collision>
-        <origin xyz="0 0 0" rpy="${-pi/2} 0 0"/>
+        <origin xyz="0 0 0" rpy="${-radians(90)} 0 0"/>
         <geometry>
           <mesh filename="package://kuka_kr210_support/meshes/kr210l150/collision/base_link.stl"/>
         </geometry>
@@ -55,7 +54,7 @@
         <inertia ixx="180.42" ixy="-0.83462" ixz="0.32549" iyy="177.68" iyz="-20.82" izz="20.495"/>
       </inertial>
       <visual>
-        <origin xyz="0 0 0" rpy="${-pi/2} 0 0"/>
+        <origin xyz="0 0 0" rpy="${-radians(90)} 0 0"/>
         <geometry>
           <mesh filename="package://kuka_kr210_support/meshes/kr210l150/visual/link_2.dae"/>
         </geometry>
@@ -77,7 +76,7 @@
         <inertia ixx="11.887" ixy="-0.12154" ixz="-1.3604" iyy="98.805" iyz="-0.056505" izz="96.251"/>
       </inertial>
       <visual>
-        <origin xyz="0 0 0" rpy="${-pi/2} 0 0"/>
+        <origin xyz="0 0 0" rpy="${-radians(90)} 0 0"/>
         <geometry>
           <mesh filename="package://kuka_kr210_support/meshes/kr210l150/visual/link_3.dae"/>
         </geometry>
@@ -99,7 +98,7 @@
         <inertia ixx="1.8001" ixy="-0.18515" ixz="0.00051232" iyy="5.514" iyz="0.00070469" izz="6.3498"/>
       </inertial>
       <visual>
-        <origin xyz="0 0 0" rpy="${-pi/2} 0 0"/>
+        <origin xyz="0 0 0" rpy="${-radians(90)} 0 0"/>
         <geometry>
           <mesh filename="package://kuka_kr210_support/meshes/kr210l150/visual/link_4.dae"/>
         </geometry>
@@ -121,7 +120,7 @@
         <inertia ixx="0.3938" ixy="-0.085332" ixz="1.7223E-06" iyy="0.68945" iyz="-7.0292E-06" izz="0.67292"/>
       </inertial>
       <visual>
-        <origin xyz="0 0 0" rpy="${-pi/2} 0 0"/>
+        <origin xyz="0 0 0" rpy="${-radians(90)} 0 0"/>
         <geometry>
           <mesh filename="package://kuka_kr210_support/meshes/kr210l150/visual/link_5.dae"/>
         </geometry>
@@ -158,8 +157,8 @@
         </geometry>
       </collision>
     </link>
-    <!-- This frame corresponds to the $FLANGE coordinate system in KUKA KRC controllers. -->
-    <link name="${prefix}tool0"/>
+    <!-- This frame corresponds to the $TOOL coordinate system in KUKA KRC controllers. -->
+    <link name="${prefix}flange"/>
 
     <!-- joints -->
     <joint name="${prefix}joint_a1" type="revolute">
@@ -181,7 +180,7 @@
       <parent link="${prefix}link_2"/>
       <child link="${prefix}link_3"/>
       <axis xyz="0 1 0"/>
-      <limit lower="${radians(-210)}" upper="${radians(155-90)}" effort="0" velocity="${radians(112)}"/>
+      <limit lower="${radians(-210)}" upper="${radians(65)}" effort="0" velocity="${radians(112)}"/>
     </joint>
     <joint name="${prefix}joint_a4" type="revolute">
       <origin xyz="0.95795 0.184 -0.055059" rpy="0 0 0"/>
@@ -204,10 +203,26 @@
       <axis xyz="1 0 0"/>
       <limit lower="${radians(-350)}" upper="${radians(350)}" effort="0" velocity="${radians(219)}"/>
     </joint>
-    <joint name="${prefix}link_6-tool0" type="fixed">
+    <joint name="${prefix}link_6-flange" type="fixed">
       <parent link="${prefix}link_6"/>
-      <child link="${prefix}tool0"/>
+      <child link="${prefix}flange"/>
       <origin xyz="0.0375 0 -0.00023924" rpy="0 0 0"/>
+    </joint>
+
+    <!-- ROS base_link to KUKA $ROBROOT coordinate system transform -->
+    <link name="${prefix}base" />
+    <joint name="${prefix}base_link-base" type="fixed">
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <parent link="${prefix}base_link"/>
+      <child link="${prefix}base"/>
+    </joint>
+
+    <!-- This frame corresponds to the $TOOL coordinate system in KUKA KRC controllers -->
+    <link name="${prefix}tool0" />
+    <joint name="${prefix}flange-tool0" type="fixed">
+      <parent link="${prefix}flange"/>
+      <child link="${prefix}tool0"/>
+      <origin xyz="0 0 0" rpy="0 ${radians(90)} 0"/>
     </joint>
 
     <!-- rename 'Link1' to 'link_1', maintain bw-compatibility -->
