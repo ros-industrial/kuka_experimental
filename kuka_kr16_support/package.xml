@@ -13,10 +13,16 @@
     <p><b>Specifications</b>:</p>
     <ul>
       <li>KR 16-2 - Default</li>
+      <li>KR 16 R1610 cybertech - Default</li>
     </ul>
     <p>
-      Joint limits and maximum joint velocities are based on the information
+      Joint limits and maximum joint velocities for the KR 16-2 are based on the information
       found in the online datasheet <a href="http://www.kuka-robotics.com/res/sps/e6c77545-9030-49b1-93f5-4d17c92173aa_Spez_KR_16_en.pdf">here</a>. All urdfs are based on the default motion and joint velocity limits,
+      unless noted otherwise.
+    </p>
+    <p>
+      Joint limits and maximum joint velocities for the KR 16 R1610 cybertech are based on the information
+      found in the online datasheet <a href="https://www.kuka.com/-/media/kuka-downloads/imported/48ec812b1b2947898ac2598aff70abc0/spez_kr_cybertech_en.pdf">here</a>. All urdfs are based on the default motion and joint velocity limits,
       unless noted otherwise.
     </p>
     <p>
@@ -29,6 +35,7 @@
     </p>
   </description>
   <author>Lars Tingelstad</author>
+  <author email="simon.schmeisser@optonic.com">Simon Schmeisser (Optonic GmbH)</author>
   <maintainer email="lars.tingelstad@ntnu.no">Lars Tingelstad</maintainer>
   <maintainer email="g.a.vanderhoorn@tudelft.nl">G.A. vd. Hoorn (TU Delft Robotics Institute)</maintainer>
   <license>BSD</license>
