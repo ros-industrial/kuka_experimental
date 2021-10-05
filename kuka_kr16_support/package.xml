@@ -13,7 +13,7 @@
     <p><b>Specifications</b>:</p>
     <ul>
       <li>KR 16-2 - Default</li>
-      <li>KR 16 R1610 cybertech - Default</li>
+      <li>KR 16 R1610 CYBERTECH - Default</li>
     </ul>
     <p>
       Joint limits and maximum joint velocities for the KR 16-2 are based on the information
@@ -21,8 +21,9 @@
       unless noted otherwise.
     </p>
     <p>
-      Joint limits and maximum joint velocities for the KR 16 R1610 cybertech are based on the information
-      found in the online datasheet <a href="https://www.kuka.com/-/media/kuka-downloads/imported/48ec812b1b2947898ac2598aff70abc0/spez_kr_cybertech_en.pdf">here</a>. All urdfs are based on the default motion and joint velocity limits,
+      Joint limits and maximum joint velocities for the KR 16 R1610 CYBERTECH are based on the information
+      found in <em>KUKA Roboter GmbH - KR CYBERTECH - With F and C Variants -
+      Specification</em> version <em>Spez KR CYBERTECH V4, 25.06.2018</em>. All urdfs are based on the default motion and joint velocity limits,
       unless noted otherwise.
     </p>
     <p>
