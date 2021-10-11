@@ -19,10 +19,10 @@
   <!--xacro:include filename="$(find kuka_kr10_gazebo)/urdf/endorse_tool_macro.xacro"/-->
 
   <!-- Proxxon Drilling Tool -->
-  <xacro:include filename="$(find kuka_kr10_gazebo)/urdf/proxxon_drill_macro.xacro"/>
+  <!--xacro:include filename="$(find kuka_kr10_gazebo)/urdf/proxxon_drill_macro.xacro"/-->
   
 
   <!-- tool -->
-  <xacro:proxxon_drilling_tool_gazebo prefix=""/>
+  <!--xacro:proxxon_drilling_tool_gazebo prefix=""/-->
 
 </robot>
