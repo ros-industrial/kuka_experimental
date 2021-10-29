@@ -8,7 +8,6 @@
 #
 # The moveit_opw_kinematics_plugin package provides such a solver.
 #
-kinematics_solver: moveit_opw_kinematics_plugin/MoveItOPWKinematicsPlugin
 opw_kinematics_geometric_parameters:
     a1:  0.33
     a2:  -0.115
