@@ -116,9 +116,6 @@
         </geometry>
       </collision>
     </link>
-    <!-- tool link -->
-    <!-- This frame corresponds to the $FLANGE coordinate system in KUKA KRC controllers. -->
-    <link name="${prefix}tool0"/>
     <!-- END LINKS -->
 
     <!-- JOINTS -->
