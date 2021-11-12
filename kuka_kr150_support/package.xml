@@ -14,10 +14,17 @@
     <p><b>Specifications</b>:</p>
     <ul>
       <li>KR 150-2 - Default</li>
+      <li>KR 150 R3100-2 - Default</li>
     </ul>
     <p>
       Joint limits and maximum joint velocities are based on the information
       found in <em>Series 2000 KR 150-2</em>, version <em>PF0020/E/1/0709</em>.
+      All urdfs are based on the default motion and joint velocity limits,
+      unless noted otherwise.
+    </p>
+    <p>
+      Joint limits and maximum joint velocities of KR 150 R3100-2 are based on the information
+      found in the online datasheet <em>KR 150 R3100-2</em>, version <em>0000-346-515 / V22.1 / 26.03.2021</em>.
       All urdfs are based on the default motion and joint velocity limits,
       unless noted otherwise.
     </p>
