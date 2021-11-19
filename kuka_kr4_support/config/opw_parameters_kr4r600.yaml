@@ -18,4 +18,3 @@ opw_kinematics_geometric_parameters:
     c4:  0.075
 opw_kinematics_joint_offsets: [0.0, deg(-90.0), 0.0, 0.0, 0.0, 0.0]
 opw_kinematics_joint_sign_corrections: [-1, 1, 1, -1, 1, -1]
-    
