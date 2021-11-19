@@ -1,4 +1,4 @@
 <?xml version="1.0"?>
 <launch>
-  <param name="robot_description" command="$(find xacro)/xacro --inorder '$(find kuka_kr4_support)/urdf/kr4r600.xacro'"/>
+  <param name="robot_description" command="$(find xacro)/xacro '$(find kuka_kr4_support)/urdf/kr4r600.xacro'"/>
 </launch>

@@ -28,7 +28,7 @@
       robot model and configuration you intend to use them with.
     </p>
   </description>
-  <author>Simon Schmeisser (Optonic GmbH)</author>
+  <author email="simon.schmeisser@optonic.com">Simon Schmeisser (Optonic GmbH)</author>
   <maintainer email="g.a.vanderhoorn@tudelft.nl">G.A. vd. Hoorn (TU Delft Robotics Institute)</maintainer>
   <license>BSD</license>
 
