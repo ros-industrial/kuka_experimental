@@ -9,12 +9,13 @@
     <p>
       This package contains configuration data, 3D models and launch files
       for KUKA KR 6 manipulators. This currently includes the R700 sixx,
-      the R900 sixx, R900-2 and the R1820.
+      the R900 sixx, R700-2, R900-2 and the R1820.
     </p>
     <p><b>Specifications</b>:</p>
     <ul>
       <li>KR 6 R700 sixx - Default</li>
       <li>KR 6 R900 sixx - Default</li>
+      <li>KR 6 R700-2 - Default</li>
       <li>KR 6 R900-2 - Default</li>
       <li>KR 6 R1820 - Default</li>
     </ul>
@@ -24,7 +25,7 @@
       Specification</em> version <em>Spez KR AGILUS sixx V12, 26.03.2015</em>.
       Joint limits and maximum joint velocities for R1820 are based on the information
       in the <em>KUKA Roboter GmbH - KR 6 R1820 data sheet</em> version <em>V51.1, 28.01.2021</em>.
-      Joint limits and maximum joint velocities for R900-2 are based on the information
+      Joint limits and maximum joint velocities for R700-2 and R900-2 are based on the information
       in the <em>KUKA Deutschland GmbH - Robots KR AGILUS-2 Specification</em> version <em>V4, 26.02.2019</em>.
       All urdfs are based on the default motion and joint velocity limits,
       unless noted otherwise (ie: no support for high speed joints,
@@ -38,6 +39,7 @@
   </description>
   <author>G.A. vd. Hoorn (TU Delft Robotics Institute)</author>
   <author>Brett Hemes (3M)</author>
+  <author>Simon Schmeisser (Optonic)</author>
   <author>Timo Birnkraut (Optonic)</author>
   <maintainer email="g.a.vanderhoorn@tudelft.nl">G.A. vd. Hoorn (TU Delft Robotics Institute)</maintainer>
   <license>BSD</license>
