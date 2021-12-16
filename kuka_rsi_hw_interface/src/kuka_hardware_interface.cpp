@@ -53,8 +53,13 @@ KukaHardwareInterface::KukaHardwareInterface()
   , joint_names_(6)
   , rsi_initial_joint_positions_(6, 0.0)
   , rsi_joint_position_corrections_(6, 0.0)
+  , rsi_digital_outputs(16)
   , ipoc_(0)
   , n_dof_(6)
+  , digital_output_state_(16)
+  , digital_output_command_(16)
+  , digital_input_state_(16)
+
 {
   in_buffer_.resize(1024);
   out_buffer_.resize(1024);
@@ -84,6 +89,12 @@ void KukaHardwareInterface::read(const ros::Time& time, const ros::Duration& per
   for (std::size_t i = 0; i < n_dof_; ++i)
   {
     joint_position_[i] = DEG2RAD * rsi_state_.positions[i];
+  }
+  for (std::size_t i = 0; i < digital_input_state_.size(); ++i)
+  {
+    digital_input_state_[i] = rsi_state_.digital_inputs[i] == 1 ?
+                                  hardware_state_command_interfaces::DigitalIOStateHandle::State::HIGH :
+                                  hardware_state_command_interfaces::DigitalIOStateHandle::State::LOW;
   }
   ipoc_ = rsi_state_.ipoc;
   if (rt_rsi_kuka_to_pc_pub_->trylock())
@@ -117,6 +128,16 @@ bool KukaHardwareInterface::read()
   {
     joint_position_[i] = DEG2RAD * rsi_state_.positions[i];
   }
+  for (std::size_t i = 0; i < digital_input_state_.size(); ++i)
+  {
+    digital_input_state_[i] = rsi_state_.digital_inputs[i] == 1 ?
+                                  hardware_state_command_interfaces::DigitalIOStateHandle::State::HIGH :
+                                  hardware_state_command_interfaces::DigitalIOStateHandle::State::LOW;
+  }
+  for (std::size_t i = 0; i < digital_output_state_.size(); ++i)
+  {
+    digital_output_state_[i] = digital_output_command_[i];
+  }
   ipoc_ = rsi_state_.ipoc;
 
   return true;
@@ -129,6 +150,12 @@ void KukaHardwareInterface::write(const ros::Time& time, const ros::Duration& pe
   for (std::size_t i = 0; i < n_dof_; ++i)
   {
     rsi_joint_position_corrections_[i] = (RAD2DEG * joint_position_command_[i]) - rsi_initial_joint_positions_[i];
+  }
+
+  for (std::size_t i = 0; i < digital_output_command_.size(); ++i)
+  {
+    rsi_digital_outputs[i] =
+        digital_output_command_[i] == hardware_state_command_interfaces::DigitalIOStateHandle::State::HIGH ? 1 : 0;
   }
 
   if (rt_rsi_pc_to_kuka_pub_->trylock())
@@ -146,7 +173,7 @@ void KukaHardwareInterface::write(const ros::Time& time, const ros::Duration& pe
     rt_rsi_pc_to_kuka_pub_->unlockAndPublish();
   }
 
-  out_buffer_ = RSICommand(rsi_joint_position_corrections_, ipoc_).xml_doc;
+  out_buffer_ = RSICommand(rsi_joint_position_corrections_, rsi_digital_outputs, ipoc_).xml_doc;
   // send is a blocking action if the buffer is full
   if (server_->send(out_buffer_) <= 0)
   {
@@ -253,6 +280,104 @@ bool KukaHardwareInterface::init(ros::NodeHandle& root_nh, ros::NodeHandle& robo
   {
     ROS_ERROR_STREAM("joints not found in parameters");
     return false;
+  }
+  if (robot_hw_nh.hasParam("digital_outputs"))
+  {
+    XmlRpc::XmlRpcValue digital_output_list;
+    robot_hw_nh.getParam("digital_outputs", digital_output_list);
+    ROS_INFO_STREAM_NAMED("hardware_interfac", digital_output_list);
+
+    size_t digital_output_size = digital_output_list.size();
+    digital_outputs_.resize(digital_output_size);
+
+    for (std::size_t i = 0; i < digital_output_size; ++i)
+    {
+      std::map<std::string, std::string> digital_output_info;
+
+      digital_output_info["name"] = (std::string)(digital_output_list[i]["name"]);
+      digital_output_info["output"] = (std::string)(digital_output_list[i]["output"]);
+      digital_output_info["bit_position"] = std::to_string((int)(digital_output_list[i]["bit_position"]));
+
+      digital_outputs_[i] = digital_output_info;
+    }
+    // Create ros_control interfaces
+    for (std::size_t i = 0; i < digital_output_size; ++i)
+    {
+      auto digital_output_name = digital_outputs_[i]["name"];
+      auto digital_output_type_output = digital_outputs_[i]["output"];
+      auto digital_output_bit_position = std::stoi(digital_outputs_[i]["bit_position"]);
+
+      if (digital_output_bit_position > 16)
+      {
+        ROS_ERROR_STREAM_NAMED("hardware_interfac", "Output bit position should be between 0-15");
+        return false;
+      }
+      digital_output_command_[digital_output_bit_position] =
+          hardware_state_command_interfaces::DigitalIOStateHandle::State::UNDEFINED;
+      digital_output_state_[digital_output_bit_position] =
+          hardware_state_command_interfaces::DigitalIOStateHandle::State::UNDEFINED;
+
+      // Create digital output state interface for all digital outputs
+      digital_output_state_interface_.registerHandle(hardware_state_command_interfaces::DigitalIOStateHandle(
+          digital_output_name, &(digital_output_state_[digital_output_bit_position])));
+
+      // Create digital output command control interface
+      digital_output_command_interface_.registerHandle(hardware_state_command_interfaces::DigitalOutputHandle(
+          digital_output_state_interface_.getHandle(digital_output_name),
+          &(digital_output_command_[digital_output_bit_position])));
+    }
+
+    // Register digital output interfaces
+    registerInterface(&digital_output_state_interface_);
+    registerInterface(&digital_output_command_interface_);
+    ROS_INFO_STREAM_NAMED("hardware_interface", "digital_outputs_ init done");
+  }
+
+  if (robot_hw_nh.hasParam("digital_inputs"))
+  {
+    XmlRpc::XmlRpcValue digital_input_list;
+    robot_hw_nh.getParam("digital_inputs", digital_input_list);
+    ROS_INFO_STREAM_NAMED("hardware_interface", digital_input_list);
+
+    size_t digital_input_size = digital_input_list.size();
+    digital_inputs_.resize(digital_input_size);
+
+    for (std::size_t i = 0; i < digital_input_size; ++i)
+    {
+      std::map<std::string, std::string> digital_input_info;
+
+      digital_input_info["name"] = (std::string)(digital_input_list[i]["name"]);
+      digital_input_info["input"] = (std::string)(digital_input_list[i]["input"]);
+      digital_input_info["bit_position"] = std::to_string((int)(digital_input_list[i]["bit_position"]));
+
+      digital_inputs_[i] = digital_input_info;
+    }
+
+    // Create ros_control interfaces
+    for (std::size_t i = 0; i < digital_input_size; ++i)
+    {
+      auto digital_input_name = digital_inputs_[i]["name"];
+      auto digital_input_type_input = digital_inputs_[i]["input"];
+      auto digital_input_bit_position = std::stoi(digital_inputs_[i]["bit_position"]);
+
+      if (digital_input_bit_position > 16)
+      {
+        ROS_ERROR_STREAM_NAMED("hardware_interfac", "Input bit position should be between 0-15");
+        return false;
+      }
+
+      digital_input_state_[digital_input_bit_position] =
+          hardware_state_command_interfaces::DigitalIOStateHandle::State::UNDEFINED;
+
+      // Create digital input state interface for all digital outputs
+      digital_input_state_interface_.registerHandle(hardware_state_command_interfaces::DigitalIOStateHandle(
+          digital_input_name, &(digital_input_state_[digital_input_bit_position])));
+    }
+
+    // Register digital input interfaces
+    registerInterface(&digital_input_state_interface_);
+
+    ROS_INFO_STREAM_NAMED("hardware_interfac", "digital_inputs_ init done");
   }
   configure();
   ROS_INFO_STREAM_NAMED("hardware_interface", "Loaded kuka_rsi_hardware_interface");
