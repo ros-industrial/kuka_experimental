@@ -1,17 +1,17 @@
 <ROOT>
    <CONFIG>
-      <IP_NUMBER>ip.address.of.rospc</IP_NUMBER>   <!-- IP-number of the external socket -->
-      <PORT>49152</PORT>                   <!-- Port-number of the external socket -->      
-      <SENTYPE>ImFree</SENTYPE>        <!-- The name of your system send in <Sen Type="" > -->     
+      <IP_NUMBER>192.168.1.101</IP_NUMBER>   <!-- IP-number of the external socket -->
+      <PORT>59152</PORT>                   <!-- Port-number of the external socket -->
+      <SENTYPE>ImFree</SENTYPE>        <!-- The name of your system send in <Sen Type="" > -->
       <ONLYSEND>FALSE</ONLYSEND>       <!-- TRUE means the client don't expect answers. Do not send anything to robot -->
    </CONFIG>
    <!-- RSI Data: TYPE=  "BOOL", "STRING", "LONG", "DOUBLE" -->
    <!-- INDX= "INTERNAL" switch on internal read values. Needed by DEF_... -->
-   <!-- INDX= "nmb" Input/Output index of RSI-Object / Maximum of RSI Channels: 64  -->   
-   <!-- HOLDON="1", set this output index of RSI Object to the last value  -->   
+   <!-- INDX= "nmb" Input/Output index of RSI-Object / Maximum of RSI Channels: 64  -->
+   <!-- HOLDON="1", set this output index of RSI Object to the last value  -->
    <!-- DEF_Delay count the late packages and send it back to server  -->
    <!-- DEF_Tech: .C = advance .T = main run / .C1 advance set function generator 1 -->
-   
+   <!-- IN and Out indexes should not start with number. In.01 should be In.Ch01 -->
    <SEND>
       <ELEMENTS>
          <ELEMENT TAG="DEF_RIst" TYPE="DOUBLE" INDX="INTERNAL" />
@@ -19,6 +19,22 @@
          <ELEMENT TAG="DEF_AIPos" TYPE="DOUBLE" INDX="INTERNAL" />
          <ELEMENT TAG="DEF_ASPos" TYPE="DOUBLE" INDX="INTERNAL" />
          <ELEMENT TAG="DEF_Delay" TYPE="LONG" INDX="INTERNAL" />
+         <ELEMENT TAG="In.Ch01" TYPE="BOOL" INDX="1" />
+         <ELEMENT TAG="In.Ch02" TYPE="BOOL" INDX="2" />
+         <ELEMENT TAG="In.Ch03" TYPE="BOOL" INDX="3" />
+         <ELEMENT TAG="In.Ch04" TYPE="BOOL" INDX="4" />
+         <ELEMENT TAG="In.Ch05" TYPE="BOOL" INDX="5" />
+         <ELEMENT TAG="In.Ch06" TYPE="BOOL" INDX="6" />
+         <ELEMENT TAG="In.Ch07" TYPE="BOOL" INDX="7" />
+         <ELEMENT TAG="In.Ch08" TYPE="BOOL" INDX="8" />
+         <ELEMENT TAG="In.Ch09" TYPE="BOOL" INDX="9" />
+         <ELEMENT TAG="In.Ch10" TYPE="BOOL" INDX="10" />
+         <ELEMENT TAG="In.Ch11" TYPE="BOOL" INDX="11" />
+         <ELEMENT TAG="In.Ch12" TYPE="BOOL" INDX="12" />
+         <ELEMENT TAG="In.Ch13" TYPE="BOOL" INDX="13" />
+         <ELEMENT TAG="In.Ch14" TYPE="BOOL" INDX="14" />
+         <ELEMENT TAG="In.Ch15" TYPE="BOOL" INDX="15" />
+         <ELEMENT TAG="In.Ch16" TYPE="BOOL" INDX="16" />
       </ELEMENTS>
    </SEND>
    <RECEIVE>
@@ -29,6 +45,22 @@
          <ELEMENT TAG="AK.A4" TYPE="DOUBLE" INDX="4" HOLDON="1" />
          <ELEMENT TAG="AK.A5" TYPE="DOUBLE" INDX="5" HOLDON="1" />
          <ELEMENT TAG="AK.A6" TYPE="DOUBLE" INDX="6" HOLDON="1" />
+         <ELEMENT TAG="Out.Ch01" TYPE="BOOL" INDX="7" HOLDON="1" />
+         <ELEMENT TAG="Out.Ch02" TYPE="BOOL" INDX="8" HOLDON="1" />
+         <ELEMENT TAG="Out.Ch03" TYPE="BOOL" INDX="9" HOLDON="1" />
+         <ELEMENT TAG="Out.Ch04" TYPE="BOOL" INDX="10" HOLDON="1" />
+         <ELEMENT TAG="Out.Ch05" TYPE="BOOL" INDX="11" HOLDON="1" />  
+         <ELEMENT TAG="Out.Ch06" TYPE="BOOL" INDX="12" HOLDON="1" />  
+         <ELEMENT TAG="Out.Ch07" TYPE="BOOL" INDX="13" HOLDON="1" />
+         <ELEMENT TAG="Out.Ch08" TYPE="BOOL" INDX="14" HOLDON="1" />  
+         <ELEMENT TAG="Out.Ch09" TYPE="BOOL" INDX="15" HOLDON="1" />  
+         <ELEMENT TAG="Out.Ch10" TYPE="BOOL" INDX="16" HOLDON="1" />  
+         <ELEMENT TAG="Out.Ch11" TYPE="BOOL" INDX="17" HOLDON="1" />  
+         <ELEMENT TAG="Out.Ch12" TYPE="BOOL" INDX="18" HOLDON="1" />  
+         <ELEMENT TAG="Out.Ch13" TYPE="BOOL" INDX="19" HOLDON="1" />  
+         <ELEMENT TAG="Out.Ch14" TYPE="BOOL" INDX="20" HOLDON="1" />
+         <ELEMENT TAG="Out.Ch15" TYPE="BOOL" INDX="21" HOLDON="1" />         
+         <ELEMENT TAG="Out.Ch16" TYPE="BOOL" INDX="22" HOLDON="1" />
       </ELEMENTS>
    </RECEIVE>
 </ROOT>
