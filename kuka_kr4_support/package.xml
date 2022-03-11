@@ -8,7 +8,7 @@
     </p>
     <p>
       This package contains configuration data, 3D models and launch files
-      for the KUKA KR 4 manipulators. This currently includes the R540 only.
+      for the KUKA KR 4 manipulators. This currently includes the R600 only.
     </p>
     <p><b>Specifications</b>:</p>
     <ul>
@@ -28,7 +28,8 @@
       robot model and configuration you intend to use them with.
     </p>
   </description>
-  <author email="simon.schmeisser@optonic.com">Simon Schmeisser (Optonic GmbH)</author>
+  <author>Simon Schmeisser (Optonic GmbH)</author>
+  <maintainer email="simon.schmeisser@optonic.com">Simon Schmeisser (Optonic GmbH)</maintainer>
   <maintainer email="g.a.vanderhoorn@tudelft.nl">G.A. vd. Hoorn (TU Delft Robotics Institute)</maintainer>
   <license>BSD</license>
 
