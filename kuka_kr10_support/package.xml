@@ -15,6 +15,7 @@
     <ul>
       <li>KR 10 R900-2 - Default</li>
       <li>KR 10 R1100 sixx - Default</li>
+      <li>KR 10 R1420 - Default</li>
     </ul>
     <p>
       Joint limits and maximum joint velocities for the Agilus-2 variants
@@ -33,11 +34,20 @@
       extended / limited motion ranges or other options).
     </p>
     <p>
+      Joint limits and maximum joint velocities are based on the information
+      in the <em>KUKA Roboter GmbH - KR CYBERTECH nano</em> version
+	  <em>Spez KR CYBERTECH nano V1, 25.07.2016</em>.
+      All urdfs are based on the default motion and joint velocity limits,
+      unless noted otherwise (ie: no support for high speed joints,
+      extended / limited motion ranges or other options).
+    </p>
+    <p>
       Before using any of the configuration files and / or meshes included
       in this package, be sure to check they are correct for the particular
       robot model and configuration you intend to use them with.
     </p>
   </description>
+  <author email="hi@aatb.ch">Thibault Brevet (AATB GmbH)</author>
   <author email="schindlbeck@imr.uni-hannover.de">Christopher Schindlbeck (University of Hanover)</author>
   <author email="simon.schmeisser@optonic.com">Simon Schmeisser (Optonic GmbH)</author>
   <maintainer email="g.a.vanderhoorn@tudelft.nl">G.A. vd. Hoorn (TU Delft Robotics Institute)</maintainer>
