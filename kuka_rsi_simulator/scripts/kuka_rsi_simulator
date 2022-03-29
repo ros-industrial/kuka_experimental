@@ -85,10 +85,9 @@ if __name__ == '__main__':
             act_joint_pos = cmd_joint_pos + des_joint_correction_absolute
             ipoc += 1
             time.sleep(cycle_time / 2)
-        except socket.timeout, msg:
+        except socket.timeout as msg:
             rospy.logwarn('{}: Socket timed out'.format(node_name))
             timeout_count += 1
-        except socket.error, e:
+        except socket.error as e:
             if e.errno != errno.EINTR:
                 raise
-
