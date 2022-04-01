@@ -1,9 +1,8 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://wiki.ros.org/xacro">
-  <xacro:include filename="$(find kuka_resources)/urdf/common_constants.xacro"/>
-  <xacro:include filename="$(find kuka_resources)/urdf/common_materials.xacro"/>
 
   <xacro:macro name="kuka_kr10r1100sixx" params="prefix">
+    <xacro:include filename="$(find kuka_resources)/urdf/common_materials.xacro"/>
     <link name="${prefix}base_link">
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0"/>
