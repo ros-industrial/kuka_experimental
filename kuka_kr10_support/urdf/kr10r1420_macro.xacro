@@ -1,20 +1,20 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://wiki.ros.org/xacro">
 
-  <xacro:macro name="kuka_kr10r1100sixx" params="prefix">
+  <xacro:macro name="kuka_kr10r1420" params="prefix">
     <xacro:include filename="$(find kuka_resources)/urdf/common_materials.xacro"/>
     <link name="${prefix}base_link">
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
-          <mesh filename="package://kuka_kr10_support/meshes/kr10r1100sixx/visual/base_link.stl" />
+          <mesh filename="package://kuka_kr10_support/meshes/kr10r1420/visual/base_link.stl" />
         </geometry>
         <xacro:material_kuka_black />
       </visual>
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
-          <mesh filename="package://kuka_kr10_support/meshes/kr10r1100sixx/collision/base_link.stl" />
+          <mesh filename="package://kuka_kr10_support/meshes/kr10r1420/collision/base_link.stl" />
         </geometry>
       </collision>
     </link>
@@ -22,14 +22,14 @@
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
-          <mesh filename="package://kuka_kr10_support/meshes/kr10r1100sixx/visual/link_1.stl" />
+          <mesh filename="package://kuka_kr10_support/meshes/kr10r1420/visual/link_1.stl" />
         </geometry>
         <xacro:material_kuka_orange />
       </visual>
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
-          <mesh filename="package://kuka_kr10_support/meshes/kr10r1100sixx/collision/link_1.stl" />
+          <mesh filename="package://kuka_kr10_support/meshes/kr10r1420/collision/link_1.stl" />
         </geometry>
       </collision>
     </link>
@@ -37,14 +37,14 @@
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
-          <mesh filename="package://kuka_kr10_support/meshes/kr10r1100sixx/visual/link_2.stl"/>
+          <mesh filename="package://kuka_kr10_support/meshes/kr10r1420/visual/link_2.stl"/>
         </geometry>
         <xacro:material_kuka_orange />
       </visual>
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
-          <mesh filename="package://kuka_kr10_support/meshes/kr10r1100sixx/collision/link_2.stl" />
+          <mesh filename="package://kuka_kr10_support/meshes/kr10r1420/collision/link_2.stl" />
         </geometry>
       </collision>
     </link>
@@ -52,14 +52,14 @@
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
-          <mesh filename="package://kuka_kr10_support/meshes/kr10r1100sixx/visual/link_3.stl" />
+          <mesh filename="package://kuka_kr10_support/meshes/kr10r1420/visual/link_3.stl" />
         </geometry>
         <xacro:material_kuka_orange />
       </visual>
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
-          <mesh filename="package://kuka_kr10_support/meshes/kr10r1100sixx/collision/link_3.stl" />
+          <mesh filename="package://kuka_kr10_support/meshes/kr10r1420/collision/link_3.stl" />
         </geometry>
       </collision>
     </link>
@@ -67,14 +67,14 @@
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
-          <mesh filename="package://kuka_kr10_support/meshes/kr10r1100sixx/visual/link_4.stl" />
+          <mesh filename="package://kuka_kr10_support/meshes/kr10r1420/visual/link_4.stl" />
         </geometry>
         <xacro:material_kuka_orange />
       </visual>
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
-          <mesh filename="package://kuka_kr10_support/meshes/kr10r1100sixx/collision/link_4.stl" />
+          <mesh filename="package://kuka_kr10_support/meshes/kr10r1420/collision/link_4.stl" />
         </geometry>
       </collision>
     </link>
@@ -82,14 +82,14 @@
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
-          <mesh filename="package://kuka_kr10_support/meshes/kr10r1100sixx/visual/link_5.stl" />
+          <mesh filename="package://kuka_kr10_support/meshes/kr10r1420/visual/link_5.stl" />
         </geometry>
         <xacro:material_kuka_orange />
       </visual>
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
-          <mesh filename="package://kuka_kr10_support/meshes/kr10r1100sixx/collision/link_5.stl" />
+          <mesh filename="package://kuka_kr10_support/meshes/kr10r1420/collision/link_5.stl" />
         </geometry>
       </collision>
     </link>
@@ -97,14 +97,14 @@
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
-          <mesh filename="package://kuka_kr10_support/meshes/kr10r1100sixx/visual/link_6.stl" />
+          <mesh filename="package://kuka_kr10_support/meshes/kr10r1420/visual/link_6.stl" />
         </geometry>
         <xacro:material_kuka_pedestal />
       </visual>
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
-          <mesh filename="package://kuka_kr10_support/meshes/kr10r1100sixx/collision/link_6.stl" />
+          <mesh filename="package://kuka_kr10_support/meshes/kr10r1420/collision/link_6.stl" />
         </geometry>
       </collision>
     </link>
@@ -112,35 +112,35 @@
     <link name="${prefix}flange" />
 
     <joint name="${prefix}joint_a1" type="revolute">
-      <origin xyz="0 0 0.400" rpy="0 0 0"/>
+      <origin xyz="0 0 0.450" rpy="0 0 0"/>
       <parent link="${prefix}base_link"/>
       <child link="${prefix}link_1"/>
       <axis xyz="0 0 -1"/>
-      <limit effort="0" lower="${radians(-170)}" upper="${radians(170)}" velocity="${radians(300)}"/>
+      <limit effort="0" lower="${radians(-170)}" upper="${radians(170)}" velocity="${radians(220)}"/>
     </joint>
     <joint name="${prefix}joint_a2" type="revolute">
-      <origin xyz="0.025 0 0" rpy="0 0 0"/>
+      <origin xyz="0.150 0 0" rpy="0 0 0"/>
       <parent link="${prefix}link_1"/>
       <child link="${prefix}link_2"/>
       <axis xyz="0 1 0"/>
-      <limit effort="0" lower="${radians(-190)}" upper="${radians(45)}" velocity="${radians(225)}"/>
+      <limit effort="0" lower="${radians(-185)}" upper="${radians(65)}" velocity="${radians(210)}"/>
     </joint>
     <joint name="${prefix}joint_a3" type="revolute">
-      <origin xyz="0.560 0 0" rpy="0 0 0"/>
+      <origin xyz="0.610 0 0" rpy="0 0 0"/>
       <parent link="${prefix}link_2"/>
       <child link="${prefix}link_3"/>
       <axis xyz="0 1 0"/>
-      <limit effort="0" lower="${radians(-120)}" upper="${radians(156)}" velocity="${radians(225)}"/>
+      <limit effort="0" lower="${radians(-137)}" upper="${radians(163)}" velocity="${radians(270)}"/>
     </joint>
     <joint name="${prefix}joint_a4" type="revolute">
-      <origin xyz="0 0 0.035" rpy="0 0 0"/>
+      <origin xyz="0 0 0.02" rpy="0 0 0"/>
       <parent link="${prefix}link_3"/>
       <child link="${prefix}link_4"/>
       <axis xyz="-1 0 0"/>
       <limit effort="0" lower="${radians(-185)}" upper="${radians(185)}" velocity="${radians(381)}"/>
     </joint>
     <joint name="${prefix}joint_a5" type="revolute">
-      <origin xyz="0.515 0 0" rpy="0 0 0"/>
+      <origin xyz="0.660 0 0" rpy="0 0 0"/>
       <parent link="${prefix}link_4"/>
       <child link="${prefix}link_5"/>
       <axis xyz="0 1 0"/>
