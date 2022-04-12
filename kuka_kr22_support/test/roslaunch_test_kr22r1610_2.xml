@@ -1,0 +1,10 @@
+<?xml version="1.0" ?>
+<launch>
+  <group ns="load_kr22r1610_2__">
+    <include file="$(find kuka_kr22_support)/launch/load_kr22r1610_2.launch"/>
+  </group>
+
+  <group ns="test_kr22r1610_2__">
+    <include file="$(find kuka_kr22_support)/launch/test_kr22r1610_2.launch"/>
+  </group>
+</launch>
