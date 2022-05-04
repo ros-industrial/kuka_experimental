@@ -1,0 +1,10 @@
+opw_kinematics_geometric_parameters:
+    a1:  0.175
+    a2:  -0.05
+    b:   0.000
+    c1:  0.575
+    c2:  0.890
+    c3:  1.035
+    c4:  0.185
+opw_kinematics_joint_offsets: [0.0, -1.57079632679, 0.0, 0.0, 0.0, 0.0]
+opw_kinematics_joint_sign_corrections: [-1, 1, 1, -1, 1, -1]
