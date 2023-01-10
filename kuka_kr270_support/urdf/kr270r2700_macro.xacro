@@ -2,6 +2,7 @@
 <robot xmlns:xacro="http://wiki.ros.org/xacro">
 
   <xacro:macro name="kuka_kr270r2700" params="prefix">
+    <xacro:include filename="$(find kuka_resources)/urdf/common_materials.xacro"/>
     <!-- links -->
     <link name="${prefix}base_link">
       <inertial>
@@ -14,9 +15,7 @@
         <geometry>
           <mesh filename="package://kuka_kr270_support/meshes/kr270r2700/visual/base_link.dae"/>
         </geometry>
-        <material name="">
-          <color rgba="0.75294 0.75294 0.75294 1"/>
-        </material>
+        <xacro:material_kuka_pedestal />
       </visual>
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0"/>
@@ -36,9 +35,7 @@
         <geometry>
           <mesh filename="package://kuka_kr270_support/meshes/kr270r2700/visual/link_1.dae"/>
         </geometry>
-        <material name="">
-          <color rgba="0.75294 0.75294 0.75294 1"/>
-        </material>
+        <xacro:material_kuka_pedestal />
       </visual>
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0"/>
@@ -58,9 +55,7 @@
         <geometry>
           <mesh filename="package://kuka_kr270_support/meshes/kr270r2700/visual/link_2.dae"/>
         </geometry>
-        <material name="">
-          <color rgba="0.75294 0.75294 0.75294 1"/>
-        </material>
+        <xacro:material_kuka_pedestal />
       </visual>
       <collision>
         <origin xyz="0 0 0" rpy="0 ${radians(90)} 0"/>
@@ -80,9 +75,7 @@
         <geometry>
           <mesh filename="package://kuka_kr270_support/meshes/kr270r2700/visual/link_3.dae"/>
         </geometry>
-        <material name="">
-          <color rgba="0.75294 0.75294 0.75294 1"/>
-        </material>
+        <xacro:material_kuka_pedestal />
       </visual>
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0"/>
@@ -102,9 +95,7 @@
         <geometry>
           <mesh filename="package://kuka_kr270_support/meshes/kr270r2700/visual/link_4.dae"/>
         </geometry>
-        <material name="">
-          <color rgba="0.75294 0.75294 0.75294 1"/>
-        </material>
+        <xacro:material_kuka_pedestal />
       </visual>
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0"/>
@@ -124,9 +115,7 @@
         <geometry>
           <mesh filename="package://kuka_kr270_support/meshes/kr270r2700/visual/link_5.dae"/>
         </geometry>
-        <material name="">
-          <color rgba="0.75294 0.75294 0.75294 1"/>
-        </material>
+        <xacro:material_kuka_pedestal />
       </visual>
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0"/>
@@ -146,9 +135,7 @@
         <geometry>
           <mesh filename="package://kuka_kr270_support/meshes/kr270r2700/visual/link_6.dae"/>
         </geometry>
-        <material name="">
-          <color rgba="0.75294 0.75294 0.75294 1"/>
-        </material>
+        <xacro:material_kuka_pedestal />
       </visual>
       <collision>
         <origin xyz="0.240 0 0" rpy="0 0 0"/>
