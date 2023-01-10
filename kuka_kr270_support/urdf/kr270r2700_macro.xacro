@@ -10,7 +10,7 @@
         <geometry>
           <mesh filename="package://kuka_kr270_support/meshes/kr270r2700/visual/base_link.dae"/>
         </geometry>
-        <xacro:material_kuka_pedestal />
+        <xacro:material_kuka_black />
       </visual>
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0"/>
@@ -25,7 +25,7 @@
         <geometry>
           <mesh filename="package://kuka_kr270_support/meshes/kr270r2700/visual/link_1.dae"/>
         </geometry>
-        <xacro:material_kuka_pedestal />
+        <xacro:material_kuka_orange />
       </visual>
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0"/>
@@ -40,7 +40,7 @@
         <geometry>
           <mesh filename="package://kuka_kr270_support/meshes/kr270r2700/visual/link_2.dae"/>
         </geometry>
-        <xacro:material_kuka_pedestal />
+        <xacro:material_kuka_orange />
       </visual>
       <collision>
         <origin xyz="0 0 0" rpy="0 ${radians(90)} 0"/>
@@ -55,7 +55,7 @@
         <geometry>
           <mesh filename="package://kuka_kr270_support/meshes/kr270r2700/visual/link_3.dae"/>
         </geometry>
-        <xacro:material_kuka_pedestal />
+        <xacro:material_kuka_orange />
       </visual>
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0"/>
@@ -70,7 +70,7 @@
         <geometry>
           <mesh filename="package://kuka_kr270_support/meshes/kr270r2700/visual/link_4.dae"/>
         </geometry>
-        <xacro:material_kuka_pedestal />
+        <xacro:material_kuka_orange />
       </visual>
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0"/>
@@ -85,7 +85,7 @@
         <geometry>
           <mesh filename="package://kuka_kr270_support/meshes/kr270r2700/visual/link_5.dae"/>
         </geometry>
-        <xacro:material_kuka_pedestal />
+        <xacro:material_kuka_orange />
       </visual>
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0"/>
@@ -100,7 +100,7 @@
         <geometry>
           <mesh filename="package://kuka_kr270_support/meshes/kr270r2700/visual/link_6.dae"/>
         </geometry>
-        <xacro:material_kuka_pedestal />
+        <xacro:material_kuka_black />
       </visual>
       <collision>
         <origin xyz="0.240 0 0" rpy="0 0 0"/>
