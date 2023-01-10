@@ -31,8 +31,7 @@
       <b>NB</b>: this package currently uses non-valid inertia parameters.
     </p>
   </description>
-  <author>Jan Krieglstein</author>
-  <maintainer email="jan.krieglstein@ipa.fraunhofer.de">Jan Krieglstein (Fraunhofer IPA)</maintainer>
+  <author email="jan.krieglstein@ipa.fraunhofer.de">Jan Krieglstein (Fraunhofer IPA)</author>
   <maintainer email="g.a.vanderhoorn@tudelft.nl">G.A. vd. Hoorn (TU Delft Robotics Institute)</maintainer>
   <license>BSD</license>
 
