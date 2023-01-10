@@ -16,7 +16,9 @@
     </ul>
     <p>
       Joint limits and maximum joint velocities are based on the information
-      <!-- found in the online <a href="https://www.kuka.com/-/media/kuka-downloads/imported/6b77eecacfe542d3b736af377562ecaa/0000181028_de.pdf?rev=ec8dfd6ea34947688ab70f343d481a7e&hash=01A6578B4726370C788A35703EE5036D">datasheet</a>. -->
+      found in the online datasheet of the Kuka KR 270 R2700 ultra.
+      <!-- <a href="https://www.kuka.com/-/media/kuka-downloads/imported/6b77eecacfe542d3b736af377562ecaa/0000181028_de.pdf?rev=ec8dfd6ea34947688ab70f343d481a7e&hash=01A6578B4726370C788A35703EE5036D">datasheet</a>. -->
+      <!-- KUKA KR 270 R2700 ultra - 0000181028_DE.pdf, version 0000-181-028 / V46.1 / 07.01.2021 / de -->
       All urdfs are based on the default motion and joint velocity limits,
       unless noted otherwise.
     </p>
