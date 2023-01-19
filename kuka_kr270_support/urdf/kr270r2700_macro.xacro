@@ -36,14 +36,14 @@
     </link>
     <link name="${prefix}link_2">
       <visual>
-        <origin xyz="0 0 0" rpy="0 ${radians(90)} 0"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
           <mesh filename="package://kuka_kr270_support/meshes/kr270r2700/visual/link_2.dae"/>
         </geometry>
         <xacro:material_kuka_orange />
       </visual>
       <collision>
-        <origin xyz="0 0 0" rpy="0 ${radians(90)} 0"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
           <mesh filename="package://kuka_kr270_support/meshes/kr270r2700/collision/link_2.stl"/>
         </geometry>
@@ -96,14 +96,14 @@
     </link>
     <link name="${prefix}link_6">
       <visual>
-        <origin xyz="0.240 0 0 " rpy="0 0 0"/>
+        <origin xyz="0 0 0 " rpy="0 0 0"/>
         <geometry>
           <mesh filename="package://kuka_kr270_support/meshes/kr270r2700/visual/link_6.dae"/>
         </geometry>
         <xacro:material_kuka_black />
       </visual>
       <collision>
-        <origin xyz="0.240 0 0" rpy="0 0 0"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
           <mesh filename="package://kuka_kr270_support/meshes/kr270r2700/collision/link_6.stl"/>
         </geometry>
