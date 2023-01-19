@@ -109,8 +109,6 @@
         </geometry>
       </collision>
     </link>
-    <!-- This frame corresponds to the $TOOL coordinate system in KUKA KRC controllers. -->
-    <link name="${prefix}flange"/>
 
     <!-- joints -->
     <joint name="${prefix}joint_a1" type="revolute">
@@ -155,6 +153,9 @@
       <axis xyz="-1 0 0"/>
       <limit lower="${radians(-350)}" upper="${radians(350)}" effort="0" velocity="${radians(175)}"/>
     </joint>
+
+    <!-- This frame corresponds to the $TOOL coordinate system in KUKA KRC controllers. -->
+    <link name="${prefix}flange"/>
     <joint name="${prefix}link_6-flange" type="fixed">
       <parent link="${prefix}link_6"/>
       <child link="${prefix}flange"/>
