@@ -13,11 +13,17 @@
     <p><b>Specifications</b>:</p>
     <ul>
       <li>KR 210 L150 - Default</li>
+      <li>KR 210 R3100-2 - Default</li>
     </ul>
     <p>
-      Joint limits and maximum joint velocities are based on the information
+      Joint limits and maximum joint velocities of KR 210 L150 are based on the information
       found in the online <a href="http://www.kuka-robotics.com/res/sps/e6c77545-9030-49b1-93f5-4d17c92173aa_Spez_KR_QUANTEC_extra_en.pdf">datasheet</a>.
       All urdfs are based on the default motion and joint velocity limits,
+      unless noted otherwise.
+    </p>
+    <p>
+      Joint limits and maximum joint velocities of KR 210 R3100-2 are based on the information
+      found in the online datasheet <em>0000-325-897 / V16.1 / 13.10.2021 / de</em>. All urdfs are based on the default motion and joint velocity limits,
       unless noted otherwise.
     </p>
     <p>
@@ -30,6 +36,7 @@
     </p>
   </description>
   <author>Shaun Edwards</author>
+  <author>Christian Jülg (Optonic)</author>
   <maintainer email="shaun.edwards@gmail.com">Shaun Edwards</maintainer>
   <license>BSD</license>
 
@@ -42,7 +49,7 @@
   <test_depend>roslaunch</test_depend>
 
   <exec_depend>industrial_robot_client</exec_depend>
-  <exec_depend>joint_state_publisher</exec_depend>
+  <exec_depend>joint_state_publisher_gui</exec_depend>
   <exec_depend>robot_state_publisher</exec_depend>
   <exec_depend>rviz</exec_depend>
   <exec_depend>xacro</exec_depend>

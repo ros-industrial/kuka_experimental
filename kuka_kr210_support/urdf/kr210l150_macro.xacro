@@ -1,8 +1,6 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://wiki.ros.org/xacro">
   <property name="pi" value="3.141592654"/>
-  <!--degrees to radians-->
-  <property name="deg" value="0.017453293"/>
 
   <xacro:macro name="kuka_kr210l150" params="prefix">
     <!-- links -->
@@ -169,42 +167,42 @@
       <parent link="${prefix}base_link"/>
       <child link="${prefix}link_1"/>
       <axis xyz="0 0 1"/>
-      <limit lower="${-185*deg}" upper="${185*deg}" effort="0" velocity="${123*deg}"/>
+      <limit lower="${radians(-185)}" upper="${radians(185)}" effort="0" velocity="${radians(123)}"/>
     </joint>
     <joint name="${prefix}joint_a2" type="revolute">
       <origin xyz="0.35277 -0.037476 0.4192" rpy="0 0 0"/>
       <parent link="${prefix}link_1"/>
       <child link="${prefix}link_2"/>
       <axis xyz="0 1 0"/>
-      <limit lower="${-45*deg}" upper="${85*deg}" effort="0" velocity="${115*deg}"/>
+      <limit lower="${radians(-45)}" upper="${radians(85)}" effort="0" velocity="${radians(115)}"/>
     </joint>
     <joint name="${prefix}joint_a3" type="revolute">
       <origin xyz="-9.8483E-05 -0.1475 1.2499" rpy="0 0 0"/>
       <parent link="${prefix}link_2"/>
       <child link="${prefix}link_3"/>
       <axis xyz="0 1 0"/>
-      <limit lower="${-210*deg}" upper="${(155-90)*deg}" effort="0" velocity="${112*deg}"/>
+      <limit lower="${radians(-210)}" upper="${radians(155-90)}" effort="0" velocity="${radians(112)}"/>
     </joint>
     <joint name="${prefix}joint_a4" type="revolute">
       <origin xyz="0.95795 0.184 -0.055059" rpy="0 0 0"/>
       <parent link="${prefix}link_3"/>
       <child link="${prefix}link_4"/>
       <axis xyz="1 0 0"/>
-      <limit lower="${-350*deg}" upper="${350*deg}" effort="0" velocity="${179*deg}"/>
+      <limit lower="${radians(-350)}" upper="${radians(350)}" effort="0" velocity="${radians(179)}"/>
     </joint>
     <joint name="${prefix}joint_a5" type="revolute">
       <origin xyz="0.542 0 0" rpy="0 0 0"/>
       <parent link="${prefix}link_4"/>
       <child link="${prefix}link_5"/>
       <axis xyz="0 1 0"/>
-      <limit lower="${-125*deg}" upper="${125*deg}" effort="0" velocity="${172*deg}"/>
+      <limit lower="${radians(-125)}" upper="${radians(125)}" effort="0" velocity="${radians(172)}"/>
     </joint>
     <joint name="${prefix}joint_a6" type="revolute">
       <origin xyz="0.1925 0 0" rpy="0 0 0"/>
       <parent link="${prefix}link_5"/>
       <child link="${prefix}link_6"/>
       <axis xyz="1 0 0"/>
-      <limit lower="${-350*deg}" upper="${350*deg}" effort="0" velocity="${219*deg}"/>
+      <limit lower="${radians(-350)}" upper="${radians(350)}" effort="0" velocity="${radians(219)}"/>
     </joint>
     <joint name="${prefix}link_6-tool0" type="fixed">
       <parent link="${prefix}link_6"/>
