@@ -1,8 +1,6 @@
 cmake_minimum_required(VERSION 2.8.12)
 project(kuka_cybertech_kr16_r1610_moveit_plugins)
 
-add_compile_options(-std=c++11)
-
 find_package(catkin REQUIRED COMPONENTS
   moveit_core
   pluginlib
