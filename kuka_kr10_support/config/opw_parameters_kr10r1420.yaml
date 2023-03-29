@@ -1,0 +1,21 @@
+#
+# Parameters for use with IK solvers which support OPW (Ortho-Parallel Wrist)
+# kinematic configurations, as described in the paper "An Analytical Solution
+# of the Inverse Kinematics Problem of Industrial Serial Manipulators with an
+# Ortho-parallel Basis and a Spherical Wrist" by Mathias Brandstötter, Arthur
+# Angerer, and Michael Hofbaur (Proceedings of the Austrian Robotics Workshop
+# 2014, 22-23 May, 2014, Linz, Austria).
+#
+# The moveit_opw_kinematics_plugin package provides such a solver.
+#
+opw_kinematics_geometric_parameters:
+    a1:  0.150
+    a2:  -0.020
+    b:   0.0
+    c1:  0.450
+    c2:  0.610
+    c3:  0.660
+    c4:  0.080
+opw_kinematics_joint_offsets: [0.0, deg(-90.0), 0.0, 0.0, 0.0, 0.0]
+opw_kinematics_joint_sign_corrections: [-1, 1, 1, -1, 1, -1]
+
