@@ -10,16 +10,13 @@
         <inertia ixx="89.282" ixy="-0.47721" ixz="0.85562" iyy="107.51" iyz="0.0067576" izz="172.02"/>
       </inertial>
       <visual>
-        <origin xyz="0 0 0" rpy="${-radians(90)} 0 0"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
           <mesh filename="package://kuka_kr300_support/meshes/kr300r2700_2/visual/base_link.dae"/>
         </geometry>
-        <material name="">
-          <color rgba="0.75294 0.75294 0.75294 1"/>
-        </material>
       </visual>
       <collision>
-        <origin xyz="0 0 0" rpy="${-radians(90)} 0 0"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
           <mesh filename="package://kuka_kr300_support/meshes/kr300r2700_2/collision/base_link.stl"/>
         </geometry>
@@ -36,9 +33,6 @@
         <geometry>
           <mesh filename="package://kuka_kr300_support/meshes/kr300r2700_2/visual/link_1.dae"/>
         </geometry>
-        <material name="">
-          <color rgba="0.75294 0.75294 0.75294 1"/>
-        </material>
       </visual>
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0"/>
@@ -54,13 +48,10 @@
         <inertia ixx="180.42" ixy="-0.83462" ixz="0.32549" iyy="177.68" iyz="-20.82" izz="20.495"/>
       </inertial>
       <visual>
-        <origin xyz="0 0 0" rpy="${-radians(90)} 0 0"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
           <mesh filename="package://kuka_kr300_support/meshes/kr300r2700_2/visual/link_2.dae"/>
         </geometry>
-        <material name="">
-          <color rgba="0.75294 0.75294 0.75294 1"/>
-        </material>
       </visual>
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0"/>
@@ -76,7 +67,7 @@
         <inertia ixx="11.887" ixy="-0.12154" ixz="-1.3604" iyy="98.805" iyz="-0.056505" izz="96.251"/>
       </inertial>
       <visual>
-        <origin xyz="0 0 0" rpy="${-radians(90)} 0 0"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
           <mesh filename="package://kuka_kr300_support/meshes/kr300r2700_2/visual/link_3.dae"/>
         </geometry>
@@ -98,13 +89,10 @@
         <inertia ixx="1.8001" ixy="-0.18515" ixz="0.00051232" iyy="5.514" iyz="0.00070469" izz="6.3498"/>
       </inertial>
       <visual>
-        <origin xyz="0 0 0" rpy="${-radians(90)} 0 0"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
           <mesh filename="package://kuka_kr300_support/meshes/kr300r2700_2/visual/link_4.dae"/>
         </geometry>
-        <material name="">
-          <color rgba="0.75294 0.75294 0.75294 1"/>
-        </material>
       </visual>
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0"/>
@@ -120,13 +108,10 @@
         <inertia ixx="0.3938" ixy="-0.085332" ixz="1.7223E-06" iyy="0.68945" iyz="-7.0292E-06" izz="0.67292"/>
       </inertial>
       <visual>
-        <origin xyz="0 0 0" rpy="${-radians(90)} 0 0"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
           <mesh filename="package://kuka_kr300_support/meshes/kr300r2700_2/visual/link_5.dae"/>
         </geometry>
-        <material name="">
-          <color rgba="0.75294 0.75294 0.75294 1"/>
-        </material>
       </visual>
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0"/>
@@ -146,9 +131,6 @@
         <geometry>
           <mesh filename="package://kuka_kr300_support/meshes/kr300r2700_2/visual/link_6.dae"/>
         </geometry>
-        <material name="">
-          <color rgba="0.75294 0.75294 0.75294 1"/>
-        </material>
       </visual>
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0"/>
@@ -162,42 +144,42 @@
 
     <!-- joints -->
     <joint name="${prefix}joint_a1" type="revolute">
-      <origin xyz="-0.00262 0.00097586 0.33099" rpy="0 0 0"/>
+      <origin xyz="0 0 0.2356" rpy="0 0 0"/>
       <parent link="${prefix}base_link"/>
       <child link="${prefix}link_1"/>
       <axis xyz="0 0 1"/>
-      <limit lower="${radians(-185)}" upper="${radians(185)}" effort="0" velocity="${radians(123)}"/>
+      <limit lower="${radians(-185)}" upper="${radians(185)}" effort="0" velocity="${radians(105)}"/>
     </joint>
     <joint name="${prefix}joint_a2" type="revolute">
-      <origin xyz="0.35277 -0.037476 0.4192" rpy="0 0 0"/>
+      <origin xyz="0.33 0.09 0.4094" rpy="0 0 0"/>
       <parent link="${prefix}link_1"/>
       <child link="${prefix}link_2"/>
       <axis xyz="0 1 0"/>
-      <limit lower="${radians(-45)}" upper="${radians(85)}" effort="0" velocity="${radians(115)}"/>
+      <limit lower="${radians(-55)}" upper="${radians(85)}" effort="0" velocity="${radians(115)}"/>
     </joint>
     <joint name="${prefix}joint_a3" type="revolute">
-      <origin xyz="-9.8483E-05 -0.1475 1.2499" rpy="0 0 0"/>
+      <origin xyz="0 -0.195 1.145" rpy="0 0 0"/>
       <parent link="${prefix}link_2"/>
       <child link="${prefix}link_3"/>
       <axis xyz="0 1 0"/>
-      <limit lower="${radians(-210)}" upper="${radians(65)}" effort="0" velocity="${radians(112)}"/>
+      <limit lower="${radians(-210)}" upper="${radians(78)}" effort="0" velocity="${radians(112)}"/>
     </joint>
     <joint name="${prefix}joint_a4" type="revolute">
-      <origin xyz="0.95795 0.184 -0.055059" rpy="0 0 0"/>
+      <origin xyz="0.8685 0.105 0.112" rpy="0 0 0"/>
       <parent link="${prefix}link_3"/>
       <child link="${prefix}link_4"/>
       <axis xyz="1 0 0"/>
       <limit lower="${radians(-350)}" upper="${radians(350)}" effort="0" velocity="${radians(179)}"/>
     </joint>
     <joint name="${prefix}joint_a5" type="revolute">
-      <origin xyz="0.542 0 0" rpy="0 0 0"/>
+      <origin xyz="0.3515 0 0" rpy="0 0 0"/>
       <parent link="${prefix}link_4"/>
       <child link="${prefix}link_5"/>
       <axis xyz="0 1 0"/>
       <limit lower="${radians(-125)}" upper="${radians(125)}" effort="0" velocity="${radians(172)}"/>
     </joint>
     <joint name="${prefix}joint_a6" type="revolute">
-      <origin xyz="0.1925 0 0" rpy="0 0 0"/>
+      <origin xyz="0.2 0 0" rpy="0 0 0"/>
       <parent link="${prefix}link_5"/>
       <child link="${prefix}link_6"/>
       <axis xyz="1 0 0"/>
