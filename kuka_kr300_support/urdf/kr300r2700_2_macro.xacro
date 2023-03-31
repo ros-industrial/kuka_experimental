@@ -144,51 +144,51 @@
 
     <!-- joints -->
     <joint name="${prefix}joint_a1" type="revolute">
-      <origin xyz="0 0 0.2356" rpy="0 0 0"/>
+      <origin xyz="0 0 0.245" rpy="0 0 0"/>
       <parent link="${prefix}base_link"/>
       <child link="${prefix}link_1"/>
       <axis xyz="0 0 1"/>
       <limit lower="${radians(-185)}" upper="${radians(185)}" effort="0" velocity="${radians(105)}"/>
     </joint>
     <joint name="${prefix}joint_a2" type="revolute">
-      <origin xyz="0.33 0.09 0.4094" rpy="0 0 0"/>
+      <origin xyz="0.33 0.09 0.4" rpy="0 0 0"/>
       <parent link="${prefix}link_1"/>
       <child link="${prefix}link_2"/>
       <axis xyz="0 1 0"/>
-      <limit lower="${radians(-55)}" upper="${radians(85)}" effort="0" velocity="${radians(115)}"/>
+      <limit lower="${radians(-55)}" upper="${radians(85)}" effort="0" velocity="${radians(101)}"/>
     </joint>
     <joint name="${prefix}joint_a3" type="revolute">
-      <origin xyz="0 -0.195 1.145" rpy="0 0 0"/>
+      <origin xyz="0 -0.195 1.15" rpy="0 0 0"/>
       <parent link="${prefix}link_2"/>
       <child link="${prefix}link_3"/>
       <axis xyz="0 1 0"/>
-      <limit lower="${radians(-210)}" upper="${radians(78)}" effort="0" velocity="${radians(112)}"/>
+      <limit lower="${radians(-210)}" upper="${radians(78)}" effort="0" velocity="${radians(107)}"/>
     </joint>
     <joint name="${prefix}joint_a4" type="revolute">
-      <origin xyz="0.8685 0.105 0.112" rpy="0 0 0"/>
+      <origin xyz="0.8685 0.105 0.115" rpy="0 0 0"/>
       <parent link="${prefix}link_3"/>
       <child link="${prefix}link_4"/>
       <axis xyz="1 0 0"/>
-      <limit lower="${radians(-350)}" upper="${radians(350)}" effort="0" velocity="${radians(179)}"/>
+      <limit lower="${radians(-350)}" upper="${radians(350)}" effort="0" velocity="${radians(140)}"/>
     </joint>
     <joint name="${prefix}joint_a5" type="revolute">
       <origin xyz="0.3515 0 0" rpy="0 0 0"/>
       <parent link="${prefix}link_4"/>
       <child link="${prefix}link_5"/>
       <axis xyz="0 1 0"/>
-      <limit lower="${radians(-125)}" upper="${radians(125)}" effort="0" velocity="${radians(172)}"/>
+      <limit lower="${radians(-122.5)}" upper="${radians(122.5)}" effort="0" velocity="${radians(113)}"/>
     </joint>
     <joint name="${prefix}joint_a6" type="revolute">
       <origin xyz="0.2 0 0" rpy="0 0 0"/>
       <parent link="${prefix}link_5"/>
       <child link="${prefix}link_6"/>
       <axis xyz="1 0 0"/>
-      <limit lower="${radians(-350)}" upper="${radians(350)}" effort="0" velocity="${radians(219)}"/>
+      <limit lower="${radians(-350)}" upper="${radians(350)}" effort="0" velocity="${radians(180)}"/>
     </joint>
     <joint name="${prefix}link_6-flange" type="fixed">
       <parent link="${prefix}link_6"/>
       <child link="${prefix}flange"/>
-      <origin xyz="0.0375 0 -0.00023924" rpy="0 0 0"/>
+      <origin xyz="0.04 0 0" rpy="0 0 0"/>
     </joint>
 
     <!-- ROS base_link to KUKA $ROBROOT coordinate system transform -->
