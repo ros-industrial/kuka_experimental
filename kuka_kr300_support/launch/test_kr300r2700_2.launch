@@ -1,6 +1,6 @@
 <launch>
   <include file="$(find kuka_kr300_support)/launch/load_kr300r2700_2.launch"/>
-  <node name="joint_state_publisher_gui" pkg="joint_state_publisher_gui" type="joint_state_publisher_gui">
+  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
     <param name="use_gui" value="true"/>
   </node>
   <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/>
