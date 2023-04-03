@@ -12,6 +12,7 @@ find_package(catkin REQUIRED COMPONENTS
   realtime_tools
   roscpp
   std_msgs
+  kuka_rsi_hw_interface_msgs
 )
 
 find_package(Boost REQUIRED COMPONENTS system)
@@ -55,6 +56,9 @@ target_link_libraries(kuka_hardware_interface_node
   kuka_hardware_interface
 )
 
+install(DIRECTORY include/${PROJECT_NAME}/
+  DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION})
+
 install(
   TARGETS kuka_hardware_interface
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
@@ -64,3 +68,10 @@ install(
 install(
   TARGETS kuka_hardware_interface_node
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
+
+install(DIRECTORY launch/
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/launch
+  )
+
+install(FILES kuka_rsi_hardware_interface_plugin.xml
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
