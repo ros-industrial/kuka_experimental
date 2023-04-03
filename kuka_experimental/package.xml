@@ -18,6 +18,7 @@
   <exec_depend>kuka_kr150_support</exec_depend>
   <exec_depend>kuka_kr16_support</exec_depend>
   <exec_depend>kuka_kr210_support</exec_depend>
+  <exec_depend>kuka_kr300_support</exec_depend>
   <exec_depend>kuka_kr5_support</exec_depend>
   <exec_depend>kuka_kr6_support</exec_depend>
   <exec_depend>kuka_lbr_iiwa_support</exec_depend>
