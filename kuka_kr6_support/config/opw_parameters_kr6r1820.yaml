@@ -9,12 +9,13 @@
 # The moveit_opw_kinematics_plugin package provides such a solver.
 #
 opw_kinematics_geometric_parameters:
-  a1:  0.025
-  a2: -0.035
-  b:   0.000
-  c1:  0.400
-  c2:  0.315
-  c3:  0.365
-  c4:  0.080
+    a1:  0.150
+    a2:  -0.02
+    b:   0.000
+    c1:  0.450
+    c2:  0.810
+    c3:  0.860
+    c4:  0.080
 opw_kinematics_joint_offsets: [0.0, deg(-90.0), 0.0, 0.0, 0.0, 0.0]
 opw_kinematics_joint_sign_corrections: [-1, 1, 1, -1, 1, -1]
+
