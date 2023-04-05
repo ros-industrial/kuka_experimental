@@ -1,4 +1,6 @@
-&ACCESS RVO
-defdat kuka_eki_hw_interface
+&ACCESS RVP
+DEFDAT  KUKA_EKI_HW_INTERFACE
+EXT  bas (BAS_COMMAND  :IN,REAL  :IN )
    ext bas(bas_command  :in,real  :in )
-enddat
+   INT id_count
+ENDDAT
