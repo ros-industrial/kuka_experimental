@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="paused" default="false"/>
+  <arg name="gui" default="true"/>
+  <arg name="remap" default="true"/>
+
+  <group if="$(arg remap)">
+    <!-- remap topics to conform to ROS-I specifications -->
+    <remap from="/arm_controller/follow_joint_trajectory" to="/joint_trajectory_action"/>
+    <remap from="/arm_controller/state" to="/feedback_states"/>
+    <remap from="/arm_controller/command" to="/joint_path_command"/>
+
+    <!-- startup simulated world -->
+    <include file="$(find gazebo_ros)/launch/empty_world.launch">
+      <arg name="world_name" value="worlds/empty.world"/>
+      <arg name="gui" value="$(arg gui)"/>
+      <arg name="paused" value="$(arg paused)"/>
+    </include>
+  </group>
+
+  <group unless="$(arg remap)">
+    <!-- startup simulated world -->
+    <include file="$(find gazebo_ros)/launch/empty_world.launch">
+      <arg name="world_name" value="worlds/empty.world"/>
+      <arg name="gui" value="$(arg gui)"/>
+      <arg name="paused" value="$(arg paused)"/>
+    </include>
+  </group>
+
+  <!-- send robot URDF to ROS param server,
+       and spawn robot in Gazebo, along with necessary ROS nodes -->
+  <include file="$(find kuka_kr10_gazebo)/launch/spawn_kr10.launch"/>
+
+</launch>
