@@ -1,0 +1,4 @@
+<?xml version="1.0"?>
+<launch>
+  <param name="robot_description" command="$(find xacro)/xacro '$(find kuka_kr340_support)/urdf/kr340r3330.xacro'"/>
+</launch>

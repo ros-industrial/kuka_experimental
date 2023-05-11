@@ -1,0 +1,9 @@
+<launch>
+  <group ns="load_kr340r3330__">
+    <include file="$(find kuka_kr340_support)/launch/load_kr340r3330.launch"/>
+  </group>
+
+  <group ns="test_kr340r3330__">
+    <include file="$(find kuka_kr340_support)/launch/test_kr340r3330.launch"/>
+  </group>
+</launch>
