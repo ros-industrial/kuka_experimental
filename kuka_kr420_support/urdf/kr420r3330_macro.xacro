@@ -70,7 +70,7 @@
         <geometry>
           <mesh filename="package://kuka_kr420_support/meshes/kr420r3330/visual/link_4.stl" />
         </geometry>
-        <xacro:material_kuka_ral_traffic_white />
+        <xacro:material_kuka_orange />
       </visual>
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0"/>
@@ -85,7 +85,7 @@
         <geometry>
           <mesh filename="package://kuka_kr420_support/meshes/kr420r3330/visual/link_5.stl" />
         </geometry>
-        <xacro:material_kuka_ral_traffic_white />
+        <xacro:material_kuka_orange />
       </visual>
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0"/>
