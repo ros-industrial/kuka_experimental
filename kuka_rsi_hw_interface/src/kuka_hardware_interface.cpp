@@ -48,7 +48,7 @@ namespace kuka_rsi_hw_interface
 KukaHardwareInterface::KukaHardwareInterface() :
     joint_position_(6, 0.0), joint_velocity_(6, 0.0), joint_effort_(6, 0.0), joint_position_command_(6, 0.0), joint_velocity_command_(
         6, 0.0), joint_effort_command_(6, 0.0), joint_names_(6), rsi_initial_joint_positions_(6, 0.0), rsi_joint_position_corrections_(
-        6, 0.0), ipoc_(0), n_dof_(6)
+        6, 0.0), ipoc_(0), n_dof_(6), krc_multiplier_(1.0)
 {
   in_buffer_.resize(1024);
   out_buffer_.resize(1024);
@@ -104,6 +104,11 @@ bool KukaHardwareInterface::read(const ros::Time time, const ros::Duration perio
   }
 
   rsi_state_ = RSIState(in_buffer_);
+  if(rsi_state_.ipoc > ipoc_)
+  {
+    control_period_.fromSec(krc_multiplier_ * (rsi_state_.ipoc - ipoc_) / 1000.0);
+  }
+
   for (std::size_t i = 0; i < n_dof_; ++i)
   {
     joint_position_[i] = DEG2RAD * rsi_state_.positions[i];
@@ -141,6 +146,7 @@ void KukaHardwareInterface::start()
   if (bytes < 100)
   {
     bytes = server_->recv(in_buffer_);
+    krc_multiplier_ = 12.0;
   }
 
   rsi_state_ = RSIState(in_buffer_);
