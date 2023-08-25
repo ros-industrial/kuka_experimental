@@ -1,5 +1,15 @@
 /*********************************************************************
- * Software License Agreement (BSD License)
+ * Software License Agreement (BSD License & Apache-2.0)
+ *
+ *  The function "kuka_rsi_hw_interface::assign_max_rt_priority" is
+ *  subject to the Apache License, Version 2.0 with the copyright 
+ *  information below.
+ *
+ *  Copyright 2019 FZI Forschungszentrum Informatik
+ *  Created on behalf of Universal Robots A/S
+ *  SPDX-License-Identifier: Apache-2.0
+ *
+ *  To all other parts of this software, the following terms apply.
  *
  *  Copyright (c) 2014 Norwegian University of Science and Technology
  *  All rights reserved.
@@ -50,57 +60,11 @@ int main(int argc, char** argv)
 
   ros::NodeHandle nh;
 
-  std::ifstream realtime_file("/sys/kernel/realtime", std::ios::in);
-  bool has_realtime = false;
-  if (realtime_file.is_open())
-  {
-    realtime_file >> has_realtime;
-  }
-  if (has_realtime)
-  {
-    const int max_thread_priority = sched_get_priority_max(SCHED_FIFO);
-    if (max_thread_priority != -1)
-    {
-      // We'll operate on the currently running thread.
-      pthread_t this_thread = pthread_self();
-
-      // struct sched_param is used to store the scheduling priority
-      struct sched_param params;
-
-      // We'll set the priority to the maximum.
-      params.sched_priority = max_thread_priority;
-
-      int ret = pthread_setschedparam(this_thread, SCHED_FIFO, &params);
-      if (ret != 0)
-      {
-        ROS_ERROR_STREAM("Unsuccessful in setting main thread realtime priority. Error code: " << ret);
-      }
-      // Now verify the change in thread priority
-      int policy = 0;
-      ret = pthread_getschedparam(this_thread, &policy, &params);
-      if (ret != 0)
-      {
-        ROS_ERROR_STREAM("Couldn't retrieve real-time scheduling parameters");
-      }
-
-      // Check the correct policy was applied
-      if (policy != SCHED_FIFO)
-      {
-        ROS_ERROR("Main thread: Scheduling is NOT SCHED_FIFO!");
-      }
-      else
-      {
-        ROS_INFO("Main thread: SCHED_FIFO OK");
-      }
-
-      // Print thread scheduling priority
-      ROS_INFO_STREAM("Main thread priority is " << params.sched_priority);
-    }
-    else
-    {
-      ROS_ERROR("Could not get maximum thread priority for main thread");
-    }
-  }
+  // Assign the highest realtime priority to the currently running thread.
+  /* The function is subject to the Apache License, Version 2.0. See the
+     copyright information in the Software License Agreement at the top
+     of this file. */
+  kuka_rsi_hw_interface::assign_max_rt_priority();
 
   kuka_rsi_hw_interface::KukaHardwareInterface kuka_rsi_hw_interface;
   kuka_rsi_hw_interface.configure();
