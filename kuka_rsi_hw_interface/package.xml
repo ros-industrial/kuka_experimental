@@ -4,9 +4,11 @@
   <version>0.1.0</version>
   <description>A ROS-Control hardware interface for use with KUKA RSI</description>
   <author>Lars Tingelstad</author>
+  <author>Felix Exner</author>
   <maintainer email="lars.tingelstad@ntnu.no">Lars Tingelstad</maintainer>
   <maintainer email="g.a.vanderhoorn@tudelft.nl">G.A. vd. Hoorn (TU Delft Robotics Institute)</maintainer>
   <license>BSD</license>
+  <license>Apache-2.0</license>
 
   <url type="website">http://wiki.ros.org/kuka_rsi_hw_interface</url>
   <url type="bugtracker">https://github.com/ros-industrial/kuka_experimental/issues</url>
