@@ -8,15 +8,18 @@
     </p>
     <p>
       This package contains configuration data, 3D models and launch files
-      for KUKA KR 20 manipulators. This currently includes the R1810-2.
+      for KUKA KR 20 manipulators. This currently includes the R1810-2 and the R1810.
     </p>
     <p><b>Specifications</b>:</p>
     <ul>
       <li>KR 20 R1810-2 - Default</li>
+      <li>KR 20 R1810 - Default</li>
     </ul>
     <p>
       Joint limits and maximum joint velocities for R1810-2 are based on the information
       in the <em>KUKA KR 20 R1810-2 datasheet</em> version <em>0000-321-012 / V13.1 / 26.05.2022 / en</em>.
+      Joint limits and maximum joint velocities for R1810 are based on the information
+      in the <em>KUKA KR 20 R1810 datasheet</em> version <em>0000-262-123 / V8.1 / 23.09.2022 / en</em>.
     </p>
     <p>
       All urdfs are based on the default motion and joint velocity limits,
@@ -31,6 +34,7 @@
   </description>
   <author>Simon Schmeisser (Optonic)</author>
   <author>Christian Jülg (Optonic)</author>
+  <author>Tobias Bergmann (Optonic)</author>
   <maintainer email="g.a.vanderhoorn@tudelft.nl">G.A. vd. Hoorn (TU Delft Robotics Institute)</maintainer>
   <license>BSD</license>
 
