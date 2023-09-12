@@ -4,40 +4,47 @@
   <version>0.1.0</version>
   <description>
     <p>
-      ROS-Industrial support for the KUKA KR20 R1810_2 (and variants).
+      ROS-Industrial support for the KUKA KR 20 (and variants).
     </p>
     <p>
       This package contains configuration data, 3D models and launch files
-      for KUKA KR20 R1810_2 manipulators. This currently includes the KUKA KR70 R2100 only.
+      for KUKA KR 20 manipulators. This currently includes the R1810-2.
     </p>
     <p><b>Specifications</b>:</p>
     <ul>
-      <li>KR20 R1810_2 - Default</li>
+      <li>KR 20 R1810-2 - Default</li>
     </ul>
     <p>
-      Joint limits and maximum joint velocities are based on the information
-      found in the online datasheet <a href="fehlt noch">here</a>. All urdfs are based on the default motion and joint velocity limits,
-      unless noted otherwise.
+      Joint limits and maximum joint velocities for R1810-2 are based on the information
+      in the <em>KUKA KR 20 R1810-2 datasheet</em> version <em>0000-321-012 / V13.1 / 26.05.2022 / en</em>.
+    </p>
+    <p>
+      All urdfs are based on the default motion and joint velocity limits,
+      unless noted otherwise (ie: no support for high speed joints,
+      extended / limited motion ranges or other options).
     </p>
     <p>
       Before using any of the configuration files and / or meshes included
       in this package, be sure to check they are correct for the particular
       robot model and configuration you intend to use them with.
     </p>
-    <p>
-      <b>NB</b>: this package currently uses non-valid inertia parameters.
-    </p>
   </description>
-  <author>Lars Tingelstad</author>
+  <author>Simon Schmeisser (Optonic)</author>
+  <author>Christian Jülg (Optonic)</author>
   <maintainer email="g.a.vanderhoorn@tudelft.nl">G.A. vd. Hoorn (TU Delft Robotics Institute)</maintainer>
   <license>BSD</license>
+
+  <url type="website">http://wiki.ros.org/kuka_kr20_support</url>
+  <url type="bugtracker">https://github.com/ros-industrial/kuka_experimental/issues</url>
+  <url type="repository">https://github.com/ros-industrial/kuka_experimental</url>
 
   <buildtool_depend>catkin</buildtool_depend>
 
   <test_depend>roslaunch</test_depend>
 
   <exec_depend>industrial_robot_client</exec_depend>
-  <exec_depend>joint_state_publisher</exec_depend>
+  <exec_depend>joint_state_publisher_gui</exec_depend>
+  <exec_depend>kuka_resources</exec_depend>
   <exec_depend>robot_state_publisher</exec_depend>
   <exec_depend>rviz</exec_depend>
   <exec_depend>xacro</exec_depend>
