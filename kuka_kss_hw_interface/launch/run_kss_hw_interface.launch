@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<launch>
+    <arg name="sim" default="false" />
+
+    <param name="robot_description" command="$(find xacro)/xacro '$(find kuka_kr6_support)/urdf/kr6r900sixx.xacro'"/>   
+    <rosparam file="$(find kuka_kss_hw_interface)/test/test_params_sim.yaml" command="load" if="$(arg sim)"/>
+    <rosparam file="$(find kuka_kss_hw_interface)/test/test_params.yaml" command="load" unless="$(arg sim)"/>
+
+     <!-- Load ROS Control joint controller configurations from YAML file to parameter server -->
+    <rosparam file="$(find kuka_kss_hw_interface)/config/hardware_controllers.yaml" command="load"/>
+    <!-- Load standard kuka controller joint names from YAML file to parameter server -->
+    <rosparam file="$(find kuka_kss_hw_interface)/config/controller_joint_names.yaml" command="load"/>
+
+    <!-- Start ROS interface node -->
+    <node name="kuka_kss_hw_interface" pkg="kuka_kss_hw_interface"
+      type="kuka_kss_hw_interface_node" respawn="false"
+      output="screen"
+      required="true"/>
+
+    <!-- Load ROS Control controllers (args use params from hardware_controllers.yaml above) -->
+    <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen"
+        args="position_trajectory_controller joint_state_controller --shutdown-timeout 1"/>
+    <!-- Load robot state publisher -->
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
+
+</launch>

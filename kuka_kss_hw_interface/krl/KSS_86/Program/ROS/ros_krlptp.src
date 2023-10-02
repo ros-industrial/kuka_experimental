@@ -1,0 +1,74 @@
+&ACCESS RVP
+&REL 74
+&PARAM DISKPATH = KRC:\R1\Program\ROS
+DEF ros_krlptp ( )
+   ; Software License Agreement (BSD License)
+   ;
+   ; Copyright (c) 2022, Kuka Robotics Corp
+   ; All rights reserved.
+   ;
+   ; Redistribution and use in source and binary forms, with or without
+   ; modification, are permitted provided that the following conditions are met:
+   ;
+   ;      * Redistributions of source code must retain the above copyright
+   ;        notice, this list of conditions and the following disclaimer.
+   ;      * Redistributions in binary form must reproduce the above copyright
+   ;        notice, this list of conditions and the following disclaimer in the
+   ;        documentation and/or other materials provided with the distribution.
+   ;      * Neither the name of the copyright holder, nor the names of its
+   ;        contributors may be used to endorse or promote products derived
+   ;        from this software without specific prior written permission.
+   ;
+   ; THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+   ; AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+   ; IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+   ; ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+   ; LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+   ; CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+   ; SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+   ; INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+   ; CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+   ; ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+   ; POSSIBILITY OF SUCH DAMAGE.
+
+   ; Author: Pat Duda <pat.duda@kuka.com>
+
+;FOLD INI
+  ;FOLD BASISTECH INI
+    GLOBAL INTERRUPT DECL 3 WHEN $STOPMESS==TRUE DO IR_STOPM ( )
+    INTERRUPT ON 3 
+    BAS (#INITMOV,0 )
+  ;ENDFOLD (BASISTECH INI)
+  ;FOLD USER INI
+    ;Make your modifications here
+
+  ;ENDFOLD (USER INI)
+  ;ENDFOLD (INI)
+
+   ROS_joint_pos_tgt = $AXIS_ACT_MEAS
+   nextMove = $AXIS_ACT_MEAS
+   moveTime = 0.200
+   ptp ROS_joint_pos_tgt
+   ROS_Runtime_Init()
+   ; Setup default motion params
+   ; VEL & ACC may be reduced to give smooth motion at the default data rate
+   ; For faster performance, these may also be increased
+   ; Small/fast robots may need lower values
+   ROS_Pdat={VEL 50.000,ACC 50.000,APO_DIST 20.000,GEAR_JERK 100.000,EXAX_IGN 0}
+   PDAT_ACT=ROS_Pdat
+   BAS(#PTP_DAT)
+   $ADVANCE = 2
+   ; Loop forever
+   LOOP
+      movesQueued = ROS_GetNextMoveFIFO(nextMove, moveTime)
+      CONTINUE
+      IF (movesQueued > 0) THEN
+         PTP nextMove C_PTP
+      ENDIF 
+      CONTINUE
+      IF (ROS_ReqOpStateChange()) THEN
+         EXIT
+      ENDIF
+   ENDLOOP
+
+END

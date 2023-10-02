@@ -1,0 +1,7 @@
+rsi:
+  listen_address: "127.0.0.1"
+  listen_port: 49152
+kuka:
+  ip_address: "127.0.0.1"
+  server_port: "54600"
+  server_timeout: 3  

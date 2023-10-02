@@ -1,0 +1,437 @@
+&ACCESS RV2
+&REL 3
+&PARAM DISKPATH = KRC:\R1\Program\ROS
+DEF kuka_ros_comm_EKIXML ( )
+   ; Software License Agreement (BSD License)
+   ;
+   ; Copyright (c) 2022, Kuka Robotics Corp
+   ; All rights reserved.
+   ;
+   ; Redistribution and use in source and binary forms, with or without
+   ; modification, are permitted provided that the following conditions are met:
+   ;
+   ;      * Redistributions of source code must retain the above copyright
+   ;        notice, this list of conditions and the following disclaimer.
+   ;      * Redistributions in binary form must reproduce the above copyright
+   ;        notice, this list of conditions and the following disclaimer in the
+   ;        documentation and/or other materials provided with the distribution.
+   ;      * Neither the name of the copyright holder, nor the names of its
+   ;        contributors may be used to endorse or promote products derived
+   ;        from this software without specific prior written permission.
+   ;
+   ; THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+   ; AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+   ; IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+   ; ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+   ; LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+   ; CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+   ; SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+   ; INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+   ; CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+   ; ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+   ; POSSIBILITY OF SUCH DAMAGE.
+
+   ; Author: Pat Duda <pat.duda@kuka.com>
+
+
+END
+
+
+GLOBAL DEF ROS_EKI_ServerInit()
+
+   InterfaceName[] = "EkiKSSinterface"
+   
+   xfer_pos_data = g_joint_pos_empty 
+   xfer_vel_data = g_joint_pos_empty 
+   xfer_torque_data = g_joint_pos_empty
+
+   $FLAG[ROS_EKI_Conn_Work] = FALSE
+   EKI_Conn_WatchID = SPSchg_bAlloc($FLAG[ROS_EKI_Conn_Work], "EKI_Conn")
+   EKI_DisConn_WatchID = SPSchg_bAlloc($FLAG[ROS_EKI_Conn_Work], "EKI_DisConn")
+
+END
+
+
+GLOBAL DEF ROS_EKI_ServerStart()
+   decl eki_status eki_ret
+   
+   ; Init connection flag - will be set TRUE internally by EKI after connection is made
+   $flag[ROS_EKI_Conn_Flag] = FALSE
+   ; Init data recv flag - will be set TRUE internally by EKI after data is received
+   $flag[ROS_EKI_Recv_Flag] = FALSE
+   
+   
+   eki_ret = EKI_Init(InterfaceName[])
+   eki_ret = EKI_Open(InterfaceName[])
+END
+
+
+GLOBAL DEF ROS_EKI_ServerReset()
+   decl eki_status eki_ret
+   eki_ret = EKI_Clear(InterfaceName[])
+   ROS_EKI_ServerStart()
+END
+
+
+GLOBAL DEFFCT BOOL ROS_EKI_IsConn()
+DECL EKI_STATUS eki_test
+
+   IF ($FLAG[ROS_EKI_Conn_Flag]==FALSE) THEN
+      eki_test = EKI_CheckBuffer(InterfaceName[], "ROS/@REQTYPE")
+      $FLAG[ROS_EKI_Conn_Flag] = eki_test.Connected
+      IF (eki_test.Connected) THEN
+         MsgNotify("WARNING:ROS_EKI_Conn_Flag FLAG disconnected. Override eki_test.Connected=TRUE")
+      ENDIF
+   ENDIF
+   RETURN($FLAG[ROS_EKI_Conn_Flag])
+ENDFCT
+
+
+; Detect a disconnect->connect transition
+GLOBAL DEFFCT BOOL ROS_EKI_ChkConnect()
+   $FLAG[ROS_EKI_Conn_Work] = ROS_EKI_IsConn()
+   RETURN(SPSchg_bRising(EKI_Conn_WatchID, $FLAG[ROS_EKI_Conn_Work]))
+ENDFCT
+
+
+; Detect a connect->disconnect transition
+GLOBAL DEFFCT BOOL ROS_EKI_ChkDisconn()
+   RETURN(SPSchg_bFalling(EKI_DisConn_WatchID, $FLAG[ROS_EKI_Conn_Work]))
+ENDFCT
+
+
+
+; Send necessary system data on connection initialization.
+; Note: all params are inputs and should not be changed.
+; Expected values passed in:
+;  ver=ROS_InterfaceVersion, 
+;  ipo_time=ROS_IPOC, 
+;  nAx=$NUM_AX, 
+;  nExAx=$EX_AX_NUM, 
+;  serNo=$KR_SERIALNO, 
+;  robName[]=$ROBNAME[], 
+;  robTrafo[]=$ROBTRAFO[],
+;  robVer[]=$V_R1MADA[],
+;  features=ROS_SupportFeatures, 
+;  axType[]=$AXIS_TYPE[], 
+;  axVel[]=$VEL_AXIS_MA[], 
+;  ratio[]=$RAT_MOT_AX[])
+GLOBAL DEF ROS_EKI_Send_InitData(ver:IN, ipo_time:IN, nAx:IN, nExAx:IN, serNo:IN, robName[]:IN, robTrafo[]:IN,robVer[]:IN,features:IN, axType[]:OUT, axVel[]:OUT, ratio[]:OUT)
+   DECL INT ver
+   DECL INT ipo_time
+   DECL INT nAx
+   DECL INT nExAx
+   DECL INT serNo
+   DECL CHAR robName[]
+   DECL CHAR robTrafo[]
+   DECL CHAR robVer[]
+   DECL ROS_FeatuesType features
+   DECL INT axType[]
+   DECL FRA ratio[]
+   DECL REAL axVel[]
+   
+   DECL EKI_STATUS eki_ret
+   
+   IF (NOT ROS_EKI_IsConn()) THEN  
+      RETURN
+   ENDIF
+   
+   eki_ret = eki_setInt(InterfaceName[], "Robot/Init/@VER", ver)
+   eki_ret = eki_setInt(InterfaceName[], "Robot/Init/@IPOC", ipo_time)
+   
+   eki_ret = eki_setInt(InterfaceName[], "Robot/Init/@NumAx", nAx)
+   eki_ret = eki_setInt(InterfaceName[], "Robot/Init/@NumExAx", nExAx)
+   
+   eki_ret = eki_setInt(InterfaceName[], "Robot/Init/@SerialNum", serNo)
+   eki_ret = eki_setString(InterfaceName[], "Robot/Init/@Name", robName[])
+   eki_ret = eki_setString(InterfaceName[], "Robot/Init/@Model", robTrafo[])
+   eki_ret = eki_setString(InterfaceName[], "Robot/Init/@RobVer", robVer[])
+   
+   ; Features supported ----------------------------------
+   ; Required element for now
+   eki_ret = eki_setInt(InterfaceName[], "Robot/Init/Features/@EKI", features.EKI)
+   eki_ret = eki_setInt(InterfaceName[], "Robot/Init/Features/@RSI", features.RSI)
+   eki_ret = eki_setInt(InterfaceName[], "Robot/Init/Features/@MXA", features.MXA)
+
+   ; Axis types ----------------------------------
+   eki_ret = eki_setInt(InterfaceName[], "Robot/Init/Axis/A1/@Type", axType[1])
+   eki_ret = eki_setInt(InterfaceName[], "Robot/Init/Axis/A2/@Type", axType[2])
+   eki_ret = eki_setInt(InterfaceName[], "Robot/Init/Axis/A3/@Type", axType[3])
+   eki_ret = eki_setInt(InterfaceName[], "Robot/Init/Axis/A4/@Type", axType[4])
+   eki_ret = eki_setInt(InterfaceName[], "Robot/Init/Axis/A5/@Type", axType[5])
+   eki_ret = eki_setInt(InterfaceName[], "Robot/Init/Axis/A6/@Type", axType[6])
+                                                            
+   eki_ret = eki_setInt(InterfaceName[], "Robot/Init/Axis/E1/@Type", axType[7 ])
+   eki_ret = eki_setInt(InterfaceName[], "Robot/Init/Axis/E2/@Type", axType[8 ])
+   eki_ret = eki_setInt(InterfaceName[], "Robot/Init/Axis/E3/@Type", axType[9 ])
+   eki_ret = eki_setInt(InterfaceName[], "Robot/Init/Axis/E4/@Type", axType[10])
+   eki_ret = eki_setInt(InterfaceName[], "Robot/Init/Axis/E5/@Type", axType[11])
+   eki_ret = eki_setInt(InterfaceName[], "Robot/Init/Axis/E6/@Type", axType[12])
+
+   ; Axis ratios ----------------------------------
+   eki_ret = eki_setInt(InterfaceName[], "Robot/Init/Axis/A1/@RatioNum", ratio[1].N)
+   eki_ret = eki_setInt(InterfaceName[], "Robot/Init/Axis/A2/@RatioNum", ratio[2].N)
+   eki_ret = eki_setInt(InterfaceName[], "Robot/Init/Axis/A3/@RatioNum", ratio[3].N)
+   eki_ret = eki_setInt(InterfaceName[], "Robot/Init/Axis/A4/@RatioNum", ratio[4].N)
+   eki_ret = eki_setInt(InterfaceName[], "Robot/Init/Axis/A5/@RatioNum", ratio[5].N)
+   eki_ret = eki_setInt(InterfaceName[], "Robot/Init/Axis/A6/@RatioNum", ratio[6].N)
+                                                                          
+   eki_ret = eki_setInt(InterfaceName[], "Robot/Init/Axis/E1/@RatioNum", ratio[7 ].N)
+   eki_ret = eki_setInt(InterfaceName[], "Robot/Init/Axis/E2/@RatioNum", ratio[8 ].N)
+   eki_ret = eki_setInt(InterfaceName[], "Robot/Init/Axis/E3/@RatioNum", ratio[9 ].N)
+   eki_ret = eki_setInt(InterfaceName[], "Robot/Init/Axis/E4/@RatioNum", ratio[10].N)
+   eki_ret = eki_setInt(InterfaceName[], "Robot/Init/Axis/E5/@RatioNum", ratio[11].N)
+   eki_ret = eki_setInt(InterfaceName[], "Robot/Init/Axis/E6/@RatioNum", ratio[12].N)
+
+   ; Axis ratios ----------------------------------
+   eki_ret = eki_setInt(InterfaceName[], "Robot/Init/Axis/A1/@RatioDen", ratio[1].D)
+   eki_ret = eki_setInt(InterfaceName[], "Robot/Init/Axis/A2/@RatioDen", ratio[2].D)
+   eki_ret = eki_setInt(InterfaceName[], "Robot/Init/Axis/A3/@RatioDen", ratio[3].D)
+   eki_ret = eki_setInt(InterfaceName[], "Robot/Init/Axis/A4/@RatioDen", ratio[4].D)
+   eki_ret = eki_setInt(InterfaceName[], "Robot/Init/Axis/A5/@RatioDen", ratio[5].D)
+   eki_ret = eki_setInt(InterfaceName[], "Robot/Init/Axis/A6/@RatioDen", ratio[6].D)
+                                                                       
+   eki_ret = eki_setInt(InterfaceName[], "Robot/Init/Axis/E1/@RatioDen", ratio[7 ].D)
+   eki_ret = eki_setInt(InterfaceName[], "Robot/Init/Axis/E2/@RatioDen", ratio[8 ].D)
+   eki_ret = eki_setInt(InterfaceName[], "Robot/Init/Axis/E3/@RatioDen", ratio[9 ].D)
+   eki_ret = eki_setInt(InterfaceName[], "Robot/Init/Axis/E4/@RatioDen", ratio[10].D)
+   eki_ret = eki_setInt(InterfaceName[], "Robot/Init/Axis/E5/@RatioDen", ratio[11].D)
+   eki_ret = eki_setInt(InterfaceName[], "Robot/Init/Axis/E6/@RatioDen", ratio[12].D)
+
+   ; Axis RPM ----------------------------------
+   eki_ret = eki_setReal(InterfaceName[], "Robot/Init/Axis/A1/@MaxRPM", axVel[1])
+   eki_ret = eki_setReal(InterfaceName[], "Robot/Init/Axis/A2/@MaxRPM", axVel[2])
+   eki_ret = eki_setReal(InterfaceName[], "Robot/Init/Axis/A3/@MaxRPM", axVel[3])
+   eki_ret = eki_setReal(InterfaceName[], "Robot/Init/Axis/A4/@MaxRPM", axVel[4])
+   eki_ret = eki_setReal(InterfaceName[], "Robot/Init/Axis/A5/@MaxRPM", axVel[5])
+   eki_ret = eki_setReal(InterfaceName[], "Robot/Init/Axis/A6/@MaxRPM", axVel[6])
+                                                              
+   eki_ret = eki_setReal(InterfaceName[], "Robot/Init/Axis/E1/@MaxRPM", axVel[7 ])
+   eki_ret = eki_setReal(InterfaceName[], "Robot/Init/Axis/E2/@MaxRPM", axVel[8 ])
+   eki_ret = eki_setReal(InterfaceName[], "Robot/Init/Axis/E3/@MaxRPM", axVel[9 ])
+   eki_ret = eki_setReal(InterfaceName[], "Robot/Init/Axis/E4/@MaxRPM", axVel[10])
+   eki_ret = eki_setReal(InterfaceName[], "Robot/Init/Axis/E5/@MaxRPM", axVel[11])
+   eki_ret = eki_setReal(InterfaceName[], "Robot/Init/Axis/E6/@MaxRPM", axVel[12])
+   
+   eki_ret = eki_send(InterfaceName[], "Robot/Init")
+
+END
+
+
+
+GLOBAL DEF ROS_EKI_Send_Jstate(ipo_time:IN, pos_data:IN, vel_data:IN, torque_data:IN)
+   DECL INT ipo_time 
+   DECL E6AXIS pos_data
+   DECL E6AXIS vel_data
+   DECL E6AXIS torque_data
+   DECL eki_status eki_ret
+   
+   xfer_pos_data = pos_data
+   xfer_vel_data =  vel_data
+   xfer_torque_data = torque_data
+   
+   ; Load state values into xml structure
+   ; header data
+   eki_ret = eki_setInt(InterfaceName[], "Robot/State/@IPOC", ipo_time)
+   
+   ; position
+   eki_ret = eki_setreal(InterfaceName[], "Robot/State/Pos/@A1", xfer_pos_data.A1)
+   eki_ret = eki_setreal(InterfaceName[], "Robot/State/Pos/@A2", xfer_pos_data.A2)
+   eki_ret = eki_setreal(InterfaceName[], "Robot/State/Pos/@A3", xfer_pos_data.A3)
+   eki_ret = eki_setreal(InterfaceName[], "Robot/State/Pos/@A4", xfer_pos_data.A4)
+   eki_ret = eki_setreal(InterfaceName[], "Robot/State/Pos/@A5", xfer_pos_data.A5)
+   eki_ret = eki_setreal(InterfaceName[], "Robot/State/Pos/@A6", xfer_pos_data.A6)
+   eki_ret = eki_setreal(InterfaceName[], "Robot/State/Pos/@E1", xfer_pos_data.E1)
+   eki_ret = eki_setreal(InterfaceName[], "Robot/State/Pos/@E2", xfer_pos_data.E2)
+   eki_ret = eki_setreal(InterfaceName[], "Robot/State/Pos/@E3", xfer_pos_data.E3)
+   eki_ret = eki_setreal(InterfaceName[], "Robot/State/Pos/@E4", xfer_pos_data.E4)
+   eki_ret = eki_setreal(InterfaceName[], "Robot/State/Pos/@E5", xfer_pos_data.E5)
+   eki_ret = eki_setreal(InterfaceName[], "Robot/State/Pos/@E6", xfer_pos_data.E6)
+   ; velocity
+   eki_ret = eki_setreal(InterfaceName[], "Robot/State/Vel/@A1", xfer_vel_data.A1)
+   eki_ret = eki_setreal(InterfaceName[], "Robot/State/Vel/@A2", xfer_vel_data.A2)
+   eki_ret = eki_setreal(InterfaceName[], "Robot/State/Vel/@A3", xfer_vel_data.A3)
+   eki_ret = eki_setreal(InterfaceName[], "Robot/State/Vel/@A4", xfer_vel_data.A4)
+   eki_ret = eki_setreal(InterfaceName[], "Robot/State/Vel/@A5", xfer_vel_data.A5)
+   eki_ret = eki_setreal(InterfaceName[], "Robot/State/Vel/@A6", xfer_vel_data.A6)
+   eki_ret = eki_setreal(InterfaceName[], "Robot/State/Pos/@E1", xfer_vel_data.E1)
+   eki_ret = eki_setreal(InterfaceName[], "Robot/State/Pos/@E2", xfer_vel_data.E2)
+   eki_ret = eki_setreal(InterfaceName[], "Robot/State/Pos/@E3", xfer_vel_data.E3)
+   eki_ret = eki_setreal(InterfaceName[], "Robot/State/Pos/@E4", xfer_vel_data.E4)
+   eki_ret = eki_setreal(InterfaceName[], "Robot/State/Pos/@E5", xfer_vel_data.E5)
+   eki_ret = eki_setreal(InterfaceName[], "Robot/State/Pos/@E6", xfer_vel_data.E6)
+   ; effort
+   eki_ret = eki_setreal(InterfaceName[], "Robot/State/Eff/@A1", xfer_torque_data.A1)
+   eki_ret = eki_setreal(InterfaceName[], "Robot/State/Eff/@A2", xfer_torque_data.A2)
+   eki_ret = eki_setreal(InterfaceName[], "Robot/State/Eff/@A3", xfer_torque_data.A3)
+   eki_ret = eki_setreal(InterfaceName[], "Robot/State/Eff/@A4", xfer_torque_data.A4)
+   eki_ret = eki_setreal(InterfaceName[], "Robot/State/Eff/@A5", xfer_torque_data.A5)
+   eki_ret = eki_setreal(InterfaceName[], "Robot/State/Eff/@A6", xfer_torque_data.A6)
+   eki_ret = eki_setreal(InterfaceName[], "Robot/State/Pos/@E1", xfer_torque_data.E1)
+   eki_ret = eki_setreal(InterfaceName[], "Robot/State/Pos/@E2", xfer_torque_data.E2)
+   eki_ret = eki_setreal(InterfaceName[], "Robot/State/Pos/@E3", xfer_torque_data.E3)
+   eki_ret = eki_setreal(InterfaceName[], "Robot/State/Pos/@E4", xfer_torque_data.E4)
+   eki_ret = eki_setreal(InterfaceName[], "Robot/State/Pos/@E5", xfer_torque_data.E5)
+   eki_ret = eki_setreal(InterfaceName[], "Robot/State/Pos/@E6", xfer_torque_data.E6)
+   ; interface state
+   eki_ret = eki_checkbuffer(InterfaceName[], "ROS/Command/Pos/@A1")
+   eki_ret = eki_setint(InterfaceName[], "Robot/State/RobotCommand/@Size", eki_ret.buff)
+
+   ; Send xml structure
+   IF (ROS_EKI_IsConn()) THEN  ; Make sure connection hasn't died while updating xml structure
+      eki_ret = eki_send(InterfaceName[], "Robot/State")
+      EKI_Check(eki_ret, #NOTIFY)
+   ENDIF
+
+END
+
+
+
+
+; Send status code data.  RobStat should already be populated with current state
+; from the routine ROS_GetStatusData()
+GLOBAL DEF ROS_EKI_Send_Status(RobStat:IN)
+   DECL ROS_RobStatusType RobStat
+   DECL EKI_STATUS eki_ret
+
+   IF (NOT ROS_EKI_IsConn()) THEN  
+      RETURN
+   ENDIF
+
+   eki_ret = eki_setInt(InterfaceName[], "Robot/Status/@Mode", RobStat.Mode)
+   
+   ; Transmit the current Run Mode 
+   eki_ret = eki_setString(InterfaceName[], "Robot/Status/@OpState", RobStat.opState[])
+   
+   ; Transmit states with ROS standard tri-state values (-1=unknown, 0=OFF, 1=ON ) 
+   eki_ret = eki_setInt(InterfaceName[], "Robot/Status/@EStop", RobStat.eStop)
+   eki_ret = eki_setInt(InterfaceName[], "Robot/Status/@GuardStop", RobStat.guardStop)
+   eki_ret = eki_setInt(InterfaceName[], "Robot/Status/@DrivesPowered", RobStat.drivesPowered)
+   eki_ret = eki_setInt(InterfaceName[], "Robot/Status/@MotionPossible", RobStat.motionPossible)
+   eki_ret = eki_setInt(InterfaceName[], "Robot/Status/@InMotion", RobStat.inMotion)
+   eki_ret = eki_setInt(InterfaceName[], "Robot/Status/@InError", RobStat.inError)
+   eki_ret = eki_setInt(InterfaceName[], "Robot/Status/@ErrorCode", RobStat.errCode)
+
+   ; Send the message
+   eki_ret = eki_send(InterfaceName[], "Robot/Status")
+
+END
+
+
+; Send command acknowledge
+GLOBAL DEF ROS_EKI_SendAck(cmd[]:IN, cmdID:IN)
+   DECL CHAR cmd[]
+   DECL INT cmdID
+   DECL EKI_Status eki_ret
+
+   IF (NOT ROS_EKI_IsConn()) THEN  
+      RETURN
+   ENDIF
+   
+   eki_ret = EKI_SetString(InterfaceName[], "Robot/Ack/@REQTYPE", cmd[])
+   eki_ret = eki_setInt(InterfaceName[], "Robot/Ack/@ID", cmdID)
+   eki_ret = EKI_Send(InterfaceName[], "Robot/Ack")
+
+END
+
+
+; ROS_EKI_ReceiveData()
+; Tries to read received elements from buffer. Receive q left unchanged if empty.
+GLOBAL DEF ROS_EKI_ReceiveData()
+   DECL EKI_Status eki_ret
+   DECL EKI_Status eki_ret_req
+   DECL E6AXIS joint_pos_cmd
+   DECL INT idx
+   DECL INT cmdID
+   DECL REAL dTime
+
+   ; Verify a valid connection
+   IF (NOT $FLAG[ROS_EKI_Conn_Flag]) THEN
+      GOTO SkipRecv 
+   ENDIF
+   
+   ; Skip processing if no data received.
+   IF (NOT $FLAG[ROS_EKI_Recv_Flag]) THEN
+      GOTO SkipRecv 
+   ENDIF
+
+   eki_ret_req = eki_checkbuffer(InterfaceName[], "ROS/@REQTYPE")
+   IF eki_ret_req.buff <= 0 THEN
+     GOTO SkipRecv 
+   ENDIF
+   
+   SPSdelay_Start(ROS_Timeout_RecvID, 200)
+   WHILE ((eki_ret_req.buff > 0) AND (NOT SPSdelay_Done(ROS_Timeout_RecvID, TRUE)))
+      eki_ret_req = eki_getString(InterfaceName[], "ROS/@REQTYPE", RecvType[])
+      cmdID = -1
+      dTime = 0.2
+      eki_ret = eki_getINT(InterfaceName[], "ROS/@ID", cmdID)
+      
+      ; Command data
+      IF (StrComp(RecvType[], "CMD", #NOT_CASE_SENS)) THEN
+         ; Init data - uninit data causes EKI error
+         joint_pos_cmd = ROS_joint_pos_tgt
+         eki_ret = eki_getReal(InterfaceName[], "ROS/Command/@dt", dTime)
+         eki_ret = eki_getReal(InterfaceName[], "ROS/Command/Pos/@A1", joint_pos_cmd.a1)
+         eki_ret = eki_getReal(InterfaceName[], "ROS/Command/Pos/@A2", joint_pos_cmd.a2)
+         eki_ret = eki_getReal(InterfaceName[], "ROS/Command/Pos/@A3", joint_pos_cmd.a3)
+         eki_ret = eki_getReal(InterfaceName[], "ROS/Command/Pos/@A4", joint_pos_cmd.a4)
+         eki_ret = eki_getReal(InterfaceName[], "ROS/Command/Pos/@A5", joint_pos_cmd.a5)
+         eki_ret = eki_getReal(InterfaceName[], "ROS/Command/Pos/@A6", joint_pos_cmd.a6)
+         eki_ret = eki_getReal(InterfaceName[], "ROS/Command/Pos/@E1", joint_pos_cmd.E1)
+         eki_ret = eki_getReal(InterfaceName[], "ROS/Command/Pos/@E2", joint_pos_cmd.E2)
+         eki_ret = eki_getReal(InterfaceName[], "ROS/Command/Pos/@E3", joint_pos_cmd.E3)
+         eki_ret = eki_getReal(InterfaceName[], "ROS/Command/Pos/@E4", joint_pos_cmd.E4)
+         eki_ret = eki_getReal(InterfaceName[], "ROS/Command/Pos/@E5", joint_pos_cmd.E5)
+         eki_ret = eki_getReal(InterfaceName[], "ROS/Command/Pos/@E6", joint_pos_cmd.E6)
+         
+         ROS_LogTargetPosCmd(joint_pos_cmd, cmdID, dTime)
+      ENDIF 
+      
+      ; Program STOP command
+      IF (StrComp(RecvType[], "STOP", #NOT_CASE_SENS)) THEN
+         idx = ROS_LogCommand(#ROSC_Stop, cmdID)
+      ENDIF
+   
+      ; Program Start
+      IF (StrComp(RecvType[], "START", #NOT_CASE_SENS)) THEN
+         idx = ROS_LogCommand(#ROSC_Start, cmdID)
+      ENDIF
+   
+      ; Drives OFF
+      IF (StrComp(RecvType[], "DRIV_OFF", #NOT_CASE_SENS)) THEN
+         idx = ROS_LogCommand(#ROSC_DrivesOff, cmdID)
+      ENDIF
+   
+      ; Drives ON
+      IF (StrComp(RecvType[], "DRIV_ON", #NOT_CASE_SENS)) THEN
+         idx = ROS_LogCommand(#ROSC_DrivesOn, cmdID)
+      ENDIF
+   
+      ; Program Reset
+      IF (StrComp(RecvType[], "RESET", #NOT_CASE_SENS)) THEN
+         idx = ROS_LogCommand(#ROSC_Reset, cmdID)
+      ENDIF
+      
+      ; HEARTBEAT command to keep link alive
+      IF (StrComp(RecvType[], "HEARTBEAT", #NOT_CASE_SENS)) THEN
+         idx = ROS_LogCommand(#ROSC_Heartbeat, cmdID)
+      ENDIF
+   
+      ; Change operation mode
+      IF (StrComp(RecvType[], "CHANGE", #NOT_CASE_SENS)) THEN
+         eki_ret = eki_GetString(InterfaceName[], "ROS/OpState/@Type", ReqOpState[])
+         
+         ROS_LogOpModeCmd(ReqOpState[], cmdID)
+      ENDIF
+      
+      ; Initial connect
+      IF (StrComp(RecvType[], "CON", #NOT_CASE_SENS)) THEN
+         ; Send initialization data back
+         idx = ROS_LogCommand(#ROSC_Init, cmdID)
+      ENDIF
+   ENDWHILE
+   SkipRecv:
+   ; When all data is read, reset the receive flag
+   $FLAG[ROS_EKI_Recv_Flag] = FALSE
+END

@@ -1,0 +1,99 @@
+<ROOT>
+   <CONFIG>
+      <IP_NUMBER>172.32.1.243</IP_NUMBER>   <!-- IP-number of the external socket -->
+      <PORT>49152</PORT>                   <!-- Port-number of the external socket -->      
+      <SENTYPE>V2003ROS</SENTYPE>        <!-- The name of your system send in <Sen Type="" > -->     
+      <ONLYSEND>FALSE</ONLYSEND>       <!-- TRUE means the client don't expect answers. Do not send anything to robot -->
+   </CONFIG>
+   <!-- Software License Agreement (BSD License)                                        -->
+   <!--                                                                                 -->
+   <!-- Copyright (c) 2022, Kuka Robotics Corp                                          -->
+   <!-- All rights reserved.                                                            -->
+   <!--                                                                                 -->
+   <!-- Redistribution and use in source and binary forms, with or without              -->
+   <!-- modification, are permitted provided that the following conditions are met:     -->
+   <!--                                                                                 -->
+   <!--      * Redistributions of source code must retain the above copyright           -->
+   <!--        notice, this list of conditions and the following disclaimer.            -->
+   <!--      * Redistributions in binary form must reproduce the above copyright        -->
+   <!--        notice, this list of conditions and the following disclaimer in the      -->
+   <!--        documentation and/or other materials provided with the distribution.     -->
+   <!--      * Neither the name of the copyright holder, nor the names of its           -->
+   <!--        contributors may be used to endorse or promote products derived          -->
+   <!--        from this software without specific prior written permission.            -->
+   <!--                                                                                 -->
+   <!-- THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"     -->
+   <!-- AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE       -->
+   <!-- IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE      -->
+   <!-- ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE        -->
+   <!-- LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR             -->
+   <!-- CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF            -->
+   <!-- SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS        -->
+   <!-- INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN         -->
+   <!-- CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)         -->
+   <!-- ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE      -->
+   <!-- POSSIBILITY OF SUCH DAMAGE.                                                     -->
+   
+   <!-- RSI Data: TYPE=  "BOOL", "STRING", "LONG", "DOUBLE" -->
+   <!-- INDX= "INTERNAL" switch on internal read values. Needed by DEF_... -->
+   <!-- INDX= "nmb" Input/Output index of RSI-Object / Maximum of RSI Channels: 64  -->   
+   <!-- HOLDON="1", set this output index of RSI Object to the last value in case of missed packet  -->   
+   <!-- DEF_Delay count the late packages and send it back to server  -->
+   <!-- DEF_Tech: .C = advance .T = main run / .C1 advance set function generator 1 -->
+   
+   <SEND>
+      <ELEMENTS>
+         <ELEMENT TAG="DEF_RIst" TYPE="DOUBLE" INDX="INTERNAL" />
+         <ELEMENT TAG="DEF_RSol" TYPE="DOUBLE" INDX="INTERNAL" />
+         <ELEMENT TAG="DEF_AIPos" TYPE="DOUBLE" INDX="INTERNAL" />
+         <ELEMENT TAG="DEF_EIPos" TYPE="DOUBLE" INDX="INTERNAL" />
+         <ELEMENT TAG="DEF_ASPos" TYPE="DOUBLE" INDX="INTERNAL" />
+         <ELEMENT TAG="DEF_ESPos" TYPE="DOUBLE" INDX="INTERNAL" />
+         <ELEMENT TAG="DEF_Delay" TYPE="LONG" INDX="INTERNAL" />
+         <ELEMENT TAG="AIVel.A1" TYPE="DOUBLE" INDX="1" />
+         <ELEMENT TAG="AIVel.A2" TYPE="DOUBLE" INDX="2" />
+         <ELEMENT TAG="AIVel.A3" TYPE="DOUBLE" INDX="3" />
+         <ELEMENT TAG="AIVel.A4" TYPE="DOUBLE" INDX="4" />
+         <ELEMENT TAG="AIVel.A5" TYPE="DOUBLE" INDX="5" />
+         <ELEMENT TAG="AIVel.A6" TYPE="DOUBLE" INDX="6" />
+         <ELEMENT TAG="AIVel.E1" TYPE="DOUBLE" INDX="7" />
+         <ELEMENT TAG="AIVel.E2" TYPE="DOUBLE" INDX="8" />
+         <ELEMENT TAG="AIVel.E3" TYPE="DOUBLE" INDX="9" />
+         <ELEMENT TAG="AIVel.E4" TYPE="DOUBLE" INDX="10" />
+         <ELEMENT TAG="AIVel.E5" TYPE="DOUBLE" INDX="11" />
+         <ELEMENT TAG="AIVel.E6" TYPE="DOUBLE" INDX="12" />
+         <ELEMENT TAG="AIEff.A1" TYPE="DOUBLE" INDX="13" />
+         <ELEMENT TAG="AIEff.A2" TYPE="DOUBLE" INDX="14" />
+         <ELEMENT TAG="AIEff.A3" TYPE="DOUBLE" INDX="15" />
+         <ELEMENT TAG="AIEff.A4" TYPE="DOUBLE" INDX="16" />
+         <ELEMENT TAG="AIEff.A5" TYPE="DOUBLE" INDX="17" />
+         <ELEMENT TAG="AIEff.A6" TYPE="DOUBLE" INDX="18" />
+         <ELEMENT TAG="AIEff.E1" TYPE="DOUBLE" INDX="19" />
+         <ELEMENT TAG="AIEff.E2" TYPE="DOUBLE" INDX="20" />
+         <ELEMENT TAG="AIEff.E3" TYPE="DOUBLE" INDX="21" />
+         <ELEMENT TAG="AIEff.E4" TYPE="DOUBLE" INDX="22" />
+         <ELEMENT TAG="AIEff.E5" TYPE="DOUBLE" INDX="23" />
+         <ELEMENT TAG="AIEff.E6" TYPE="DOUBLE" INDX="24" />
+         <ELEMENT TAG="STAT.VER" TYPE="LONG" INDX="25" />
+      </ELEMENTS>
+   </SEND>
+   <RECEIVE>
+      <ELEMENTS>
+         <ELEMENT TAG="AK.A1" TYPE="DOUBLE" INDX="1" HOLDON="1" />
+         <ELEMENT TAG="AK.A2" TYPE="DOUBLE" INDX="2" HOLDON="1" />
+         <ELEMENT TAG="AK.A3" TYPE="DOUBLE" INDX="3" HOLDON="1" />
+         <ELEMENT TAG="AK.A4" TYPE="DOUBLE" INDX="4" HOLDON="1" />
+         <ELEMENT TAG="AK.A5" TYPE="DOUBLE" INDX="5" HOLDON="1" />
+         <ELEMENT TAG="AK.A6" TYPE="DOUBLE" INDX="6" HOLDON="1" />
+         <ELEMENT TAG="AK.E1" TYPE="DOUBLE" INDX="7" HOLDON="1" />
+         <ELEMENT TAG="AK.E2" TYPE="DOUBLE" INDX="8" HOLDON="1" />
+         <ELEMENT TAG="AK.E3" TYPE="DOUBLE" INDX="9" HOLDON="1" />
+         <ELEMENT TAG="AK.E4" TYPE="DOUBLE" INDX="10" HOLDON="1" />
+         <ELEMENT TAG="AK.E5" TYPE="DOUBLE" INDX="11" HOLDON="1" />
+         <ELEMENT TAG="AK.E6" TYPE="DOUBLE" INDX="12" HOLDON="1" />
+         <!-- Interface version. HOLDON="0" also gives report of comm status -->   
+         <ELEMENT TAG="STAT.VER" TYPE="LONG" INDX="13" HOLDON="0" />
+         <ELEMENT TAG="STAT.STOP" TYPE="LONG" INDX="14" HOLDON="1" />
+      </ELEMENTS>
+   </RECEIVE>
+</ROOT>

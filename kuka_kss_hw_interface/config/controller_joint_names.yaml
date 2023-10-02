@@ -1,0 +1,2 @@
+# Defines mapping from joint order on robot to joint names in URDF
+controller_joint_names: ["joint_a1", "joint_a2", "joint_a3", "joint_a4", "joint_a5", "joint_a6"]

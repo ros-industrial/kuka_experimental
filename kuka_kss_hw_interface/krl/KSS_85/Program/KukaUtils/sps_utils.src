@@ -1,0 +1,499 @@
+&ACCESS RVO2
+&REL 661
+&COMMENT General SPS resources
+&PARAM EDITMASK = *
+&PARAM DISKPATH = KRC:\R1\Program\KukaUtils
+DEF SPS_utils()
+; -----------------------------------------------
+   ; Software License Agreement (BSD License)
+   ;
+   ; Copyright (c) 2012, Kuka Robotics Corp
+   ; All rights reserved.
+   ;
+   ; Redistribution and use in source and binary forms, with or without
+   ; modification, are permitted provided that the following conditions are met:
+   ;
+   ;      * Redistributions of source code must retain the above copyright
+   ;        notice, this list of conditions and the following disclaimer.
+   ;      * Redistributions in binary form must reproduce the above copyright
+   ;        notice, this list of conditions and the following disclaimer in the
+   ;        documentation and/or other materials provided with the distribution.
+   ;      * Neither the name of the copyright holder, nor the names of its
+   ;        contributors may be used to endorse or promote products derived
+   ;        from this software without specific prior written permission.
+   ;
+   ; THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+   ; AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+   ; IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+   ; ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+   ; LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+   ; CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+   ; SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+   ; INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+   ; CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+   ; ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+   ; POSSIBILITY OF SUCH DAMAGE.
+
+   ; Author: Pat Duda <pat.duda@kuka.com>
+; -----------------------------------------------
+; REV 1.0 - P.Duda
+;   - Initial release
+;   - Convert timer to use $ROB_TIMER 
+
+  ; PARAMETER Initialization
+  SPS_Timer_Num=14
+  SPS_Timer_Reset()
+  ; Setup SPS performance timer
+  SPSdelay_Start(SPS_Timer_Cnt+1, 1000)
+  
+  SPS_AllocItemsInit(SPS_ChgBoolAlloc[])
+  SPS_AllocItemsInit(SPS_ChgIntAlloc[])
+
+  SPSseq_InitThreads()
+
+END
+
+; TODO 
+; - Signal value tracking (bool)
+;     - watch for change 
+;     - rising edge 
+;     - falling edge 
+;     - support watch for change on other data types
+; - Signal pulse using timer utilities
+; - Flasher utility  
+
+
+; -----------------------------------------------
+; TIMING UTILITIES
+; SPSdelay - Non-Blocking timing support
+; -----------------------------------------------
+; This module supports a general timing structure
+; that uses a single timer with events to 
+; manage non-blocking delay operations in the SPS.
+; -----------------------------------------------
+
+; Starts a time delay identified by IDX
+; Specify a time delay dTime, in milliseconds 
+GLOBAL DEF SPSdelay_Start(idx:IN, dTime:IN)
+DECL INT idx
+DECL INT dTime
+
+IF (idx > SPS_Timer_Cnt) THEN
+  ;Error
+ENDIF
+
+SPS_TIMERS[idx].Index = idx
+SPS_TIMERS[idx].Active = TRUE
+SPS_TIMERS[idx].Timer_Num = SPS_Timer_Num
+SPS_TIMERS[idx].tStart = $ROB_TIMER
+SPS_TIMERS[idx].tExpire = SPS_TIMERS[idx].tStart + dTime
+
+END
+
+
+; Checks if the desired delay has completed
+; The Reset flag will turn off future checks 
+; - essentially makes it a one-shot
+GLOBAL DEFFCT BOOL SPSdelay_Done(idx:IN, reset_t:IN)
+DECL INT idx
+DECL BOOL reset_t
+
+IF ( SPS_TIMERS[idx].Active AND ($ROB_TIMER > SPS_TIMERS[idx].tExpire)) THEN
+  IF (reset_t) THEN
+    SPS_TIMERS[idx].Active = FALSE
+  ENDIF
+  RETURN(TRUE)
+ELSE
+  RETURN(FALSE)
+ENDIF
+
+ENDFCT
+
+; Checks if the given offset has elapsed
+; This is useful when a single start time is used with multiple offset times.
+; The delay dTime is in milliseconds.
+GLOBAL DEFFCT BOOL SPSdelay_Offset(idx:IN, dTime:IN)
+DECL INT idx
+DECL INT dTime
+
+IF ( $ROB_TIMER > (SPS_TIMERS[idx].tStart + dTime)) THEN
+  RETURN(TRUE)
+ELSE
+  RETURN(FALSE)
+ENDIF
+
+ENDFCT
+
+
+; Returns the amount of time that has elapsed for idx
+GLOBAL DEFFCT INT SPSdelay_Elapsed(idx:IN)
+DECL INT idx
+
+RETURN ($ROB_TIMER - SPS_TIMERS[idx].tStart)
+ENDFCT
+
+
+
+; Returns the amount of time that has elapsed for idx
+GLOBAL DEFFCT INT SPSdelay_TimeStamp()
+DECL INT idx
+
+RETURN ($ROB_TIMER)
+ENDFCT
+
+
+; Obsolete
+; Performs a timer reset to handle wraparound in long running applications
+GLOBAL DEF SPS_Timer_Reset()
+
+  $TIMER_STOP[SPS_Timer_Num] = TRUE
+  $TIMER[SPS_Timer_Num] = 0
+  $TIMER_STOP[SPS_Timer_Num] = FALSE
+
+END
+
+
+; Place this inside the SPS loop to track scan time (in var SPS_ScanTime)
+GLOBAL DEF SPS_Performance_Calc()
+  SPS_ScanCnt = SPS_ScanCnt+1
+  ; This will always have invalid results for the 1st cycle
+  IF (SPS_ScanCnt > 10 ) THEN
+    SPS_ScanTime = (1.0*SPSdelay_Elapsed(SPS_Timer_Cnt+1))/(1.0*(SPS_ScanCnt-1))
+    SPSdelay_Start(SPS_Timer_Cnt+1, 1000)
+    SPS_ScanCnt = 0
+  ENDIF
+END
+
+
+
+
+; -----------------------------------------------
+; SEQUENCE UTILITIES
+; SPSseq - Support for a state sequence of operations
+; -----------------------------------------------
+; This module supports a general state machine structure
+; that tracks current state of a thread and applies
+; different actions based on state.
+; -----------------------------------------------
+
+
+; Initialize all the sequence threads.  Put this in SPS Init section.
+GLOBAL DEF SPSseq_InitThreads()
+  DECL INT curThread 
+  FOR curThread=1 TO SPS_SeqThreadCnt
+    SPS_SeqMgr[curThread].Thread = curThread
+    SPS_SeqMgr[curThread].Priority  = 0
+    SPS_SeqMgr[curThread].CurStep  = 0
+    SPS_SeqMgr[curThread].NextStep  = 0
+    SPS_SeqMgr[curThread].Active  = TRUE
+  ENDFOR
+END
+
+; Increments the next sequence step.
+GLOBAL DEF SPSseq_NextStep(Proc:OUT)
+  DECL SPS_Sequence Proc
+  Proc.NextStep = Proc.CurStep + 1
+END
+
+; Sets the next desired sequence step by number
+GLOBAL DEF SPSseq_SetStep(Proc:OUT, NewStep:IN)
+  DECL SPS_Sequence Proc
+  DECL INT NewStep
+  Proc.NextStep = NewStep
+END
+
+; Performs the state transitions in an orderly way
+GLOBAL DEF SPSseq_DoTransition(Proc:OUT)
+  DECL SPS_Sequence Proc
+  Proc.CurStep = Proc.NextStep
+END
+
+; Cycles through all the sequence threads
+; Put this in SPS Run section
+GLOBAL DEF SPSseq_Manager()
+  INT curThread
+
+  FOR curThread=1 TO SPS_SeqThreadCnt
+    ; TODO: Future - use priority to process order.
+    IF (SPS_SeqMgr[curThread].Active==TRUE) THEN
+      SPSseq_Dispatch(SPS_SeqMgr[curThread], #ACTION)
+      SPSseq_Dispatch(SPS_SeqMgr[curThread], #CHECK_TRANSITION)
+    ENDIF
+  ENDFOR
+  ; Do all the state transitions in an orderly manner at the same time.
+  FOR curThread=1 TO SPS_SeqThreadCnt
+    IF (SPS_SeqMgr[curThread].Active==TRUE) THEN
+      SPSseq_DoTransition(SPS_SeqMgr[curThread])
+    ENDIF
+  ENDFOR
+END
+
+; Selects the correct routine for each sequence thread
+GLOBAL DEF SPSseq_Dispatch(Proc:OUT, Pass:IN)
+  DECL SPS_Sequence Proc
+  DECL SPS_StateOP  Pass 
+
+  SWITCH(Proc.Thread)
+  CASE 1 ;-FCU Communication
+    ;FCU_Command_SeqHandler(Proc, Pass)
+  ;CASE 2 ;-xxx Manager
+    ;new2_SeqHand(Proc, Pass)
+  ;CASE 3 ;-xxx connection
+    ;new3_SeqHand(Proc, Pass)
+  DEFAULT
+    ;Automatically disable inactive threads
+    Proc.Active = FALSE
+  ENDSWITCH
+
+END
+
+
+; Copy this template to a module and change Template to a meaningful name
+;   -Add actions to each #ACTION section.
+;   -Add IF conditions to each #CHECK_TRANSITION section.
+;   -Add CASE section for more steps.
+;   -Some steps may have transition conditions but no action or 
+;    some steps may have actions with an unconditional transition (no IF)
+;    that implements a one-shot.
+; (The system will only process the code in the current step (State))
+
+GLOBAL DEF Template_SeqHandler(Proc:OUT, Sweep:IN)
+  DECL SPS_Sequence Proc
+  DECL SPS_StateOP  Sweep 
+  
+  SWITCH(Proc.CurStep)
+  CASE 1 ;-Step Description
+    IF (Sweep == #ACTION) THEN
+      ; Actions to perform in this step/state
+    ENDIF
+    IF (Sweep == #CHECK_TRANSITION) THEN
+      ; If conditions for step/state transitions
+      SPSseq_NextStep(Proc)
+    ENDIF
+
+  CASE 2 ;-Step Description
+    IF (Sweep == #ACTION) THEN
+      ; Actions to perform in this step/state
+    ENDIF
+    IF (Sweep == #CHECK_TRANSITION) THEN
+      ; If conditions for step/state transitions
+      SPSseq_NextStep(Proc)
+    ENDIF
+
+  DEFAULT
+    ; Do nothing
+  ENDSWITCH
+
+END
+
+
+; -----------------------------------------------
+; VALUE CHANGE UTILITIES
+; SPSchg - Support for tracking/checking value change
+; -----------------------------------------------
+; This module gives some utilities to watch a value
+; for a change.
+; These all take the param ChgID which tracks 
+; the previous value.  Each change watch should
+; have a different ChgID.  This also enables 
+; watching changes to the same var at different 
+; intervals (with different ChgID).
+; -----------------------------------------------
+
+; ----- BOOLEAN VALUES --------------------------
+; Same functionality as SPSchg_bStart but auto
+; auto-allocates an ID and registers the name 
+GLOBAL DEFFCT INT SPSchg_bAlloc(Val:IN, name[]:IN)
+DECL BOOL Val
+DECL CHAR name[]
+INT ID
+
+   ID = SPS_AllocItem(SPS_ChgBoolAlloc[], name[])
+   SPSchg_bStart(ID, Val)
+   RETURN(ID)
+ENDFCT
+
+
+; Start watching a value
+GLOBAL DEF SPSchg_bStart(ChgID:IN, Val:IN)
+  DECL INT ChgID
+  DECL BOOL Val
+  SPS_ChgLastBool[ChgID] = Val
+END
+
+; Watch for any change since last check
+GLOBAL DEFFCT BOOL SPSchg_bChanged(ChgID:IN, Val:IN)
+  DECL INT ChgID
+  DECL BOOL Val
+  DECL BOOL retVal
+  retVal = (SPS_ChgLastBool[ChgID] <> Val)
+  SPS_ChgLastBool[ChgID] = Val
+  return(retVal)
+ENDFCT
+
+; Watch for a rising edge (change from FALSE to TRUE)
+GLOBAL DEFFCT BOOL SPSchg_bRising(ChgID:IN, Val:IN)
+  DECL INT ChgID
+  DECL BOOL Val
+  DECL BOOL retVal
+  retVal = ((SPS_ChgLastBool[ChgID]==FALSE) AND (Val == TRUE))
+  SPS_ChgLastBool[ChgID] = Val
+  return(retVal)
+ENDFCT
+
+; Watch for a falling edge (change from TRUE to FALSE)
+GLOBAL DEFFCT BOOL SPSchg_bFalling(ChgID:IN, Val:IN)
+  DECL INT ChgID
+  DECL BOOL Val
+  DECL BOOL retVal
+  retVal = ((SPS_ChgLastBool[ChgID]==TRUE) AND (Val == FALSE))
+  SPS_ChgLastBool[ChgID] = Val
+  return(retVal)
+ENDFCT
+
+
+
+; ----- INTEGER VALUES --------------------------
+
+; Same functionality as SPSchg_iStart but auto
+; auto-allocates an ID and registers the name 
+GLOBAL DEFFCT INT SPSchg_iAlloc(Val:IN, name[]:IN)
+DECL INT Val
+DECL CHAR name[]
+INT ID
+
+   ID = SPS_AllocItem(SPS_ChgIntAlloc[], name[])
+   SPSchg_iStart(ID, Val)
+   RETURN(ID)
+ENDFCT
+
+
+; Start watching a value
+GLOBAL DEF SPSchg_iStart(ChgID:IN, Val:IN)
+  DECL INT ChgID
+  DECL INT Val
+  SPS_ChgLastInt[ChgID] = Val
+END
+
+; Watch for any change since last check
+GLOBAL DEFFCT BOOL SPSchg_iChanged(ChgID:IN, Val:IN)
+  DECL INT ChgID
+  DECL INT Val
+  DECL BOOL retVal
+  retVal = (SPS_ChgLastInt[ChgID] <> Val)
+  SPS_ChgLastInt[ChgID] = Val
+  return(retVal)
+ENDFCT
+
+; Watch for a rising value 
+GLOBAL DEFFCT BOOL SPSchg_iRising(ChgID:IN, Val:IN)
+  DECL INT ChgID
+  DECL INT Val
+  DECL BOOL retVal
+  retVal = (Val > SPS_ChgLastInt[ChgID])
+  SPS_ChgLastInt[ChgID] = Val
+  return(retVal)
+ENDFCT
+
+; Watch for a falling value 
+GLOBAL DEFFCT BOOL SPSchg_iFalling(ChgID:IN, Val:IN)
+  DECL INT ChgID
+  DECL INT Val
+  DECL BOOL retVal
+  retVal = (Val < SPS_ChgLastInt[ChgID])
+  SPS_ChgLastInt[ChgID] = Val
+  return(retVal)
+ENDFCT
+
+
+; Initialize the list so all items are empty
+DEF SPS_AllocItemsInit(allocList[]:OUT)
+DECL SPS_AllocItem allocList[]
+INT idx
+BOOL ret
+
+   FOR idx = 1 TO 1000
+      IF (SPS_FreeItem(allocList[], idx) == FALSE) THEN
+         EXIT
+      ENDIF
+   ENDFOR
+END
+
+; Search the Alloc List for an open item.
+; Returns the index of the item.  0 if no items are available
+DEFFCT INT SPS_AllocItem(allocList[]:OUT, name[]:IN)
+DECL SPS_AllocItem allocList[]
+DECL CHAR name[]
+INT idx
+BOOL ret
+BOOL itemUsed
+BOOL err
+
+   err = FALSE
+   idx = 1
+   FOR idx = 1 TO 1000
+      ON_ERROR_PROCEED
+      itemUsed = allocList[idx].Used
+      IF ($ERR.NUMBER <> 0) THEN
+         ; Error for end of array -> exit loop
+         err = TRUE
+         EXIT
+      ENDIF
+      
+      IF (NOT itemUsed) THEN
+         allocList[idx].Used = TRUE
+         ret = StrClear(allocList[idx].Name[])
+         ret = StrCopy(allocList[idx].Name[], name[])
+         err = FALSE
+         EXIT
+      ENDIF
+   ENDFOR
+   
+   IF (err) THEN
+      idx = 0
+   ENDIF
+
+   RETURN (idx)
+ENDFCT
+
+
+; Frees & resets the spcified index
+DEFFCT BOOL SPS_FreeItem(allocList[]:OUT, idx:IN)
+DECL SPS_AllocItem allocList[]
+DECL INT idx
+BOOL ret
+
+   ON_ERROR_PROCEED
+   allocList[idx].Used = FALSE
+   IF ($ERR.NUMBER <> 0) THEN
+      ; Error for end of array -> exit loop
+      RETURN(FALSE)
+   ENDIF
+   ret = StrClear(allocList[idx].Name[])
+   RETURN(TRUE)
+ENDFCT
+
+
+
+GLOBAL DEFFCT INT SPSmsg_Status(SMSG[]:IN)
+
+  DECL CHAR SMSG[]
+
+  DECL INT OFFST
+  DECL STATE_T wSTAT
+  DECL KrlMsg_t mymessage
+  DECL KrlMsgPar_t mypar[3]
+  DECL KrlMsgOpt_t myoptions
+  DECL INT nhandle
+
+  mymessage = {modul[] "UserSPS", Nr 500, msg_txt[] "empty"}
+  myoptions.log_to_db = true
+
+  OFFST=0
+  ;Put the message into KEY
+  SWRITE(mymessage.msg_txt[],wSTAT,OFFST,"%s",SMSG[])
+
+  nhandle = Set_KrlMsg(#notify, mymessage, mypar[], myoptions)
+
+  RETURN(nhandle)
+ENDFCT

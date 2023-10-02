@@ -1,0 +1,10 @@
+&ACCESS RVO3
+&REL 76
+&PARAM EDITMASK = *
+&PARAM TEMPLATE = C:\KRC\Roboter\Template\FunctionVorgabe
+DEFDAT ProgramControl PUBLIC
+DECL STATE_T StmtState
+DECL MODUS_T CmdMode = #SYNC
+BOOL ShowErrorMessages = FALSE
+BOOL ShowDebugMessages = FALSE
+ENDDAT
