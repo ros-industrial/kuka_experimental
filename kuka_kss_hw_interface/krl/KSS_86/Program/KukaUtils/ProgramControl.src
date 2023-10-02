@@ -1,0 +1,624 @@
+&ACCESS RVO3
+&REL 76
+&PARAM EDITMASK = *
+&PARAM TEMPLATE = C:\KRC\Roboter\Template\FunctionVorgabe
+DEF ProgramControl( )
+   ; Software License Agreement (BSD License)
+   ;
+   ; Copyright (c) 2019, Kuka Robotics Corp
+   ; All rights reserved.
+   ;
+   ; Redistribution and use in source and binary forms, with or without
+   ; modification, are permitted provided that the following conditions are met:
+   ;
+   ;      * Redistributions of source code must retain the above copyright
+   ;        notice, this list of conditions and the following disclaimer.
+   ;      * Redistributions in binary form must reproduce the above copyright
+   ;        notice, this list of conditions and the following disclaimer in the
+   ;        documentation and/or other materials provided with the distribution.
+   ;      * Neither the name of the copyright holder, nor the names of its
+   ;        contributors may be used to endorse or promote products derived
+   ;        from this software without specific prior written permission.
+   ;
+   ; THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+   ; AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+   ; IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+   ; ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+   ; LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+   ; CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+   ; SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+   ; INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+   ; CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+   ; ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+   ; POSSIBILITY OF SUCH DAMAGE.
+
+;**************************************************
+;** Program control functions
+;** 
+;** These are intended to be called from the SPS
+;** program to SELECT, CANCEL, RESET or STOP the
+;** robot program.  These functions may have delays
+;** in them, so they should not be called if the 
+;** scantime of the SPS is critical.
+;**
+;**************************************************
+END
+
+GLOBAL DEFFCT BOOL WaitForState(ProState: IN, Condition: IN, Timeout:IN)
+;FOLD Help
+;   Used internally to wait for a specific program
+;   state or timeout, whichever comes first.
+; @Inputs
+;   @param ProState
+;      ENUM PRO_STATE: #P_ACTIVE,#P_FREE,#P_END,#P_RESET,#P_STOP
+;      Required parameter, no default value 
+;   
+;   @param Condition
+;      TRUE or FALSE - condition to check the state against.
+;   
+;   @param Timeout
+;      Maximum time to wait in milliseconds.
+;   
+; @Outputs
+;   None 
+;
+; @Return
+;    TRUE - Program state condition was met
+;    FALSE - Timeout occured
+;
+; @Examples 
+;    ; Wait for up to 1s for the program to NOT be active
+;    IF (WaitForState(#P_ACTIVE, FALSE, 1000) <> TRUE) THEN
+;       ; Program is not active, so execute desired code...
+;    ENDIF
+; 
+; @See also
+;   WaitForProgramRunning, WaitForProgramCanceled, WaitForProgramDone, WaitForProgramReset, WaitForProgramStopped
+;ENDFOLD
+DECL PRO_STATE ProState
+BOOL Condition
+INT Timeout
+INT StartTime, TriggerTime
+INT IntegerMax
+
+IntegerMax=2147483647
+StartTime = $ROB_TIMER
+
+; Set the trigger time based on the start time.  Account for integer rollover
+IF ((IntegerMax-Timeout) < StartTime) THEN
+  TriggerTime = Timeout - (IntegerMax-StartTime)
+ELSE
+  TriggerTime = StartTime + Timeout
+ENDIF
+
+IF (TriggerTime >= StartTime) THEN
+  ; No worries about timer rollover
+  IF Condition THEN
+    REPEAT
+      WAIT SEC 0.12
+    UNTIL (($PRO_STATE1 == ProState) OR ($ROB_TIMER > TriggerTime) OR ($ROB_TIMER < StartTime))
+  ELSE
+    REPEAT
+      WAIT SEC 0.12
+    UNTIL (($PRO_STATE1 <> ProState) OR ($ROB_TIMER > TriggerTime) OR ($ROB_TIMER < StartTime))
+  ENDIF
+ELSE
+  ; Timer rollover must be accounted for   
+  IF Condition THEN
+    REPEAT
+      WAIT SEC 0.12
+    UNTIL (($PRO_STATE1 == ProState) OR (($ROB_TIMER > TriggerTime) AND ($ROB_TIMER < StartTime)))
+  ELSE
+    REPEAT
+      WAIT SEC 0.12
+    UNTIL (($PRO_STATE1 <> ProState) OR (($ROB_TIMER > TriggerTime) AND ($ROB_TIMER < StartTime)))
+  ENDIF
+ENDIF
+  
+IF (Condition AND ($PRO_STATE1 == ProState)) THEN
+  RETURN TRUE
+ENDIF
+
+IF (NOT Condition AND ($PRO_STATE1 <> ProState)) THEN 
+  RETURN TRUE
+ENDIF
+
+RETURN FALSE
+ENDFCT
+
+GLOBAL DEFFCT BOOL WaitForProgramRunning(Timeout:IN)
+;FOLD Help
+;   Used wait for the robot program to be running or
+;   a timeout, whichever comes first.
+; @Inputs
+;   @param Timeout
+;      Maximum time to wait in milliseconds.
+;
+; @Outputs
+;   None 
+;
+; @Return
+;    TRUE - Program is running
+;    FALSE - Timeout occured
+;
+; @Examples 
+;    ; Wait for up to 5s for the program to be running
+;    WaitForProgramRunning(5000)
+; 
+; @See also
+;   WaitForState, WaitForProgramCanceled, WaitForProgramDone, WaitForProgramReset, WaitForProgramStopped
+;ENDFOLD
+INT Timeout
+Return WaitForState(#P_ACTIVE, TRUE, Timeout)
+ENDFCT
+
+GLOBAL DEFFCT BOOL WaitForProgramCanceled(Timeout:IN)
+;FOLD Help
+;   Used wait for the robot program to be canceled or
+;   a timeout, whichever comes first.
+; @Inputs
+;   @param Timeout
+;      Maximum time to wait in milliseconds.
+;   
+; @Outputs
+;   None 
+;
+; @Return
+;    TRUE - Program is canceled
+;    FALSE - Timeout occured
+;
+; @Examples 
+;    ; Wait for up to 5s for the program to be canceled
+;    WaitForProgramCanceled(5000)
+; 
+; @See also
+;   WaitForState, WaitForProgramRunning, WaitForProgramDone, WaitForProgramReset, WaitForProgramStopped
+;ENDFOLD
+INT Timeout
+Return WaitForState(#P_FREE, TRUE, Timeout)
+ENDFCT
+
+GLOBAL DEFFCT BOOL WaitForProgramDone(Timeout:IN)
+;FOLD Help
+;   Used wait for the robot program to be done or
+;   a timeout, whichever comes first.
+; @Inputs
+;   @param Timeout
+;      Maximum time to wait in milliseconds.
+;   
+; @Outputs
+;   None 
+;
+; @Return
+;    TRUE - Program is done
+;    FALSE - Timeout occured
+;
+; @Examples 
+;    ; Wait for up to 5s for the program to be done
+;    WaitForProgramDone(5000)
+; 
+; @See also
+;   WaitForState, WaitForProgramRunning, WaitForProgramCanceled, WaitForProgramReset, WaitForProgramStopped
+;ENDFOLD
+INT Timeout
+Return WaitForState(#P_END, TRUE, Timeout)
+ENDFCT
+
+GLOBAL DEFFCT BOOL WaitForProgramReset(Timeout:IN)
+;FOLD Help
+;   Used wait for the robot program to be reset or
+;   a timeout, whichever comes first.
+; @Inputs
+;   @param Timeout
+;      Maximum time to wait in milliseconds.
+;   
+; @Outputs
+;   None 
+;
+; @Return
+;    TRUE - Program is reset
+;    FALSE - Timeout occured
+;
+; @Examples 
+;    ; Wait for up to 5s for the program to be reset
+;    WaitForProgramReset(5000)
+; 
+; @See also
+;   WaitForState, WaitForProgramRunnning, WaitForProgramCanceled, WaitForProgramDone, WaitForProgramStopped
+;ENDFOLD
+INT Timeout
+Return WaitForState(#P_RESET, TRUE, Timeout)
+ENDFCT
+
+GLOBAL DEFFCT BOOL WaitForProgramStopped(Timeout:IN)
+;FOLD Help
+;   Used wait for the robot program to be stopped (but not at the end of the program) or
+;   a timeout, whichever comes first.
+; @Inputs
+;   @param Timeout
+;      Maximum time to wait in milliseconds.
+;   
+; @Outputs
+;   None 
+;
+; @Return
+;    TRUE - Program is stopped
+;    FALSE - Timeout occured
+;
+; @Examples 
+;    ; Wait for up to 5s for the program to be stopped
+;    WaitForProgramStopped(5000)
+; 
+; @See also
+;   WaitForState, WaitForProgramRunning, WaitForProgramCanceled, WaitForProgramDone, WaitForProgramReset
+;ENDFOLD
+INT Timeout
+Return WaitForState(#P_STOP, TRUE, Timeout)
+ENDFCT
+
+GLOBAL DEFFCT INT SelectProg(ProgName: IN, Force: IN)
+;FOLD Help
+; Selects the robot program for running.  If mode is EXT and drives are on, the program will run too.  In all other cases, the program must be started with the start signal or button.
+;
+; @Inputs
+;   @param ProgName
+;      E.G.  "/R1/test()"
+;      Required parameter, no default value 
+;   
+;   @param Force
+;      Force program select  [Optional, Default is FALSE]
+;        TRUE  --> If a different program is currently selected, it will be stopped and canceled. Then the new program is selected.
+;        FALSE --> If a different program is currently selected, this function will return an error code and not select the new program.  (DEFAULT)   
+;
+; @Outputs
+;   None 
+;
+; @Return
+;    Error Code
+;         0 = Success
+;         1 = A program is already selected
+;         3 = Timeout Stopping program
+;         4 = Timeout Canceling program
+;         5 = Timeout Selecting program
+;
+;         KSS01422 $PRONAME[] value invalid = progname and path invalid;
+;
+; @Examples 
+;   ;Select program A.src that resides in KRC:/R1/Program.
+;   INT Err
+;   Err = SelectProg("/R1/A()")
+;
+;   ;Select program C.src that resides in KRC:/R1/Program.  If another program is selected, force it to be stopped and cancelled first.
+;   INT Err
+;   Err = SelectProg("/R1/C()", TRUE)
+;
+; 
+; @See also
+;   ResetProg, CancelProg, StopProg
+;ENDFOLD
+CHAR ProgName[]
+BOOL Force
+CHAR ProgNameOnly[24]
+CHAR s[256]
+INT j, k, idx
+BOOL bRet
+
+; The Force argument is optional. If it is not 
+; initialized, set it to FALSE
+IF VarState("Force")<>#INITIALIZED THEN
+   Force = false
+ENDIF
+
+; Convert any backslashes to forward slashes
+FOR k = 1 to StrLen(ProgName[])
+  IF ProgName[k] == "\" THEN
+    ProgName[k] = "/"
+  ENDIF
+ENDFOR
+
+; Strip path and parentheses from program name
+; First look for the last "/" before the prog name
+j = 0
+REPEAT
+  k = StrFind(j+1, ProgName[], "/", #NOT_CASE_SENS)
+  j = j + k
+UNTIL (k==0)
+k = 1
+FOR idx = j+1 TO StrLen(ProgName[])
+  s[k] = ProgName[idx]
+  k = k + 1
+ENDFOR
+
+; Strip the parentheses
+k = StrFind(1,s[],"()", #NOT_CASE_SENS)
+IF (k > 0) THEN
+  FOR idx = 1 TO k-1
+    ProgNameOnly[idx] = s[idx]
+  ENDFOR
+ELSE
+  bRet = StrCopy(ProgNameOnly[],s[])
+ENDIF
+
+; Check if this program is already selected, but
+; only if $PRO_NAME is initialized.  If so, 
+; issue the run command - this starts it in EXT
+IF (VARSTATE("$PRO_NAME1[]") == #INITIALIZED) THEN
+  IF strComp($PRO_NAME1[], ProgNameOnly[], #NOT_CASE_SENS) THEN
+    s[] = "RUN 1"
+    IF ShowDebugMessages THEN
+      MsgNotify(s[], "PC", 0, " ", 0)
+    ENDIF
+    CWRITE($CMD,StmtState,CmdMode,s[])
+    IF (WaitForState(#P_FREE, FALSE, 1000) <> TRUE) THEN
+      IF ShowErrorMessages THEN
+        MsgNotify("Timeout running program %1", "PC", , ProgNameOnly[], 5)
+      ENDIF
+      RETURN 5
+    ENDIF
+    RETURN 0  
+  ENDIF
+ENDIF
+  
+; Check to see if another program is selected
+IF ($PRO_STATE1 <> #P_FREE) THEN
+  IF NOT Force THEN
+    ; If a different program is already selected
+    ; and we are not forcing the new selection
+    IF ShowErrorMessages THEN
+      MsgNotify("Program %1 is selected", "PC", , $PRO_NAME1[], 1)
+    ENDIF
+    RETURN 1
+  ENDIF
+  ; Must be forcing the selection, so stop and 
+  ; cancel the current program
+  IF ($PRO_STATE1 == #P_ACTIVE) THEN
+    IF ShowDebugMessages THEN
+      MsgNotify("STOP", "PC", 0, " ", 0)
+    ENDIF
+    CWRITE($CMD,StmtState,CmdMode,"STOP 1")
+    IF (WaitForState(#P_ACTIVE, FALSE, 1000) <> TRUE) THEN
+      IF ShowErrorMessages THEN
+        MsgNotify("Timeout stopping program", "PC", , " ", 3)
+      ENDIF
+      RETURN 3
+    ENDIF
+  ENDIF
+  ; Cancel
+  IF ShowDebugMessages THEN
+    MsgNotify("CANCEL", "PC", 0, " ", 0)
+  ENDIF
+  CWRITE($CMD,StmtState,CmdMode,"CANCEL 1")
+  IF (WaitForState(#P_FREE, TRUE, 1000) <> TRUE) THEN
+    IF ShowErrorMessages THEN
+      MsgNotify("Timeout cancelling program", "PC", 0, " ", 4)
+    ENDIF
+    RETURN 4
+  ENDIF
+ENDIF
+  
+; Select the new program
+bRet = StrClear(s[])
+s[] = "RUN "
+k = strAdd(s[], ProgName[])
+IF ShowDebugMessages THEN
+  MsgNotify(s[], "PC", 0, " ", 0)
+ENDIF
+CWRITE($CMD,StmtState,CmdMode,s[])
+IF (WaitForState(#P_FREE, FALSE, 1000) <> TRUE) THEN
+  IF ShowErrorMessages THEN
+    MsgNotify("Timeout selecting program %1", "PC", , ProgNameOnly[], 5)
+  ENDIF
+  RETURN 5
+ENDIF
+
+RETURN 0
+ENDFCT
+
+GLOBAL DEFFCT INT CancelProg(Force: IN)
+;FOLD Help
+; Cancels the robot program.  If no program is selected, this does not return an error.
+;
+; @Inputs
+;   @param Force
+;      Force program cancel  [Optional, Default is FALSE]
+;        TRUE  --> If a program is currently running, it will be stopped and then canceled.
+;        FALSE --> If a program is currently running, this function will return an error code and not cancel the program.  (DEFAULT)   
+;
+; @Outputs
+;   None 
+;
+; @Return
+;    Error Code
+;         0 = Success
+;         3 = Timeout Stopping program
+;         4 = Timeout Canceling program
+;         6 = A program is running
+;
+; @Examples 
+;   ; Cancel the selected program as long as it is not running
+;   INT Err
+;   Err = CancelProg()
+;
+;   ; Cancel the currently selected program, even if it is running.
+;   INT Err
+;   Err = CancelProg(TRUE)
+; 
+; @See also
+;   ResetProg, SelectProg, StopProg
+;ENDFOLD
+BOOL Force
+; The Force argument is optional. If it is not 
+; initialized, set it to FALSE
+IF VarState("Force")<>#INITIALIZED THEN
+  Force = false
+ENDIF
+
+; Check to see if no program is selected
+IF ($PRO_STATE1 == #P_FREE) THEN
+  RETURN 0
+ENDIF   
+   
+; If the selected program is running, return an
+; error or stop it.
+IF ($PRO_STATE1 == #P_ACTIVE) THEN
+  IF (NOT Force) THEN
+    IF ShowErrorMessages THEN
+      MsgNotify("Program is running", "PC", 0, " ", 6)
+    ENDIF
+    RETURN 6
+  ELSE
+    IF ShowDebugMessages THEN
+      MsgNotify("STOP", "PC", 0, " ", 0)
+    ENDIF
+    CWRITE($CMD,StmtState,CmdMode,"STOP 1")
+    IF (WaitForState(#P_ACTIVE, FALSE, 1000) <> TRUE) THEN
+      IF ShowErrorMessages THEN
+        MsgNotify("Timeout stopping program", "PC", 0, " ", 3)
+      ENDIF
+      RETURN 3
+    ENDIF
+  ENDIF
+ENDIF
+  
+; Cancel the program  
+IF ShowDebugMessages THEN
+  MsgNotify("CANCEL", "PC", 0, " ", 0)
+ENDIF
+CWRITE($CMD,StmtState,CmdMode,"CANCEL 1")
+IF (WaitForState(#P_FREE, TRUE, 1000) <> TRUE) THEN
+  IF ShowErrorMessages THEN
+    MsgNotify("Timeout cancelling program", "PC", 0, " ", 4)
+  ENDIF
+  RETURN 4
+ENDIF
+  
+RETURN 0
+ENDFCT
+
+GLOBAL DEFFCT INT ResetProg(Force: IN)
+;FOLD Help
+; Resets the robot program.  If the program is already reset, this does not return an error.
+;
+; @Inputs
+;   @param Force
+;      Force program reset  [Optional, Default is FALSE]
+;        TRUE  --> If a program is currently running, it will be stopped and then reset.
+;        FALSE --> If a program is currently running, this function will return an error code and not reset the program.  (DEFAULT)   
+;
+; @Outputs
+;   None 
+;
+; @Return
+;    Error Code
+;         0 = Success
+;         3 = Timeout Stopping program
+;         6 = A program is running
+;         7 = No program selected
+;         8 = Timeout Resetting program
+;
+; @Examples 
+;   ; Reset the selected program as long as it is not running
+;   INT Err
+;   Err = ResetProg()
+;
+;   ; Reset the currently selected program, even if it is running.
+;   INT Err
+;   Err = ResetProg(TRUE)
+; 
+; @See also
+;   CancelProg, SelectProg, StopProg
+;ENDFOLD
+BOOL Force
+; The Force argument is optional. If it is not 
+; initialized, set it to FALSE
+IF VarState("Force")<>#INITIALIZED THEN
+   Force = false
+ENDIF
+
+; If program is already reset, just return
+IF ($PRO_STATE1 == #P_RESET) THEN
+  RETURN 0
+ENDIF
+
+; Check for no program selected
+IF ($PRO_STATE1 == #P_FREE) THEN
+  IF ShowErrorMessages THEN
+    MsgNotify("No program selected", "PC", 0, " ", 7)
+  ENDIF
+  RETURN 7
+ENDIF   
+
+; If the program is running, return an error or
+; stop it
+IF ($PRO_STATE1 == #P_ACTIVE) THEN
+  IF (NOT Force) THEN
+    IF ShowErrorMessages THEN
+      MsgNotify("Program is running", "PC", 0, " ", 6)
+    ENDIF
+    RETURN 6
+  ELSE
+    IF ShowDebugMessages THEN
+      MsgNotify("STOP", "PC", 0, " ", 0)
+    ENDIF
+    CWRITE($CMD,StmtState,CmdMode,"STOP 1")
+    IF (WaitForState(#P_ACTIVE, FALSE, 1000) <> TRUE) THEN
+      IF ShowErrorMessages THEN
+        MsgNotify("Timeout stopping program", "PC", 0, " ", 3)
+      ENDIF
+      RETURN 3
+    ENDIF
+  ENDIF
+ENDIF
+
+; Reset the program
+IF ShowDebugMessages THEN
+  MsgNotify("RESET", "PC", 0, " ", 0)
+ENDIF
+CWRITE($CMD,StmtState,CmdMode,"RESET 1")
+IF (WaitForState(#P_RESET, TRUE, 1000) <> TRUE) THEN
+  IF ShowErrorMessages THEN
+    MsgNotify("Timeout resetting program", "PC", 0, " ", 8)
+  ENDIF
+  RETURN 8
+ENDIF
+
+RETURN 0
+ENDFCT
+
+GLOBAL DEFFCT INT StopProg()
+;FOLD Help
+; Stops the robot program.  If the program is not running or no program is selected, this does not return an error.
+;
+; @Inputs
+;   None 
+;
+; @Outputs
+;   None 
+;
+; @Return
+;    Error Code
+;         0 = Success
+;         3 = Timeout Stopping program
+;
+; @Examples 
+;   ; Stop the program
+;   INT Err
+;   Err = StopProg()
+; 
+; @See also
+;   CancelProg, SelectProg, ResetProg
+;ENDFOLD
+IF ($PRO_STATE1 == #P_ACTIVE) THEN
+  IF ShowDebugMessages THEN
+    MsgNotify("STOP", "PC", 0, " ", 0)
+  ENDIF
+  CWRITE($CMD,StmtState,CmdMode,"STOP 1")
+  IF (WaitForState(#P_ACTIVE, FALSE, 1000) <> TRUE) THEN
+    IF ShowErrorMessages THEN
+      MsgNotify("Timeout stopping program", "PC", 0, " ", 3)
+    ENDIF
+    RETURN 3
+  ENDIF
+ENDIF
+RETURN 0
+ENDFCT

@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>kuka_kss_hw_interface</name>
+  <version>0.1.0</version>
+  <description>A unified hardware interface for use with KUKA KSS</description>
+  <author>Pat Duda</author>
+  <maintainer email="pat.duda@kuka.com">Pat Duda</maintainer>
+  <maintainer email="g.a.vanderhoorn@tudelft.nl">G.A. vd. Hoorn (TU Delft Robotics Institute)</maintainer>
+  <license>BSD</license>
+
+  <url type="website">http://wiki.ros.org/kuka_kss_hw_interface</url>
+  <url type="bugtracker">https://github.com/ros-industrial/kuka_experimental/issues</url>
+  <url type="repository">https://github.com/ros-industrial/kuka_experimental</url>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <build_depend>cmake_modules</build_depend>
+
+  <depend>controller_manager</depend>
+  <depend>hardware_interface</depend>
+  <depend>joint_limits_interface</depend>
+  <depend>realtime_tools</depend>
+  <depend>roscpp</depend>
+  <depend>std_msgs</depend>
+  <depend>industrial_msgs</depend>
+  <depend>kuka_msgs</depend>
+</package>

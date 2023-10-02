@@ -1,0 +1,1163 @@
+&ACCESS RVO2
+&REL 11735
+&PARAM DISKPATH = KRC:\R1\Program\ROS
+def  kuka_ros_driver()
+
+   ; Software License Agreement (BSD License)
+   ;
+   ; Copyright (c) 2022, Kuka Robotics Corp
+   ; All rights reserved.
+   ;
+   ; Redistribution and use in source and binary forms, with or without
+   ; modification, are permitted provided that the following conditions are met:
+   ;
+   ;      * Redistributions of source code must retain the above copyright
+   ;        notice, this list of conditions and the following disclaimer.
+   ;      * Redistributions in binary form must reproduce the above copyright
+   ;        notice, this list of conditions and the following disclaimer in the
+   ;        documentation and/or other materials provided with the distribution.
+   ;      * Neither the name of the copyright holder, nor the names of its
+   ;        contributors may be used to endorse or promote products derived
+   ;        from this software without specific prior written permission.
+   ;
+   ; THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+   ; AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+   ; IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+   ; ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+   ; LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+   ; CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+   ; SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+   ; INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+   ; CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+   ; ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+   ; POSSIBILITY OF SUCH DAMAGE.
+
+   ; Author: Pat Duda <pat.duda@kuka.com>
+   
+   ; Dependent on modules: SPS_Utils, ProgramControl, ProgCtrl_handler, ProgCtrlExec
+
+
+
+   ; INI
+   BAS(#initmov, 0)  ; Basic initializasion of axes
+
+
+   ; Config file located in C:/ROBOTER/Config/User/Common/EthernetKRL/EkiKSSinterface.xml
+   ; Starts a TCP state sever on xml-specified IP address/port.
+   ;
+   ; State transmission is periodic (currently determined by the variable ROS_Interval) 
+
+END
+
+
+DEF ROS_SPS_test()
+   decl int elements_read
+
+   ROS_SPS_init()
+   loop
+      ROSCOM_ReceiveData()  ; Get new command from buffer if present
+      ROS_SPS_loopCall()
+   endloop
+
+END
+
+
+
+
+GLOBAL DEF ROS_SPS_Init()
+BOOL idFound
+;$AXIS_TYPE
+   ROS_InterfaceVersion = 2003
+   ProgCtrl_HandlerInit(5)
+   
+   ; Initialize the Op State to #KRL_PTP
+   idFound = OpState_IdFromState(#KRL_PTP, ROS_CurrentOpStateID)
+   ProgCtrl_Select(ROS_OpPrograms[ROS_CurrentOpStateID].prgName[], FALSE)
+   ROS_CurrentOpState=ROS_OpPrograms[ROS_CurrentOpStateID].type
+   ROS_RequestedOpState=ROS_CurrentOpState
+   ROS_ChangingOpState = FALSE
+   OpStateErrCnt = 0
+   OpStateChangeStep = 0
+   ROS_DidInit=FALSE
+      
+   SPS_utils()
+   ROS_calcVelRatio()
+   CQ_Reset(OpState_q)
+   CQ_Reset(CMDlist_q)
+   CQ_Reset(JPosList_q)
+   
+   lock_data_collect = FALSE
+   lock_data_read = FALSE
+   lock_cmdPos_receive=FALSE
+   lock_cmdPos_read=FALSE
+
+   n_DataCollect = 0
+   t_DataCollect = 0
+   ROS_write_cycle = 0.0
+   ROS_Interval=48 ;millisec
+   ROS_IntervalDC=ROS_Interval
+   ROS_NextTrigDC = $ROB_TIMER
+   ; Init the status code for quick checking
+   ROS_GetStatusData(ROS_RobotStatus)
+   ROSSTAT_Code_ID = SPSchg_iAlloc(ROS_RobotStatus.statCode, "StatusCode")
+   
+   ROSCOM_ServerInit()
+   ROSCOM_ServerStart()
+END
+
+
+
+GLOBAL DEF ROS_SPS_loopCall()
+BOOL idFound
+
+   SPS_Performance_Calc()
+   
+   ; Watch for client connect
+   IF (ROSCOM_ChkConnect() ) THEN
+      MsgNotify("ROS client connected. ")
+      OpStateErrCnt = 0
+   ENDIF
+   
+   ; Watch for client disconnect from server - requires reset
+   IF (ROSCOM_ChkDisconn() ) THEN
+      ROS_DidInit=FALSE
+      ProgCtrl_Do(#PC_Stop)
+      ; Clear all commands
+      OpStateChangeStep = 0
+      CQ_Reset(OpState_q)
+      CQ_Reset(CMDlist_q)
+      CQ_Reset(JPosList_q)
+      ROSCOM_ServerReset()
+      ROS_write_cycle = 0.0
+      ; Reset back to basic KRL control
+      idFound = OpState_IdFromState(#KRL_PTP, ROS_CurrentOpStateID)
+      ProgCtrl_Select(ROS_OpPrograms[ROS_CurrentOpStateID].prgName[], FALSE)
+      MsgNotify("WARNING. ROS client disconnected. Listening for new connection.")
+   ENDIF
+
+   ; === Robot State Data Collection ==============
+   IF ($ROB_TIMER >= ROS_NextTrigDC) THEN
+      ; protect against changing data while using it
+      WHILE (lock_data_read == TRUE)
+         WAIT SEC 0.001
+         n_lockHoldRead = n_lockHoldRead+1
+      ENDWHILE
+      
+      lock_data_collect = TRUE
+      ROS_IPOC = $ROB_TIMER
+      ROS_Meas_Pos = $axis_act_meas
+      ROS_Meas_Vel = ROS_getVel()
+      ROS_Meas_Torque = ROS_getTorques()
+      IPOC_END = $ROB_TIMER
+      lock_data_collect = FALSE
+      
+      ; Test/monitor code
+      IF (ROS_IPOC <> IPOC_END) THEN
+         IF (n_DataCollect > 20) THEN
+            n_DataCollect = 0
+            t_DataCollect = 0
+         ENDIF
+         n_DataCollect = n_DataCollect + 1
+         t_DataCollect = t_DataCollect + (IPOC_END-ROS_IPOC)
+         ROS_DataCollect_cycle = 1.0*t_DataCollect/n_DataCollect
+      ENDIF
+      ROS_NextTrigDC = ROS_IPOC + ROS_IntervalDC
+      ROS_DoSendTrig = TRUE
+   ENDIF
+      
+   ; Check connection state
+   ; If client connected do
+   ;   - Status change
+   ;   - Send robot state
+   ;   - Get commands   
+   IF (ROSCOM_IsConn()) THEN
+      ; Check for received messages
+      ROSCOM_ReceiveData()
+
+      ; ROS_CommFromSPS is a special hack to get better cycle performance from EKI XML
+      ; by handling send in the robot interpreter interrupt. A future change to binary comm 
+      ; may make this unnecessary.
+      ; Handle fail-over for main run program stop
+      IF (($PRO_STATE1==#P_ACTIVE) AND (ROS_CurrentOpState==#KRL_PTP)) THEN
+         ROS_CommFromSPS = FALSE
+      ELSE
+         ROS_CommFromSPS = TRUE
+         lock_data_read = FALSE
+         lock_cmdPos_read = FALSE
+      ENDIF
+      
+      ;ROS_CommFromSPS = TRUE ; For debug
+      IF (ROS_CommFromSPS) THEN
+         ; Send robot state from SPS
+         IF ((ROS_DoSendTrig == TRUE) AND (ROS_DidInit==TRUE)) THEN
+            ROSCOM_Send_Jstate(FALSE)
+         ENDIF
+      ENDIF
+         
+      
+      ; Monitor robot status signals & send as changed
+      ROS_GetStatusData(ROS_RobotStatus)
+      IF (SPSchg_iChanged(ROSSTAT_Code_ID, ROS_RobotStatus.statCode)) THEN
+         ROSCOM_Send_Status(ROS_RobotStatus)
+      ENDIF
+      
+   ELSE ; not connected
+      ;Stop robot
+      ;Detect initial client connection
+   ENDIF
+   
+   temp_PrevOpState = ROS_CurrentOpState   
+      
+   ; Logic for checking op state switching
+   ROS_HandleOpStateChange()
+   IF (ROS_CurrentOpState <> temp_PrevOpState) THEN
+      tempRB = OpState_ToStr(ROS_CurrentOpState, tempOpState[])
+      IF (tempRB) THEN
+         MsgNotify("OpState change to: %1", "Debug", ,tempOpState[], 1)
+      ELSE
+         MsgNotify("OpState change: OpState_ToStr failed", "Debug", ,, 1)
+      ENDIF
+   ENDIF
+   
+   ROS_HandleCommand()
+
+END
+
+; Calculate the velocity in degrees/sec(rotational joint) or mm/sec(linear joint)
+DEFFCT E6AXIS ROS_getVel()
+   E6AXIS vel
+   
+   vel.A1 = $VEL_AXIS_ACT[1]   * vel_ratio[1]
+   vel.A2 = $VEL_AXIS_ACT[2]   * vel_ratio[2]
+   vel.A3 = $VEL_AXIS_ACT[3]   * vel_ratio[3]
+   vel.A4 = $VEL_AXIS_ACT[4]   * vel_ratio[4]
+   vel.A5 = $VEL_AXIS_ACT[5]   * vel_ratio[5]
+   vel.A6 = $VEL_AXIS_ACT[6]   * vel_ratio[6]
+
+   vel.E1 = $VEL_AXIS_ACT[7]   * vel_ratio[7]
+   vel.E2 = $VEL_AXIS_ACT[8]   * vel_ratio[8]
+   vel.E3 = $VEL_AXIS_ACT[9]   * vel_ratio[9]
+   vel.E4 = $VEL_AXIS_ACT[10]  * vel_ratio[10]
+   vel.E5 = $VEL_AXIS_ACT[11]  * vel_ratio[11]
+   vel.E6 = $VEL_AXIS_ACT[12]  * vel_ratio[12]
+
+   RETURN(vel)
+ENDFCT
+
+
+; Pull the MADA values to get deg/sec(for rotational) or mm/sec(for linear)
+DEF ROS_calcVelRatio()
+   INT j
+   REAL gear_ratio
+   FOR j = 1 TO 12
+      gear_ratio = 1.0*$RAT_MOT_AX[j].N/1.0*$RAT_MOT_AX[j].D
+      IF (gear_ratio == 0.0) THEN
+         vel_ratio[j] = 0.0
+      ELSE
+         ; Ratio for converting $VEL_AXIS_ACT (in %)
+         vel_ratio[j] = ABS(($VEL_AXIS_MA[j]/100.0) / gear_ratio) 
+      ENDIF
+   ENDFOR
+
+END
+
+; Collect actual axis torques 
+DEFFCT E6AXIS ROS_getTorques()
+   E6AXIS torques
+   
+   torques.A1 = $torque_axis_act[1]
+   torques.A2 = $torque_axis_act[2]
+   torques.A3 = $torque_axis_act[3]
+   torques.A4 = $torque_axis_act[4]
+   torques.A5 = $torque_axis_act[5]
+   torques.A6 = $torque_axis_act[6]
+   
+   torques.E1 = $torque_axis_act[7]
+   torques.E2 = $torque_axis_act[8]
+   torques.E3 = $torque_axis_act[9]
+   torques.E4 = $torque_axis_act[10]
+   torques.E5 = $torque_axis_act[11]
+   torques.E6 = $torque_axis_act[12]
+   
+   RETURN(torques)
+ENDFCT
+
+
+ GLOBAL DEF ROS_Runtime_Init()
+   decl eki_status eki_ret
+
+   ; Setup interrupts
+   lock_cmdPos_read = FALSE
+   
+   ROS_DoSendTrig = FALSE
+   ; Interrupt 16 - Timed interrupt for periodic state transmission
+   GLOBAL INTERRUPT DECL ROS_InterruptSend WHEN ROS_DoSendTrig==TRUE DO ROSCOM_Send_Jstate(TRUE)
+   INTERRUPT ON ROS_InterruptSend
+
+END
+
+
+
+; Collect status info from the robot.
+; Also sets binary encoded statCode for change monitoring.
+DEF ROS_GetStatusData(RobStat:OUT)
+   DECL ROS_RobStatusType RobStat
+   INT BitCode
+   BOOL retB
+
+   BitCode = 0
+   RobStat.errCode = 0
+   RobStat.Mode = -1
+   IF ($T1 == TRUE) THEN
+      RobStat.Mode = 1
+      RobStat.errCode = 1
+      BitCode = BitCode B_OR ROSSTAT_T1
+   ENDIF
+   IF ($T2 == TRUE) THEN
+      RobStat.Mode = 2
+      RobStat.errCode = 2
+      BitCode = BitCode B_OR ROSSTAT_T2
+   ENDIF
+   IF ($AUT == TRUE) THEN
+      RobStat.Mode = 3
+      RobStat.errCode = 3
+      BitCode = BitCode B_OR ROSSTAT_AUTO
+   ENDIF
+   IF ($EXT == TRUE) THEN
+      RobStat.Mode = 4
+      BitCode = BitCode B_OR ROSSTAT_EXT
+   ENDIF
+   
+   ; Transmit the current Run Mode 
+   retB = OpState_ToStr(ROS_CurrentOpState, RobStat.opState[])
+   SWITCH ROS_CurrentOpState
+      CASE #KRL_PTP
+         BitCode = BitCode B_OR ROSSTAT_KRL_PTP
+      CASE #RSI4ms_Pos
+         BitCode = BitCode B_OR ROSSTAT_RSI4ms_Pos
+      CASE #RSI12ms_Pos
+         BitCode = BitCode B_OR ROSSTAT_RSI12ms_Pos
+      CASE #RSI4ms_Vel
+         BitCode = BitCode B_OR ROSSTAT_RSI4ms_Vel
+      CASE #RSI12ms_Vel
+         BitCode = BitCode B_OR ROSSTAT_RSI12ms_Vel
+   ENDSWITCH
+   
+   ; Store states with ROS standard tri-state values (-1=unknown, 0=OFF, 1=ON ) 
+   RobStat.eStop = 0 ;Off
+   ; Failsafe inverted logic - TRUE=OFF
+   IF (($ALARM_STOP==FALSE) OR ($ALARM_STOP_INTERN==FALSE)) THEN
+      RobStat.eStop = 1
+      RobStat.errCode = 20
+      BitCode = BitCode B_OR ROSSTAT_Estop
+   ENDIF
+
+   RobStat.guardStop = 0 ;Off
+   ; Failsafe inverted logic - TRUE=OFF
+   IF ($USER_SAF==FALSE) THEN
+      RobStat.guardStop = 1
+      RobStat.errCode = 12016
+      BitCode = BitCode B_OR ROSSTAT_GuardStop
+   ENDIF
+   
+   RobStat.drivesPowered = 0 ;Off
+   IF ($PERI_RDY) THEN
+      RobStat.drivesPowered = 1
+      BitCode = BitCode B_OR ROSSTAT_DrivesPwr
+   ENDIF
+  
+   RobStat.motionPossible = 0 ;Off
+   IF ($COULD_START_MOTION AND $PRO_ACT) THEN
+      RobStat.motionPossible = 1
+      BitCode = BitCode B_OR ROSSTAT_MotionPossible
+   ENDIF
+  
+   RobStat.inMotion = 0 ;Off
+   IF ($PRO_MOVE) THEN
+      RobStat.inMotion = 1
+      BitCode = BitCode B_OR ROSSTAT_InMotion
+   ENDIF
+
+   RobStat.inError = 0 ;Off
+   IF ($STOPMESS OR (RobStat.errCode <> 0)) THEN
+      RobStat.inError = 1
+      BitCode = BitCode B_OR ROSSTAT_InError
+   ENDIF
+   
+   RobStat.statCode = BitCode
+
+END
+
+
+
+; API Call to get the current joint state data.  Intended for use
+; by communication handler.
+GLOBAL DEF ROS_GetJstate(IPOC:OUT, CurrPos:OUT, CurrVel:OUT, CurrTorq:OUT)
+   DECL INT IPOC
+   DECL E6AXIS CurrPos
+   DECL E6AXIS CurrVel
+   DECL E6AXIS CurrTorq
+   
+   lock_data_read = TRUE
+   IPOC = ROS_IPOC
+   CurrPos = ROS_Meas_Pos 
+   CurrVel = ROS_Meas_Vel 
+   CurrTorq = ROS_Meas_Torque
+   lock_data_read = FALSE
+END
+
+; Code to exec at SPS startup to initialize the communication link
+DEF ROSCOM_ServerInit()
+   ROS_EKI_ServerInit()
+END
+
+
+; Startup the server
+DEF ROSCOM_ServerStart()
+   ROS_EKI_ServerStart()
+END
+
+; Reset the server connections
+DEF ROSCOM_ServerReset()
+   ROS_EKI_ServerReset()
+END
+
+; Test the communication connection state.  TRUE=Connected 
+DEFFCT BOOL ROSCOM_IsConn()
+   RETURN(ROS_EKI_IsConn())
+ENDFCT
+
+; Detect a connect->disconnect transition
+GLOBAL DEFFCT BOOL ROSCOM_ChkDisconn()
+   RETURN(ROS_EKI_ChkDisconn())
+ENDFCT
+
+
+; Detect a disconnect->connect transition
+GLOBAL DEFFCT BOOL ROSCOM_ChkConnect()
+   RETURN(ROS_EKI_ChkConnect())
+ENDFCT
+
+
+;Send initial connection data & robot info
+DEF ROSCOM_Send_InitData()
+   ; Features supported ----------------------------------
+   ; Required element for now
+   ROS_SupportFeatures.EKI = 1
+   
+   ROS_SupportFeatures.RSI = 0
+   IF (VARSTATE("RSIOK") ==  #INITIALIZED) THEN
+      ROS_SupportFeatures.RSI = 1
+   ENDIF
+   
+   ; No mxA support for now
+   ROS_SupportFeatures.MXA = 0
+   
+   ROS_EKI_Send_InitData(ROS_InterfaceVersion, ROS_IPOC, $NUM_AX, $EX_AX_NUM, $KR_SERIALNO, $ROBNAME[], $ROBTRAFO[],$V_R1MADA[],ROS_SupportFeatures, $AXIS_TYPE[], $VEL_AXIS_MA[], $RAT_MOT_AX[])
+END
+
+
+; Send communication message containing the robot status info.
+DEF ROSCOM_Send_Status(RobStat:IN)
+   DECL ROS_RobStatusType RobStat
+   ROS_EKI_Send_Status(RobStat)
+END
+
+; Send communication message containing the robot joint state info.
+; check_lock handles coordination of calls from SPS or main run.
+DEF ROSCOM_Send_Jstate(check_lock:IN)
+   DECL BOOL check_lock
+   DECL INT write_start
+   DECL INT write_end
+   DECL INT ipo_time 
+   DECL E6AXIS pos_data
+   DECL E6AXIS vel_data
+   DECL E6AXIS torque_data
+
+   IF (NOT ROS_CommFromSPS) THEN
+      INTERRUPT OFF ROS_InterruptSend
+   ENDIF
+   
+   ; If connection alive AND processing with ethernet messages
+   IF (ROSCOM_IsConn() AND (ROS_CurrentOpState==#KRL_PTP)) THEN  
+      
+      IF (check_lock==TRUE) THEN
+         ; Protect against reading data while changing
+         WHILE (lock_data_collect == TRUE)
+            WAIT SEC 0.001
+            n_lockHoldCollect = n_lockHoldCollect +1
+         ENDWHILE
+      ENDIF
+      ROS_GetJstate(ipo_time, pos_data, vel_data, torque_data)
+      
+      write_start = $ROB_TIMER
+   
+      ; Call out to communication routine.
+      ROS_EKI_Send_Jstate(ipo_time, pos_data, vel_data, torque_data)
+
+      ; Force false to prepare for next rising edge.
+      ROS_DoSendTrig = FALSE
+      write_end = $ROB_TIMER
+      
+      ; Debug/monitoring data
+      ROS_LogJposSend(pos_data, ipo_time)
+      IF (n_write > 20) THEN
+         t_write = 0
+         n_write = 0
+      ENDIF
+      t_write = t_write + (write_end-write_start)
+      n_write = n_write + 1
+      ROS_write_cycle = 1.0*t_write/n_write
+   ENDIF
+
+   IF (NOT ROS_CommFromSPS) THEN
+      INTERRUPT ON ROS_InterruptSend
+   ENDIF
+
+END
+
+; Send a command ack
+DEF ROSCOM_SendAck(cmd[]:IN, cmdID:IN)
+   DECL CHAR cmd[]
+   DECL INT cmdID
+   ROS_EKI_SendAck(cmd[], cmdID)
+END
+
+
+; Communication handler to receive data from ROS Node.
+; Will use interface calls to log data:
+;  - ROS_LogTargetPosCmd()
+;  - ROS_LogOpModeCmd()
+;  - ROS_LogCommand()
+DEF ROSCOM_ReceiveData()
+   ROS_EKI_ReceiveData()
+END
+
+
+; Set a received target pos if different from current
+GLOBAL DEF ROS_LogTargetPosCmd(CmdPos:IN, cmdID:IN, dTime:IN)
+   DECL E6AXIS CmdPos
+   DECL INT cmdID
+   DECL REAL dTime
+   DECL INT idx
+   DECL INT idx_pos
+
+   ; ROS Control sends same position when no motion.  Only log new pos.
+   IF (NOT E6AXIS_Equal(CmdPos, ROS_joint_pos_tgt)) THEN
+      IF (lock_cmdPos_read == TRUE) THEN
+         WAIT SEC 0.001
+      ENDIF
+      lock_cmdPos_receive = TRUE
+      idx = ROS_LogCommand(#ROSC_CmdJpos, cmdID)
+      
+      idx_pos = ROS_LogJpos(CmdPos, idx, dTime)
+      CMDlist[idx].dataID = idx_pos
+      lock_cmdPos_receive = FALSE
+      
+      ; Fill data for immediate target update capabilty
+      ROS_joint_pos_tgt = CmdPos
+      ROS_move_ID = cmdID
+   ENDIF
+
+END
+
+
+GLOBAL DEF ROS_LogOpModeCmd(ReqOpState[]:IN, cmdID:IN)
+   DECL CHAR ReqOpState[]
+   DECL INT cmdID
+   DECL ROS_OpStateType newOpState
+   DECL INT idx
+   DECL BOOL valOK
+
+   ; Change operation mode
+   idx = ROS_LogCommand(#ROSC_Change, cmdID)
+   
+   valOK = OpState_FromStr(ReqOpState[], newOpState)
+   IF (valOK) THEN
+      ROS_RequestOpState(newOpState)
+   ELSE
+      MsgNotify("WARNING. Unknown OpState requested.  Ignored.")
+   ENDIF
+   
+   idx = CQ_Head(CMDlist_q)
+   CMDlist[idx].dataID = CQ_Tail(OpState_q)
+
+END
+
+
+
+
+; Gets the next move from the queue.  Removes it when done.
+; params return the move position (E6AXIS) and time interval passed with the command (in sec) 
+; Returns how many moves are in queue, including the one returned.
+GLOBAL DEFFCT INT ROS_GetNextMoveFIFO(movePos:OUT, interval:OUT)
+DECL E6AXIS movePos
+DECL REAL interval
+DECL INT moveCount
+INT idx
+INT idx_prev
+INT cmd_idx
+INT cmd_idx_prev
+   CONTINUE
+   IF (lock_cmdPos_receive == TRUE) THEN
+      CONTINUE
+      WAIT SEC 0.001
+      RETURN(0)
+   ENDIF
+   
+   lock_cmdPos_read = TRUE
+   moveCount = CQ_Count(JPosList_q)
+   idx = CQ_Head(JPosList_q)
+   
+   IF (idx == 0) THEN
+      moveCount=0
+      GOTO NextMoveDone
+   ENDIF
+
+   ; Throw out the initial move command - can have errors on init of communication
+   IF (ROS_move_init==TRUE) THEN
+      idx = CQ_Remove(JPosList_q)
+      ROS_move_init = FALSE
+      moveCount=0
+      GOTO NextMoveDone
+   ENDIF
+
+   cmd_idx = JPos_log[idx].cmdIdx
+   
+   ROS_move_interval = JPos_log[idx].dt
+   ; Handle startup condition - limit time of first move to max 0.2sec
+   IF ((ROS_move_interval <=0.0) OR (ROS_move_interval > 0.2)) THEN
+      ROS_move_interval = 0.2
+   ENDIF
+   
+   interval = ROS_move_interval
+   movePos = JPos_log[idx].cmdPos
+   
+   idx = CQ_Remove(JPosList_q)
+   CMDlist[cmd_idx].t_exec = $ROB_TIMER
+   
+NextMoveDone:
+   lock_cmdPos_read = FALSE
+   RETURN(moveCount)
+ENDFCT
+
+
+; Gets the most recent move from the queue.  Removes all queued moves when done.
+; params return the move position (E6AXIS) and sum of command time intervals (in sec) 
+; Returns how many moves are in queue, including the one returned.
+GLOBAL DEFFCT INT ROS_GetNextMoveLIFO(movePos:OUT, interval:OUT)
+DECL E6AXIS movePos
+DECL REAL interval
+DECL INT moveCount
+INT idx
+INT idx_prev
+INT cmd_idx
+INT cmd_idx_prev
+   CONTINUE
+   IF (lock_cmdPos_receive == TRUE) THEN
+      CONTINUE
+      WAIT SEC 0.001
+      RETURN(0)
+   ENDIF
+   
+   lock_cmdPos_read = TRUE
+   moveCount = CQ_Count(JPosList_q)
+   idx = CQ_Head(JPosList_q)
+   
+   IF (idx == 0) THEN
+      moveCount = 0
+      GOTO NextMoveDone
+   ENDIF
+
+   ; Throw out the initial move command - can have errors on init of communication
+   IF (ROS_move_init==TRUE) THEN
+      idx = CQ_Remove(JPosList_q)
+      ROS_move_init = FALSE
+      moveCount = 0
+      GOTO NextMoveDone
+   ENDIF
+   
+   interval = 0.0
+   WHILE (idx > 0)
+      cmd_idx = JPos_log[idx].cmdIdx
+      
+      interval = interval + JPos_log[idx].dt
+      
+      movePos = JPos_log[idx].cmdPos
+      CMDlist[cmd_idx].t_exec = $ROB_TIMER
+      
+      idx = CQ_Remove(JPosList_q)
+      idx = CQ_Head(JPosList_q)
+   ENDWHILE
+   
+   ; Handle startup condition - watch for zero time move
+   IF (interval <=0.0) THEN
+      interval = 0.2
+   ENDIF
+   ROS_move_interval = interval
+   
+NextMoveDone:
+   lock_cmdPos_read = FALSE
+   RETURN(moveCount)
+ENDFCT
+
+
+
+; Exec operations of command from SPS
+DEF ROS_HandleCommand(idx:IN)
+DECL INT idx
+DECL CHAR reqType[8]
+DECL INT ret
+DECL BOOL retB
+DECL BOOL mainExec
+   mainExec = FALSE
+   idx = CQ_Head(CMDlist_q)
+   IF (idx > 0) THEN
+      SWITCH (CMDlist[idx].type)
+         CASE #ROSC_Init
+            ROS_move_init = TRUE
+            ROS_DidInit=FALSE
+            ROS_GetStatusData(ROS_RobotStatus)
+
+            ROSCOM_Send_InitData()
+            ROSCOM_Send_Jstate(FALSE)
+            ROSCOM_Send_Status(ROS_RobotStatus)
+            ROS_RequestOpState(#KRL_PTP )
+            ROS_DidInit=TRUE
+         CASE #ROSC_CmdJpos
+            ; Do nothing - handled by robot interpreter
+            mainExec = TRUE
+            ;NOTE:ROS Driver spec states command pos also starts robot so this 
+            ;     should call start logic if not running
+            ;However, ROS Control continuously sends command positions so 
+            ;this prevents STOP and DRIV_OFF from working properly.
+            ;IF ($PRO_STATE1 <> #P_ACTIVE) THEN
+            ;   ProgCtrl_Do(#PC_Start)
+            ;ENDIF
+         CASE #ROSC_Start
+            ROSCOM_SendAck("START", CMDlist[idx].cmdID)
+            ProgCtrl_Do(#PC_Start)
+         CASE #ROSC_Stop
+            ROSCOM_SendAck("STOP", CMDlist[idx].cmdID)
+            ProgCtrl_Do(#PC_Stop)
+         CASE #ROSC_DrivesOn
+            ProgCtrl_Do(#PC_DrivesON)
+            ROSCOM_SendAck("DRIV_ON", CMDlist[idx].cmdID)
+         CASE #ROSC_DrivesOff
+            ProgCtrl_Do(#PC_DrivesOFF)
+            ROSCOM_SendAck("DRIV_OFF", CMDlist[idx].cmdID)
+         CASE #ROSC_Reset
+            ROSCOM_SendAck("RESET", CMDlist[idx].cmdID)
+            ProgCtrl_Do(#PC_Reset)
+         CASE #ROSC_Change
+            ROSCOM_SendAck("CHANGE", CMDlist[idx].cmdID)
+         CASE #ROSC_Heartbeat
+            ROSCOM_SendAck("HEARTBEAT", CMDlist[idx].cmdID)
+      ENDSWITCH
+      
+      IF (mainExec == FALSE) THEN
+         CMDlist[idx].t_exec = $ROB_TIMER
+      ENDIF
+      
+      idx = CQ_Remove(CMDlist_q)
+   ENDIF
+END
+
+
+
+
+; Add a command to the command Q
+GLOBAL DEFFCT INT ROS_LogCommand(cmdtype:IN, cmdID:IN)
+DECL ROS_CommandType cmdtype
+DECL INT cmdID
+DECL INT idx
+
+   idx = CQ_Add(CMDlist_q)
+   IF (idx > 0) THEN
+      CMDlist[idx] = emptyCMD
+      CMDlist[idx].type = cmdtype
+      CMDlist[idx].cmdID = cmdID
+      CMDlist[idx].t_recv = $ROB_TIMER
+   ELSE
+      MsgNotify("WARNING: ROS Command queue full.  Ignoring command.")
+   ENDIF
+   
+   RETURN(idx)
+ENDFCT
+
+
+DEF ROS_HandleOpStateChange()
+DECL ROS_OpStateType opReq
+DECL INT idx
+DECL BOOL sRet
+DECL BOOL haveOpStateReq
+DECL BOOL foundID
+DECL BOOL invalidOpState
+DECL BOOL progIsSame
+DECL BOOL strOK
+DECL INT OpIdx
+DECL ProgControlType prog_op
+DECL ProgControlState prog_state
+DECL ROS_OpStateType opState
+DECL CHAR CurrProg[256]
+DECL INT prog_err
+
+   ; Check for change of selected OpState program
+   IF (VARSTATE("$PRO_NAME1[]") == #INITIALIZED) THEN
+      progIsSame = TRUE
+      strOK = FALSE
+      CurrProg[] = " "
+      ON_ERROR_PROCEED
+      strOK = StrCopy(CurrProg[], $PRO_NAME1[])
+      ;CurrProg[] = $PRO_NAME1[]
+      ;IF ($ERR.NUMBER == 0) THEN
+      IF (strOK AND ($ERR.NUMBER == 0)) THEN
+         progIsSame = StrComp(CurrProg[], ROS_OpPrograms[ROS_CurrentOpStateID].prgName[], #NOT_CASE_SENS)
+      ELSE
+         OpStateErrCnt=OpStateErrCnt+1
+      ENDIF
+      IF (NOT progIsSame) THEN
+         foundID = OpState_IdFromProg(CurrProg[], ROS_CurrentOpStateID)
+         IF (foundID) THEN
+            ROS_CurrentOpState = ROS_OpPrograms[ROS_CurrentOpStateID].type
+         ELSE
+            OpStateErrCnt=OpStateErrCnt+1
+         ENDIF
+      ENDIF
+   ENDIF
+
+   ; This routine executes as a non-blocking re-entrant routine
+   ; OpStateChangeStep handles state transitions and manages logic 
+   ; steps through the program change sequence
+   opState = #Unknown
+   invalidOpState = TRUE
+   haveOpStateReq = FALSE
+   
+   ; Check for OpState Change request
+   IF (OpStateChangeStep == 0) THEN
+      ; Requested OpState queue item is not removed until change is completed below
+      haveOpStateReq = ROS_GetReqOpState(opState)
+      IF (haveOpStateReq) THEN
+         OpStateChangeStep = 1   
+      ELSE
+         RETURN
+      ENDIF
+   ENDIF
+
+   ; Start OpState Change - one shot immediately follows new OpState request
+   IF (OpStateChangeStep == 1) THEN
+      ROS_RequestedOpState = opState
+      ; Handle request same as current state - just remove from queue
+      IF (ROS_RequestedOpState == ROS_CurrentOpState)  THEN
+         idx = CQ_Remove(OpState_q)
+         OpStateChangeStep = 0
+         RETURN
+      ENDIF
+      OpStateChangeStep = 2
+   ENDIF
+
+   ; Runtime will Stop motion & end program - Then start program change
+   IF (OpStateChangeStep == 2) THEN
+      ; Wait for program to stop
+      IF ($PRO_STATE1 <> #P_ACTIVE) THEN 
+         foundID = OpState_IdFromState(ROS_RequestedOpState, OpIdx)
+         IF (foundID) THEN
+            sRet = StrCopy(ROS_OpStateProg[], ROS_OpPrograms[OpIdx].prgName[])
+            ; Request OpMode program change 
+            ProgCtrl_Select(ROS_OpStateProg[], TRUE)   
+            OpStateChangeStep = 3
+         ELSE
+            ; Invalid opstate
+            OpStateChangeStep = 10
+         ENDIF
+      ENDIF
+   ENDIF
+         
+   ; Monitor for OpState program selection complete
+   IF (OpStateChangeStep == 3) THEN
+      ProgCtrl_Status(prog_op, prog_state, prog_err)
+      ; Monitor for completed program change
+      IF ((prog_op==#PC_Select) AND ((prog_state==#PS_Done) OR (prog_state==#PS_Error))) THEN
+         ;ROS_RequestedOpState=ROS_CurrentOpState
+         IF (ROS_CurrentOpState==ROS_RequestedOpState) THEN
+            idx = CQ_Remove(OpState_q)
+            OpStateChangeStep = 0
+         ENDIF
+      ENDIF
+   ENDIF
+   
+   ; Handle error - remove requenst from queue
+   IF (OpStateChangeStep == 10) THEN
+      MsgNotify("WARNING: Error in OpState program change. OpState change failed.")
+      ROS_RequestedOpState=ROS_CurrentOpState
+      idx = CQ_Remove(OpState_q)
+      OpStateChangeStep = 0
+   ENDIF
+   
+END
+
+
+; Get the requested opState for initiating a change
+; Returns TRUE if there's a request
+DEFFCT BOOL ROS_GetReqOpState(opReq:OUT)
+DECL ROS_OpStateType opReq
+DECL INT idx
+
+   idx = CQ_Head(OpState_q)
+   IF (idx == 0) THEN 
+      RETURN(FALSE)
+   ENDIF
+   opReq = OpState_log[idx].type
+
+   RETURN(TRUE)
+ENDFCT
+
+
+; Add an opstate request to the log
+DEF ROS_RequestOpState(opReq:IN)
+DECL ROS_OpStateType opReq
+DECL INT idx
+
+   idx = CQ_Add(OpState_q)
+   OpState_log[idx].type = opReq
+   OpState_log[idx].t_recv = $ROB_TIMER
+END
+
+
+GLOBAL DEFFCT BOOL ROS_ReqOpStateChange()
+   RETURN(ROS_RequestedOpState <> ROS_CurrentOpState)
+ENDFCT
+
+
+
+; Add a joint pos to the log
+DEFFCT INT ROS_LogJpos(jpos:OUT, cmdIdx:IN, dt:IN)
+DECL E6AXIS jpos
+DECL INT cmdIdx
+DECL REAL dt
+DECL INT idx
+
+   idx = CQ_Add(JPosList_q)
+   JPos_log[idx].cmdIdx = cmdIdx
+   JPos_log[idx].dt = dt
+   JPos_log[idx].cmdPos = jpos
+   RETURN(idx)
+ENDFCT
+
+; Add a joint pos to the send log
+DEF ROS_LogJposSend(jpos:OUT, ipoc:IN)
+DECL E6AXIS jpos
+DECL INT ipoc
+DECL REAL dt
+DECL INT idx
+
+   idx = CQ_Add(JPosSendList_q)
+   JPosSend_log[idx].cmdIdx = ipoc
+   JPosSend_log[idx].dt = 0.0
+   JPosSend_log[idx].cmdPos = jpos
+   ; Remove Q item immediately - this is just a data log
+   idx = CQ_Remove(JPosSendList_q)
+END
+
+; Sets the queue to empty
+DEF CQ_Reset(q:OUT)
+DECL CircQueue q
+   q.istart = q.iend
+END
+
+; Returns the new queue end index
+; Returns 0 if queue is full
+DEFFCT INT CQ_Add(q:OUT)
+DECL CircQueue q
+DECL INT ni
+
+   ni = CQ_Next(q, q.iend)
+   
+   ; Handle queue full
+   IF (ni == q.istart) THEN
+      RETURN(0)
+   ELSE
+      q.iend = ni
+   ENDIF
+   
+   RETURN(q.iend)
+ENDFCT
+
+; Removes the head element by indexing the head
+; Returns the head index - 0 if the Q was empty
+DEFFCT INT CQ_Remove(q:OUT)
+DECL CircQueue q
+DECL INT ni
+   ; Check if q is empty
+   IF (q.istart == q.iend) THEN
+      RETURN(0)
+   ENDIF
+      
+   q.istart = CQ_Next(q, q.istart)
+   RETURN(CQ_Next(q, q.istart))
+ENDFCT
+
+
+DEFFCT INT CQ_Count(q:OUT)
+DECL CircQueue q
+DECL INT count
+   ; Check if q has wraparound
+   IF (q.iend >= q.istart) THEN
+      count = (q.iend-q.istart)
+   ELSE
+      count = (100-q.istart)+q.iend
+   ENDIF
+  
+   RETURN(count)
+ENDFCT
+
+; Returns the index of the head.  Doesnt change the Q.
+; Returns 0 if the Q is empty
+DEFFCT INT CQ_Head(q:OUT)
+DECL CircQueue q
+   ; Check if q is empty
+   IF (q.istart == q.iend) THEN
+      RETURN(0)
+   ENDIF
+   RETURN(CQ_Next(q, q.istart))
+ENDFCT
+
+; Returns the index of the tail.  Doesnt change the Q.
+; Returns 0 if the Q is empty
+DEFFCT INT CQ_Tail(q:OUT)
+DECL CircQueue q
+   ; Check if q is empty
+   IF (q.istart == q.iend) THEN
+      RETURN(0)
+   ENDIF
+   RETURN(q.iend)
+ENDFCT
+
+
+; Returns the next index from the specified idx
+DEFFCT INT CQ_Next(q:OUT, idx:IN)
+DECL CircQueue q
+DECL INT idx
+DECL INT nextI
+   nextI = idx + 1
+   IF (nextI > q.size) THEN
+      nextI = 1
+   ENDIF
+   RETURN(nextI)
+ENDFCT
+
+; Returns the previous index from the specified idx
+DEFFCT INT CQ_Prev(q:OUT, idx:IN)
+DECL CircQueue q
+DECL INT idx
+DECL INT prevI
+   prevI = idx - 1
+   IF (prevI < 1) THEN
+      prevI = q.size
+   ENDIF
+   RETURN(prevI)
+ENDFCT
+
+
+ 
+ 
+DEFFCT BOOL OpState_IdFromState(opState:IN, ID:OUT) 
+DECL ROS_OpStateType opState
+DECL INT ID
+DECL BOOL valOK
+
+   valOK = FALSE
+   FOR ID=1 TO ROS_NumOpPrograms
+      IF (opState == ROS_OpPrograms[ID].type) THEN
+         valOK = TRUE
+         EXIT
+      ENDIF
+   ENDFOR
+
+   RETURN(valOK)
+ENDFCT
+
+
+DEFFCT BOOL OpState_IdFromProg(CurrProg[]:IN, opID:OUT)
+DECL INT opID
+DECL BOOL valOK
+DECL BOOL strOK
+DECL CHAR CurrProg[]
+
+   valOK = FALSE
+   FOR opID=1 TO ROS_NumOpPrograms
+      IF (StrComp(CurrProg[], ROS_OpPrograms[opID].prgName[],#NOT_CASE_SENS)) THEN
+         valOK = TRUE
+         EXIT
+      ENDIF
+   ENDFOR
+         
+   IF (NOT valOK) THEN
+      ; Last opID index should always be #Unknown
+      opID = ROS_NumOpPrograms
+   ENDIF
+   
+   RETURN(valOK)
+ENDFCT
+
+ 
+DEFFCT BOOL OpState_ToStr(opState:IN, s[]:OUT)
+DECL ROS_OpStateType opState
+DECL CHAR s[]
+DECL BOOL valOK
+DECL INT opID
+   opID = 0
+   valOK = OpState_IdFromState(opState, opID)
+   IF (valOK) THEN
+      valOK = StrCopy(s[], ROS_OpPrograms[opID].IDstr[])
+   ENDIF
+   
+   RETURN(valOK)
+ENDFCT
+ 
+ 
+ 
+DEFFCT BOOL OpState_FromStr(s[]:IN, opState:OUT)
+DECL ROS_OpStateType opState
+DECL CHAR s[]
+DECL INT opID
+DECL BOOL valOK
+
+   valOK = FALSE
+   FOR opID=1 TO ROS_NumOpPrograms
+      IF (StrComp(s[], ROS_OpPrograms[opID].IDstr[],#NOT_CASE_SENS)) THEN
+         valOK = TRUE
+         opState = ROS_OpPrograms[opID].type
+         EXIT
+      ENDIF
+   ENDFOR
+
+   RETURN(valOK)
+ENDFCT
+
+
+
+
+DEFFCT BOOL E6AXIS_Equal(p1:IN, p2:IN)
+DECL E6AXIS p1
+DECL E6AXIS p2
+DECL BOOL equal
+DECL REAL thr
+   thr = 0.001
+   equal = FALSE
+   ON_ERROR_PROCEED
+   equal = (Equal_Thresh(p1.A1,p2.A1,thr) AND Equal_Thresh(p1.A2, p2.A2, thr) AND Equal_Thresh(p1.A3 , p2.A3, thr) AND Equal_Thresh(p1.A4, p2.A4, thr) AND Equal_Thresh(p1.A5, p2.A5, thr) AND Equal_Thresh(p1.A6, p2.A6, thr))
+   ON_ERROR_PROCEED
+   equal = (equal AND Equal_Thresh(p1.E1, p2.E1, thr) AND Equal_Thresh(p1.E2, p2.E2, thr) AND Equal_Thresh(p1.E3, p2.E3, thr) AND Equal_Thresh(p1.E4, p2.E4, thr) AND Equal_Thresh(p1.E5, p2.E5, thr) AND Equal_Thresh(p1.E6, p2.E6, thr))
+
+   RETURN(equal)
+ENDFCT
+
+DEFFCT BOOL Equal_Thresh(V1:IN, V2:IN, Thresh:IN)
+REAL V1
+REAL V2
+REAL Thresh
+BOOL eq
+   eq = (((V1-Thresh)<=V2) AND (V2<=(V1+Thresh)))
+   RETURN (eq)
+ENDFCT

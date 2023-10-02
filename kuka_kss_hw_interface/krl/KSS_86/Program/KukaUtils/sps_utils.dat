@@ -1,0 +1,47 @@
+&ACCESS RVO2
+&REL 661
+&COMMENT General SPS resources
+&PARAM EDITMASK = *
+&PARAM DISKPATH = KRC:\R1\Program\KukaUtils
+DEFDAT  SPS_UTILS PUBLIC
+
+
+; -----------------------------------------------
+; TIMING UTILITIES
+; SPSdelay - Non-Blocking timing support
+; -----------------------------------------------
+GLOBAL INT SPS_Timer_Num=14
+
+; NOTE:Index will be useful if the struct is passed as a param 
+GLOBAL STRUC SPS_DELAY INT Index,BOOL Active,INT Timer_Num,INT tStart,INT tExpire
+DECL GLOBAL SPS_DELAY SPS_TIMERS[21] ;1 extra for SPS performance monitor
+INT SPS_Timer_Cnt=20
+INT SPS_ScanCnt=3
+;scan time in ms
+GLOBAL REAL SPS_ScanTime=4.90000
+
+
+; -----------------------------------------------
+; SEQUENCE UTILITIES
+; SPSseq - Support for a state sequence of operations
+; -----------------------------------------------
+GLOBAL ENUM SPS_StateOP ACTION,CHECK_TRANSITION
+
+GLOBAL STRUC SPS_Sequence INT Thread,INT Priority,BOOL Active,INT CurStep,INT NextStep
+; Usage: CurStep==0 makes inactive
+INT SPS_SeqThreadCnt=20
+DECL GLOBAL SPS_Sequence SPS_SeqMgr[20]
+
+
+; -----------------------------------------------
+; DATA CHANGE UTILITIES 
+; Handle changes in data
+; -----------------------------------------------
+GLOBAL STRUC SPS_AllocItem BOOL Used,CHAR Name[64]
+INT SPS_ChgCnt=32 ; Number of change elements
+BOOL SPS_ChgLastBool[32]
+INT SPS_ChgLastInt[32]
+DECL SPS_AllocItem SPS_ChgBoolAlloc[32]
+DECL SPS_AllocItem SPS_ChgIntAlloc[32]
+
+ENDDAT
