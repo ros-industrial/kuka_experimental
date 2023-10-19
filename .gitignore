@@ -50,3 +50,8 @@ qtcreator-*
 
 # Catkin custom files
 CATKIN_IGNORE
+
+# blender temp saves
+*.blend1
+# mac osx DS_Store files
+*.DS_Store
