@@ -1,0 +1,9 @@
+<launch>
+  <group ns="load_kr270r2700__">
+    <include file="$(find kuka_kr270_support)/launch/load_kr270r2700.launch"/>
+  </group>
+
+  <group ns="test_kr270r2700__">
+    <include file="$(find kuka_kr270_support)/launch/test_kr270r2700.launch"/>
+  </group>
+</launch>
