@@ -154,7 +154,7 @@
       <limit lower="${radians(-350)}" upper="${radians(350)}" effort="0" velocity="${radians(175)}"/>
     </joint>
 
-    <!-- This frame corresponds to the $TOOL coordinate system in KUKA KRC controllers. -->
+    <!-- ROS-Industrial 'flange' frame: attachment point for EEF models -->
     <link name="${prefix}flange"/>
     <joint name="${prefix}link_6-flange" type="fixed">
       <parent link="${prefix}link_6"/>
@@ -170,7 +170,8 @@
       <child link="${prefix}base"/>
     </joint>
 
-    <!-- This frame corresponds to the $TOOL coordinate system in KUKA KRC controllers -->
+    <!-- ROS-Industrial 'tool0' frame: all-zeros tool frame -->
+    <!-- This frame corresponds to the $FLANGE coordinate system in KUKA KRC controllers. -->
     <link name="${prefix}tool0" />
     <joint name="${prefix}flange-tool0" type="fixed">
       <parent link="${prefix}flange"/>
