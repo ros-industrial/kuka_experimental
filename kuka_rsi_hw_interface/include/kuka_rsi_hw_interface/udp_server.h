@@ -68,12 +68,12 @@ public:
     if (sockfd_ < 0)
       throw std::runtime_error("Error opening socket: " + std::string(strerror(errno)));
     optval = 1;
-    setsockopt(sockfd_, SOL_SOCKET, SO_REUSEADDR, (const void *)&optval , sizeof(int));
+    setsockopt(sockfd_, SOL_SOCKET, SO_REUSEADDR, (const void*)&optval, sizeof(int));
     memset(&serveraddr_, 0, sizeof(serveraddr_));
     serveraddr_.sin_family = AF_INET;
     serveraddr_.sin_addr.s_addr = inet_addr(local_host_.c_str());
     serveraddr_.sin_port = htons(local_port_);
-    if (bind(sockfd_, (struct sockaddr *) &serveraddr_, sizeof(serveraddr_)) < 0)
+    if (bind(sockfd_, (struct sockaddr*)&serveraddr_, sizeof(serveraddr_)) < 0)
       throw std::runtime_error("Error binding socket: " + std::string(strerror(errno)));
     clientlen_ = sizeof(clientaddr_);
   }
@@ -87,7 +87,7 @@ public:
   {
     if (millisecs != 0)
     {
-      tv_.tv_sec  = millisecs / 1000;
+      tv_.tv_sec = millisecs / 1000;
       tv_.tv_usec = (millisecs % 1000) * 1000;
       timeout_ = true;
       return timeout_;
@@ -101,10 +101,10 @@ public:
   ssize_t send(std::string& buffer)
   {
     ssize_t bytes = 0;
-    bytes = sendto(sockfd_, buffer.c_str(), buffer.size(), 0, (struct sockaddr *) &clientaddr_, clientlen_);
+    bytes = sendto(sockfd_, buffer.c_str(), buffer.size(), 0, (struct sockaddr*)&clientaddr_, clientlen_);
     if (bytes < 0)
     {
-      std::cout << "ERROR in sendto" << std::endl;
+      std::cout << "ERROR in sendto" << std::endl << std::flush;
     }
 
     return bytes;
@@ -124,7 +124,7 @@ public:
       tv.tv_sec = tv_.tv_sec;
       tv.tv_usec = tv_.tv_usec;
 
-      if (select(sockfd_+1, &read_fds, NULL, NULL, &tv) < 0)
+      if (select(sockfd_ + 1, &read_fds, NULL, NULL, &tv) < 0)
       {
         return 0;
       }
@@ -132,30 +132,28 @@ public:
       if (FD_ISSET(sockfd_, &read_fds))
       {
         memset(buffer_, 0, BUFSIZE);
-        bytes = recvfrom(sockfd_, buffer_, BUFSIZE, 0, (struct sockaddr *) &clientaddr_, &clientlen_);
+        bytes = recvfrom(sockfd_, buffer_, BUFSIZE, 0, (struct sockaddr*)&clientaddr_, &clientlen_);
         if (bytes < 0)
         {
-          std::cout << "ERROR in recvfrom" << std::endl;
+          std::cout << "ERROR in recvfrom" << std::endl << std::flush;
         }
       }
       else
       {
         return 0;
       }
-
     }
     else
     {
       memset(buffer_, 0, BUFSIZE);
-      bytes = recvfrom(sockfd_, buffer_, BUFSIZE, 0, (struct sockaddr *) &clientaddr_, &clientlen_);
+      bytes = recvfrom(sockfd_, buffer_, BUFSIZE, 0, (struct sockaddr*)&clientaddr_, &clientlen_);
       if (bytes < 0)
       {
-        std::cout << "ERROR in recvfrom" << std::endl;
+        std::cout << "ERROR in recvfrom" << std::endl << std::flush;
       }
     }
 
     buffer = std::string(buffer_);
-
     return bytes;
   }
 
@@ -171,8 +169,6 @@ private:
   struct sockaddr_in clientaddr_;
   char buffer_[BUFSIZE];
   int optval;
-
 };
 
 #endif
-

@@ -34,7 +34,7 @@
 
 /*
  * Author: Lars Tingelstad <lars.tingelstad@ntnu.no>
-*/
+ */
 
 #ifndef KUKA_RSI_HW_INTERFACE_RSI_STATE_
 #define KUKA_RSI_HW_INTERFACE_RSI_STATE_
@@ -44,19 +44,18 @@
 
 namespace kuka_rsi_hw_interface
 {
-
 class RSIState
 {
-
 private:
   std::string xml_doc_;
 
 public:
-  RSIState() :
-    positions(6, 0.0),
-    initial_positions(6, 0.0),
-    cart_position(6, 0.0),
-    initial_cart_position(6, 0.0)
+  RSIState()
+    : positions(6, 0.0)
+    , initial_positions(6, 0.0)
+    , cart_position(6, 0.0)
+    , initial_cart_position(6, 0.0)
+    , digital_inputs(16, 0)
   {
     xml_doc_.resize(1024);
   }
@@ -70,17 +69,20 @@ public:
   std::vector<double> cart_position;
   // RSol
   std::vector<double> initial_cart_position;
+  // Digital Inputs ; kuka sends it as 0 or 1
+  std::vector<int> digital_inputs;
   // IPOC
   unsigned long long ipoc;
-
+  bool incompatible_xml = false;
 };
 
-RSIState::RSIState(std::string xml_doc) :
-  xml_doc_(xml_doc),
-  positions(6, 0.0),
-  initial_positions(6, 0.0),
-  cart_position(6, 0.0),
-  initial_cart_position(6, 0.0)
+RSIState::RSIState(std::string xml_doc)
+  : xml_doc_(xml_doc)
+  , positions(6, 0.0)
+  , initial_positions(6, 0.0)
+  , cart_position(6, 0.0)
+  , initial_cart_position(6, 0.0)
+  , digital_inputs(16, 0)
 {
   // Parse message from robot
   TiXmlDocument bufferdoc;
@@ -119,11 +121,51 @@ RSIState::RSIState(std::string xml_doc) :
   RSol_el->Attribute("A", &initial_cart_position[3]);
   RSol_el->Attribute("B", &initial_cart_position[4]);
   RSol_el->Attribute("C", &initial_cart_position[5]);
+  // Extract Digital Inputs
+  // They should not start with number other wise the parser will have erro
+  // so the buffer should not be like <In 01=".."/>
+  // It should be lilke <In Ch01=".."/>
+  TiXmlElement* In_el = rob->FirstChildElement("In");
+  if (In_el)
+  {
+    bool success = true;
+
+    success &= TIXML_SUCCESS == In_el->QueryIntAttribute("Ch01", &digital_inputs[0]);
+    success &= TIXML_SUCCESS == In_el->QueryIntAttribute("Ch02", &digital_inputs[1]);
+    success &= TIXML_SUCCESS == In_el->QueryIntAttribute("Ch03", &digital_inputs[2]);
+    success &= TIXML_SUCCESS == In_el->QueryIntAttribute("Ch04", &digital_inputs[3]);
+    success &= TIXML_SUCCESS == In_el->QueryIntAttribute("Ch05", &digital_inputs[4]);
+    success &= TIXML_SUCCESS == In_el->QueryIntAttribute("Ch06", &digital_inputs[5]);
+    success &= TIXML_SUCCESS == In_el->QueryIntAttribute("Ch07", &digital_inputs[6]);
+    success &= TIXML_SUCCESS == In_el->QueryIntAttribute("Ch08", &digital_inputs[7]);
+    success &= TIXML_SUCCESS == In_el->QueryIntAttribute("Ch09", &digital_inputs[8]);
+    success &= TIXML_SUCCESS == In_el->QueryIntAttribute("Ch10", &digital_inputs[9]);
+    success &= TIXML_SUCCESS == In_el->QueryIntAttribute("Ch11", &digital_inputs[10]);
+    success &= TIXML_SUCCESS == In_el->QueryIntAttribute("Ch12", &digital_inputs[11]);
+    success &= TIXML_SUCCESS == In_el->QueryIntAttribute("Ch13", &digital_inputs[12]);
+    success &= TIXML_SUCCESS == In_el->QueryIntAttribute("Ch14", &digital_inputs[13]);
+    success &= TIXML_SUCCESS == In_el->QueryIntAttribute("Ch15", &digital_inputs[14]);
+    success &= TIXML_SUCCESS == In_el->QueryIntAttribute("Ch16", &digital_inputs[15]);
+    //    if (!success && !incompatible_xml)
+    //    {
+    //      std::cout << "Recieved RSI XML does not have 16 Inputs" << std::endl;
+    //      incompatible_xml = true;
+    //    }
+  }
+  else
+  {
+    //    if (!incompatible_xml)
+    //    {
+    //      std::cout << "Recieved RSI XML does not have In[xx]" << std::endl;
+    //      incompatible_xml = true;
+    //    }
+  }
+
   // Get the IPOC timestamp
   TiXmlElement* ipoc_el = rob->FirstChildElement("IPOC");
   ipoc = std::stoull(ipoc_el->FirstChild()->Value());
 }
 
-} // namespace kuka_rsi_hw_interface
+}  // namespace kuka_rsi_hw_interface
 
 #endif

@@ -71,10 +71,10 @@ int main(int argc, char** argv)
 
   // Run as fast as possible
   while (ros::ok())
-  //while (!g_quit)
+  // while (!g_quit)
   {
     // Receive current state from robot
-    if (!kuka_rsi_hw_interface.read(timestamp, period))
+    if (!kuka_rsi_hw_interface.read())
     {
       ROS_FATAL_NAMED("kuka_hardware_interface", "Failed to read state from robot. Shutting down!");
       ros::shutdown();
@@ -97,5 +97,4 @@ int main(int argc, char** argv)
   ROS_INFO_STREAM_NAMED("hardware_interface", "Shutting down.");
 
   return 0;
-
 }
