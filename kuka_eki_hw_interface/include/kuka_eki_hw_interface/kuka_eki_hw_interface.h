@@ -65,6 +65,7 @@ private:
   // EKI
   std::string eki_server_address_;
   std::string eki_server_port_;
+  int eki_cmd_id_count_;
   int eki_cmd_buff_len_;
   int eki_max_cmd_buff_len_ = 5;  // by default, limit command buffer to 5 (size of advance run in KRL)
 
@@ -81,8 +82,9 @@ private:
   int eki_read_state_timeout_ = 5;  // [s]; settable by parameter (default = 5)
   boost::asio::io_service ios_;
   boost::asio::deadline_timer deadline_;
-  boost::asio::ip::udp::endpoint eki_server_endpoint_;
-  boost::asio::ip::udp::socket eki_server_socket_;
+  boost::asio::ip::tcp::endpoint eki_server_endpoint_;
+  boost::asio::ip::tcp::socket eki_server_socket_;
+  boost::asio::ip::tcp::acceptor eki_acceptor_;
   void eki_check_read_state_deadline();
   static void eki_handle_receive(const boost::system::error_code &ec, size_t length,
                                  boost::system::error_code* out_ec, size_t* out_length);

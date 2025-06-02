@@ -48,7 +48,7 @@ namespace kuka_eki_hw_interface
 
 KukaEkiHardwareInterface::KukaEkiHardwareInterface() : joint_position_(n_dof_, 0.0), joint_velocity_(n_dof_, 0.0),
     joint_effort_(n_dof_, 0.0), joint_position_command_(n_dof_, 0.0), joint_names_(n_dof_), deadline_(ios_),
-    eki_server_socket_(ios_, boost::asio::ip::udp::endpoint(boost::asio::ip::udp::v4(), 0))
+    eki_server_socket_(ios_, boost::asio::ip::udp::endpoint(boost::asio::ip::udp::v4(), 0)), eki_cmd_id_count_(0), eki_cmd_buff_len_(0)
 {
 
 }
@@ -87,12 +87,10 @@ bool KukaEkiHardwareInterface::eki_read_state(std::vector<double> &joint_positio
   static boost::array<char, 2048> in_buffer;
 
   // Read socket buffer (with timeout)
-  // Based off of Boost documentation example: doc/html/boost_asio/example/timeouts/blocking_udp_client.cpp
   deadline_.expires_from_now(boost::posix_time::seconds(eki_read_state_timeout_));  // set deadline
   boost::system::error_code ec = boost::asio::error::would_block;
   size_t len = 0;
-  eki_server_socket_.async_receive(boost::asio::buffer(in_buffer),
-                                   boost::bind(&KukaEkiHardwareInterface::eki_handle_receive, _1, _2, &ec, &len));
+  eki_server_socket_.async_receive(boost::asio::buffer(in_buffer), boost::bind(&KukaEkiHardwareInterface::eki_handle_receive, _1, _2, &ec, &len));
   do
     ios_.run_one();
   while (ec == boost::asio::error::would_block);
@@ -133,8 +131,15 @@ bool KukaEkiHardwareInterface::eki_read_state(std::vector<double> &joint_positio
     axis_name[1]++;
   }
 
-  // Extract number of command elements buffered on robot
-  robot_command->Attribute("Size", &cmd_buff_len);
+  // Extract last command id that was received/read by the robot 
+  int id_count;
+  robot_command->Attribute("ID", &id_count);
+
+  bool wrap_around = id_count > eki_cmd_id_count_;
+  if(!wrap_around)
+      cmd_buff_len = eki_cmd_id_count_ - id_count;
+  else
+      cmd_buff_len = (INT32_MAX - id_count) + eki_cmd_id_count_;
 
   return true;
 }
@@ -142,6 +147,11 @@ bool KukaEkiHardwareInterface::eki_read_state(std::vector<double> &joint_positio
 
 bool KukaEkiHardwareInterface::eki_write_command(const std::vector<double> &joint_position_command)
 {
+  if( (eki_cmd_id_count_ + 1) > INT32_MAX )
+    eki_cmd_id_count_ = 0;
+  else
+    ++eki_cmd_id_count_;
+
   TiXmlDocument xml_out;
   TiXmlElement* robot_command = new TiXmlElement("RobotCommand");
   TiXmlElement* pos = new TiXmlElement("Pos");
@@ -149,6 +159,9 @@ bool KukaEkiHardwareInterface::eki_write_command(const std::vector<double> &join
   robot_command->LinkEndChild(pos);
   pos->LinkEndChild(empty_text);   // force <Pos></Pos> format (vs <Pos />)
   char axis_name[] = "A1";
+
+  robot_command->SetAttribute("ID", std::to_string(eki_cmd_id_count_));
+
   for (int i = 0; i < n_dof_; ++i)
   {
     pos->SetAttribute(axis_name, std::to_string(angles::to_degrees(joint_position_command[i])).c_str());
@@ -160,8 +173,7 @@ bool KukaEkiHardwareInterface::eki_write_command(const std::vector<double> &join
   xml_printer.SetStreamPrinting();  // no linebreaks
   xml_out.Accept(&xml_printer);
 
-  size_t len = eki_server_socket_.send_to(boost::asio::buffer(xml_printer.CStr(), xml_printer.Size()),
-                                          eki_server_endpoint_);
+  size_t len = eki_server_socket_.send(boost::asio::buffer(xml_printer.CStr(), xml_printer.Size()));
 
   return true;
 }
@@ -248,10 +260,34 @@ void KukaEkiHardwareInterface::start()
 
   // Start client
   ROS_INFO_NAMED("kuka_eki_hw_interface", "... connecting to robot's EKI server...");
-  boost::asio::ip::udp::resolver resolver(ios_);
-  eki_server_endpoint_ = *resolver.resolve({boost::asio::ip::udp::v4(), eki_server_address_, eki_server_port_});
-  boost::array<char, 1> ini_buf = { 0 };
-  eki_server_socket_.send_to(boost::asio::buffer(ini_buf), eki_server_endpoint_);  // initiate contact to start server
+  eki_server_endpoint_ = boost::asio::ip::tcp::endpoint(boost::asio::ip::address_v4::any(), std::stoi(eki_server_port_));
+
+  ROS_WARN_STREAM("IP: " << eki_server_endpoint_.address().to_string()); 
+  ROS_WARN_STREAM("PORT: " << eki_server_endpoint_.port());
+
+  eki_acceptor_ = boost::asio::ip::tcp::acceptor(ios_, eki_server_endpoint_.protocol());
+
+  boost::system::error_code ec;
+  
+  eki_acceptor_.bind(eki_server_endpoint_, ec);
+  while(ec.value() == 98)
+  {
+      ROS_WARN_STREAM("[ERROR] Code: " << ec.value() << " MSG: " << ec.message());
+      ROS_WARN("Retrying...");
+      eki_acceptor_.bind(eki_server_endpoint_, ec);
+      ros::Duration(0.1).sleep();
+  }
+  if(ec != 0)
+  {
+      ROS_WARN_STREAM("[ERROR] Code: " << ec.value() << " MSG: " << ec.message());
+      throw boost::system::system_error(ec ? ec : boost::asio::error::operation_aborted);
+  }
+  ROS_WARN("Connected!");
+  eki_acceptor_.listen(1);
+
+  eki_acceptor_.accept(eki_server_socket_, eki_server_endpoint_);
+  
+  eki_acceptor_.close();
 
   // Start persistent actor to check for eki_read_state timeouts
   deadline_.expires_at(boost::posix_time::pos_infin);  // do nothing unit a read is invoked (deadline_ = +inf)
