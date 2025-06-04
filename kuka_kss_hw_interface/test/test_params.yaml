@@ -1,0 +1,7 @@
+kuka:
+  ip_address: "172.32.1.10"
+  server_port: "54600"
+  server_timeout: 3
+rsi:
+  listen_address: "172.32.1.243"
+  listen_port: 49152

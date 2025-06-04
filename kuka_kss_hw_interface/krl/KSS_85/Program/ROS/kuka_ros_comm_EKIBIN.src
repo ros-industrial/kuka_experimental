@@ -1,0 +1,445 @@
+&ACCESS RVO2
+&REL 30
+&PARAM DISKPATH = KRC:\R1\Program\ROS
+DEF kuka_ros_comm_EKIBIN ( )
+   ; Software License Agreement (BSD License)
+   ;
+   ; Copyright (c) 2022, Kuka Robotics Corp
+   ; All rights reserved.
+   ;
+   ; Redistribution and use in source and binary forms, with or without
+   ; modification, are permitted provided that the following conditions are met:
+   ;
+   ;      * Redistributions of source code must retain the above copyright
+   ;        notice, this list of conditions and the following disclaimer.
+   ;      * Redistributions in binary form must reproduce the above copyright
+   ;        notice, this list of conditions and the following disclaimer in the
+   ;        documentation and/or other materials provided with the distribution.
+   ;      * Neither the name of the copyright holder, nor the names of its
+   ;        contributors may be used to endorse or promote products derived
+   ;        from this software without specific prior written permission.
+   ;
+   ; THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+   ; AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+   ; IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+   ; ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+   ; LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+   ; CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+   ; SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+   ; INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+   ; CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+   ; ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+   ; POSSIBILITY OF SUCH DAMAGE.
+
+   ; Author: Pat Duda <pat.duda@kuka.com>
+
+
+END
+
+GLOBAL DEF ROS_EKIB_ServerInit()
+
+   InterfaceName[] = "EkiBinKSSinterface"
+   
+   bin_xfer_pos_data = g_joint_pos_empty 
+   bin_xfer_vel_data = g_joint_pos_empty 
+   bin_xfer_torque_data = g_joint_pos_empty
+
+   $FLAG[ROS_EKIB_Conn_Work] = FALSE
+   EKIB_Conn_WatchID = SPSchg_bAlloc($FLAG[ROS_EKIB_Conn_Work], "EKIB_Conn")
+   EKIB_DisConn_WatchID = SPSchg_bAlloc($FLAG[ROS_EKIB_Conn_Work], "EKIB_DisConn")
+
+END
+
+
+GLOBAL DEF ROS_EKIB_ServerStart()
+   decl eki_status eki_ret
+   
+   ; Init connection flag - will be set TRUE internally by EKI after connection is made
+   $flag[ROS_EKIB_Conn_Flag] = FALSE
+   ; Init data recv flag - will be set TRUE internally by EKI after data is received
+   $flag[ROS_EKIB_Recv_Flag] = FALSE
+   
+   eki_ret = EKI_Init(InterfaceName[])
+   eki_ret = EKI_Open(InterfaceName[])
+END
+
+
+GLOBAL DEF ROS_EKIB_ServerReset()
+   decl eki_status eki_ret
+   eki_ret = EKI_Clear(InterfaceName[])
+   ROS_EKIB_ServerStart()
+END
+
+
+GLOBAL DEFFCT BOOL ROS_EKIB_IsConn()
+DECL EKI_STATUS eki_test
+
+   IF ($FLAG[ROS_EKIB_Conn_Flag]==FALSE) THEN
+      eki_test = EKI_CheckBuffer(InterfaceName[], "Buffer")
+      $FLAG[ROS_EKIB_Conn_Flag] = eki_test.Connected
+      IF (eki_test.Connected) THEN
+         MsgNotify("WARNING:ROS_EKIB_Conn_Flag FLAG disconnected. Override eki_test.Connected=TRUE")
+      ENDIF
+   ENDIF
+   RETURN($FLAG[ROS_EKIB_Conn_Flag])
+ENDFCT
+
+
+; Detect a disconnect->connect transition
+GLOBAL DEFFCT BOOL ROS_EKIB_ChkConnect()
+   $FLAG[ROS_EKIB_Conn_Work] = ROS_EKIB_IsConn()
+   RETURN(SPSchg_bRising(EKIB_Conn_WatchID, $FLAG[ROS_EKIB_Conn_Work]))
+ENDFCT
+
+
+; Detect a connect->disconnect transition
+GLOBAL DEFFCT BOOL ROS_EKIB_ChkDisconn()
+   RETURN(SPSchg_bFalling(EKIB_DisConn_WatchID, $FLAG[ROS_EKIB_Conn_Work]))
+ENDFCT
+
+
+; Send necessary system data on connection initialization.
+; Note: all params are inputs and should not be changed.
+; Expected values passed in:
+;  ver=ROS_InterfaceVersion, 
+;  ipo_time=ROS_IPOC, 
+;  nAx=$NUM_AX, 
+;  nExAx=$EX_AX_NUM, 
+;  serNo=$KR_SERIALNO, 
+;  robName[]=$ROBNAME[], 
+;  robTrafo[]=$ROBTRAFO[],
+;  robVer[]=$V_R1MADA[],
+;  features=ROS_SupportFeatures, 
+;  axType[]=$AXIS_TYPE[], 
+;  axVel[]=$VEL_AXIS_MA[], 
+;  ratio[]=$RAT_MOT_AX[])
+GLOBAL DEF ROS_EKIB_Send_InitData(ver:IN, ipo_time:IN, nAx:IN, nExAx:IN, serNo:IN, robName[]:IN, robTrafo[]:IN,robVer[]:IN,features:IN, axType[]:OUT, axVel[]:OUT, ratio[]:OUT)
+   DECL INT ver
+   DECL INT ipo_time
+   DECL INT nAx
+   DECL INT nExAx
+   DECL INT serNo
+   DECL CHAR robName[]
+   DECL CHAR robTrafo[]
+   DECL CHAR robVer[]
+   DECL ROS_FeatuesType features
+   DECL INT axType[]
+   DECL FRA ratio[]
+   DECL REAL axVel[]
+   DECL BOOL rc
+   
+   DECL EKI_STATUS eki_ret
+   
+   IF (NOT ROS_EKIB_IsConn()) THEN  
+      RETURN
+   ENDIF
+ 
+   ; Command ID = Initial Data
+   SendCmd[]=ROS_CommandTypes[ROS_Cmd_____Init].IDstr[]
+   
+   ;Write integer values to binary buffer
+   rc=StrClear(sendbinBuffer[])
+   sendbinBufferOffset = 0
+   CAST_TO(sendbinBuffer[], sendbinBufferOffset, SendCmd[], ver, ipo_time)
+   CAST_TO(sendbinBuffer[], sendbinBufferOffset, nAx, nExAx, serNo)
+   
+   ; Features supported ----------------------------------
+   CAST_TO(sendbinBuffer[], sendbinBufferOffset, features.EKI, features.RSI, features.MXA)
+
+   ; Axis types ----------------------------------
+   ;Write axis 1-6 types to bin buffer
+   CAST_TO(sendbinBuffer[], sendbinBufferOffset, axType[1], axType[2], axType[3], axType[4], axType[5], axType[6])
+   ;Write ext axis 7-12 types to bin buffer
+   CAST_TO(sendbinBuffer[], sendbinBufferOffset, axType[7], axType[8], axType[9], axType[10], axType[11], axType[12])
+
+   ; Axis ratio numerators ----------------------------------
+   ; Write axis 1-6 ratio numerators to bin buffer
+   CAST_TO(sendbinBuffer[], sendbinBufferOffset, ratio[1].N, ratio[2].N, ratio[3].N, ratio[4].N, ratio[5].N, ratio[6].N)
+   ;Write ext axis 7-12 ratio numerators to bin buffer
+   CAST_TO(sendbinBuffer[], sendbinBufferOffset, ratio[7].N, ratio[8].N, ratio[9].N, ratio[10].N, ratio[11].N, ratio[12].N)
+
+   ; Axis ratio denominators ----------------------------------
+   ;Write axis ratio den 1-6 to bin buffer
+   CAST_TO(sendbinBuffer[], sendbinBufferOffset, ratio[1].D, ratio[2].D, ratio[3].D, ratio[4].D, ratio[5].D, ratio[6].D)
+   ;Write ext axis ratio den 7-12 to bin buffer
+   CAST_TO(sendbinBuffer[], sendbinBufferOffset, ratio[7].D, ratio[8].D, ratio[9].D, ratio[10].D, ratio[11].D, ratio[12].D)
+
+   ; Axis RPM ----------------------------------
+   ;Write axis 1-6 RPM to bin buffer
+   CAST_TO(sendbinBuffer[], sendbinBufferOffset, axVel[1], axVel[2], axVel[3], axVel[4], axVel[5], axVel[6])
+   ;Write ext axis 7-12 RPM to bin buffer
+   CAST_TO(sendbinBuffer[], sendbinBufferOffset, axVel[7], axVel[8], axVel[9], axVel[10], axVel[11], axVel[12])
+   
+   CAST_TO(sendbinBuffer[], sendbinBufferOffset, endString[])
+   ;Send bin buffer
+   eki_ret = eki_send(InterfaceName[], sendbinBuffer[])
+   ;MsgNotify("DEBUG: ROS_EKIB_Send_InitData send complete")
+
+   ROS_EKIB_Send_InitName(ipo_time, robName[])
+   ROS_EKIB_Send_InitMod(ipo_time, robTrafo[])
+   ROS_EKIB_Send_InitVer(ipo_time, robVer[])
+
+END
+
+DEF ROS_EKIB_Send_InitName(ipo_time:IN, robName[]:IN)
+   DECL INT ipo_time
+   DECL CHAR robName[]
+   DECL BOOL rc
+   DECL EKI_STATUS eki_ret
+   
+   ; Command ID = Initial Data
+   SendCmd[]=ROS_CommandTypes[ROS_Cmd_InitName].IDstr[]
+   
+   ;Write integer values to binary buffer
+   rc=StrClear(sendbinBuffer[])
+   sendbinBufferOffset = 0
+   CAST_TO(sendbinBuffer[], sendbinBufferOffset, SendCmd[], ipo_time)
+   CAST_TO(sendbinBuffer[], sendbinBufferOffset, robName[])
+   CAST_TO(sendbinBuffer[], sendbinBufferOffset, endString[])
+   
+   eki_ret = eki_send(InterfaceName[], sendbinBuffer[])
+   ;MsgNotify("DEBUG: ROS_EKIB_Send_InitName send complete")
+   
+END
+
+
+DEF ROS_EKIB_Send_InitMod(ipo_time:IN, robTrafo[]:IN)
+   DECL INT ipo_time
+   DECL CHAR robTrafo[]
+   DECL BOOL rc
+   DECL EKI_STATUS eki_ret
+   
+   ; Command ID = Initial Data
+   SendCmd[]=ROS_CommandTypes[ROS_Cmd__InitMod].IDstr[]
+   
+   ;Write integer values to binary buffer
+   rc=StrClear(sendbinBuffer[])
+   sendbinBufferOffset = 0
+   CAST_TO(sendbinBuffer[], sendbinBufferOffset, SendCmd[], ipo_time)
+   CAST_TO(sendbinBuffer[], sendbinBufferOffset, robTrafo[])
+   CAST_TO(sendbinBuffer[], sendbinBufferOffset, endString[])
+
+   eki_ret = eki_send(InterfaceName[], sendbinBuffer[])
+   ;MsgNotify("DEBUG: ROS_EKIB_Send_InitMod send complete")
+
+END
+
+
+DEF ROS_EKIB_Send_InitVer(ipo_time:IN, robVer[]:IN)
+   DECL INT ipo_time
+   DECL CHAR robVer[]
+   DECL BOOL rc
+   DECL EKI_STATUS eki_ret
+   
+   ; Command ID = Initial Data
+   SendCmd[]=ROS_CommandTypes[ROS_Cmd_InitRobV].IDstr[]
+   
+   ;Write integer values to binary buffer
+   rc=StrClear(sendbinBuffer[])
+   sendbinBufferOffset = 0
+   CAST_TO(sendbinBuffer[], sendbinBufferOffset, SendCmd[], ipo_time)
+   CAST_TO(sendbinBuffer[], sendbinBufferOffset, robVer[])
+   CAST_TO(sendbinBuffer[], sendbinBufferOffset, endString[])
+ 
+    eki_ret = eki_send(InterfaceName[], sendbinBuffer[])
+   ;MsgNotify("DEBUG: ROS_EKIB_Send_InitVer send complete")
+
+END
+
+
+
+
+
+GLOBAL DEF ROS_EKIB_Send_Jstate(ipo_time:IN, pos_data:IN, vel_data:IN, torque_data:IN)
+   DECL INT ipo_time 
+   DECL E6AXIS pos_data
+   DECL E6AXIS vel_data
+   DECL E6AXIS torque_data
+   DECL eki_status eki_ret
+   DECL BOOL rc
+   
+   bin_xfer_pos_data = pos_data
+   bin_xfer_vel_data =  vel_data
+   bin_xfer_torque_data = torque_data
+   
+   SendCmd[]=ROS_CommandTypes[ROS_Cmd___JState].IDstr[]
+   
+   rc=StrClear(sendbinBuffer[])
+   sendbinBufferOffset = 0
+   CAST_TO(sendbinBuffer[], sendbinBufferOffset, SendCmd[], ipo_time)
+   
+   ; position
+   CAST_TO(sendbinBuffer[], sendbinBufferOffset, bin_xfer_pos_data)
+   ; velocity
+   CAST_TO(sendbinBuffer[], sendbinBufferOffset, bin_xfer_vel_data)
+   ; effort
+   CAST_TO(sendbinBuffer[], sendbinBufferOffset, bin_xfer_torque_data)
+
+   CAST_TO(sendbinBuffer[], sendbinBufferOffset, endString[])
+   ; Send data 
+   IF (ROS_EKI_IsConn()) THEN  ; Make sure connection hasn't died 
+      eki_ret = eki_send(InterfaceName[], sendbinBuffer[])
+      ;MsgNotify("DEBUG: ROS_EKIB_Send_Jstate send complete")
+   ENDIF
+   
+
+END
+
+
+
+
+; Send status code data.  RobStat should already be populated with current state
+; from the routine ROS_GetStatusData()
+GLOBAL DEF ROS_EKIB_Send_Status(ipoTime:IN, RobStat:IN)
+   DECL INT ipoTime
+   DECL ROS_RobStatusType RobStat
+   DECL EKI_STATUS eki_ret
+   DECL CHAR cmd[2]
+   DECL BOOL rc
+
+   IF (NOT ROS_EKIB_IsConn()) THEN  
+      RETURN
+   ENDIF
+   
+   SendCmd[]=ROS_CommandTypes[ROS_Cmd___Status].IDstr[]
+   
+   rc=StrClear(sendbinBuffer[])
+   sendbinBufferOffset = 0
+
+   ; Pack the command type & mode
+   CAST_TO(sendbinBuffer[], sendbinBufferOffset, SendCmd[], ipoTime, RobStat.Mode)
+   
+   ; Pack the states 
+   CAST_TO(sendbinBuffer[], sendbinBufferOffset, RobStat.eStop, RobStat.guardStop, RobStat.drivesPowered, RobStat.motionPossible, RobStat.inMotion, RobStat.inError, RobStat.errCode)
+
+   ; Pack the current Run Mode string (opState is 64 chars)
+   CAST_TO(sendbinBuffer[], sendbinBufferOffset, RobStat.opState[])
+   
+   CAST_TO(sendbinBuffer[], sendbinBufferOffset, endString[])
+   ; Send the message
+   eki_ret = eki_send(InterfaceName[], sendbinBuffer[])
+   ;MsgNotify("DEBUG: ROS_EKIB_Send_Status send complete")
+
+END
+
+
+; Send command acknowledge
+GLOBAL DEF ROS_EKIB_SendAck(cmd[]:IN, cmdID:IN)
+   DECL CHAR cmd[]
+   DECL INT cmdID
+   DECL EKI_Status eki_ret
+   DECL BOOL rc
+
+   IF (NOT ROS_EKIB_IsConn()) THEN  
+      RETURN
+   ENDIF
+   SendCmd[]=ROS_CommandTypes[ROS_Cmd_____Ackn].IDstr[]
+   
+   rc=StrClear(sendbinBuffer[])
+   sendbinBufferOffset = 0
+   CAST_TO(sendbinBuffer[], sendbinBufferOffset, SendCmd[], cmd[], cmdID, endString[])
+  
+   eki_ret = EKI_Send(InterfaceName[], sendbinBuffer[])
+   ;MsgNotify("DEBUG: ROS_EKIB_SendAck send complete")
+
+END
+
+
+; ROS_EKI_ReceiveData()
+; Tries to read received elements from buffer. Receive q left unchanged if empty.
+GLOBAL DEF ROS_EKIB_ReceiveData()
+   DECL EKI_Status eki_ret
+   DECL EKI_Status eki_ret_req
+   DECL E6AXIS joint_pos_cmd
+   DECL E6AXIS joint_vel_cmd
+   DECL E6AXIS joint_eff_cmd
+   DECL INT idx
+   DECL INT idxCmdType
+   DECL INT cmdID
+   DECL REAL dTime
+   DECL BOOL ret_OK
+   DECL int bb
+
+   ; Verify a valid connection
+   IF (NOT $FLAG[ROS_EKIB_Conn_Flag]) THEN
+      GOTO SkipRecv 
+   ENDIF
+   
+   ; Skip processing if no data received.
+   IF (NOT $FLAG[ROS_EKIB_Recv_Flag]) THEN
+      GOTO SkipRecv 
+   ENDIF
+   
+   ;Rrcv_flag faster than checkbuffer
+   eki_ret_req = eki_checkbuffer(InterfaceName[], "Buffer")
+   IF eki_ret_req.buff <= 0 THEN
+     GOTO SkipRecv 
+   ENDIF
+   
+   ;MsgNotify("DEBUG: received data.")
+   SPSdelay_Start(ROS_Timeout_RecvID, 200)
+   WHILE ((eki_ret_req.buff > 0) AND (NOT SPSdelay_Done(ROS_Timeout_RecvID, TRUE)))
+      binBuffer[] = " "
+      eki_ret_req = eki_getString(InterfaceName[], "Buffer", binBuffer[])
+      RecvCmd[] = " "
+      binBufferOffset = 0 
+      ; Get 8 character command
+      CAST_FROM(binBuffer[], binBufferOffset, RecvCmd[])
+      
+      idxCmdType = ROS_CommandTypeFind(RecvCmd[], TRUE)
+      ;MsgNotify("DEBUG: command type idx=%1", "ROSdebug", idxCmdType)
+
+      cmdID = -1
+      CAST_FROM(binBuffer[], binBufferOffset, cmdID)
+      
+      SWITCH (ROS_CommandTypes[idxCmdType].type)
+      CASE #ROSC_CmdJpos
+      ; Command data
+         dTime = 0.2
+         CAST_FROM(binBuffer[], binBufferOffset, dTime, joint_pos_cmd, joint_vel_cmd, joint_eff_cmd)
+         bin_xfer_pos_data = joint_pos_cmd
+         bin_xfer_vel_data = joint_vel_cmd
+         bin_xfer_torque_data = joint_eff_cmd
+         ROS_LogTargetPosCmd(joint_pos_cmd, cmdID, dTime)
+      
+      ; Program STOP command
+      CASE #ROSC_Stop
+         idx = ROS_LogCommand(#ROSC_Stop, cmdID)
+   
+      ; Program Start
+      CASE #ROSC_Start
+         idx = ROS_LogCommand(#ROSC_Start, cmdID)
+   
+      ; Drives OFF
+      CASE #ROSC_DrivesOff
+         idx = ROS_LogCommand(#ROSC_DrivesOff, cmdID)
+   
+      ; Drives ON
+      CASE #ROSC_DrivesOn
+         idx = ROS_LogCommand(#ROSC_DrivesOn, cmdID)
+   
+      ; Program Reset
+      CASE #ROSC_Reset
+         idx = ROS_LogCommand(#ROSC_Reset, cmdID)
+      
+      ; HEARTBEAT command to keep link alive
+      CASE #ROSC_HeartBeat
+         idx = ROS_LogCommand(#ROSC_Heartbeat, cmdID)
+   
+      ; Change operation state
+      CASE #ROSC_Change
+         CAST_FROM(binBuffer[], binBufferOffset, ReqOpState[])
+         ROS_LogOpModeCmd(ReqOpState[], cmdID)
+      
+      ; Initial connect
+      CASE #ROSC_Init
+         ; Send initialization data back
+         idx = ROS_LogCommand(#ROSC_Init, cmdID)
+      DEFAULT
+          MsgNotify("WARNING:ROS_EKIB unknown command type received. id=%1", "ROSdebug", ,RecvCmd[])
+      ENDSWITCH
+   ENDWHILE
+   SkipRecv:
+   ; When all data is read, reset the receive flag
+   $FLAG[ROS_EKIB_Recv_Flag] = FALSE
+END

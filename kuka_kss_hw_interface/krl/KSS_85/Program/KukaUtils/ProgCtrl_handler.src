@@ -1,0 +1,232 @@
+&ACCESS RV3
+DEF ProgCtrl_Handler ( )
+   ; Software License Agreement (BSD License)
+   ;
+   ; Copyright (c) 2022, Kuka Robotics Corp
+   ; All rights reserved.
+   ;
+   ; Redistribution and use in source and binary forms, with or without
+   ; modification, are permitted provided that the following conditions are met:
+   ;
+   ;      * Redistributions of source code must retain the above copyright
+   ;        notice, this list of conditions and the following disclaimer.
+   ;      * Redistributions in binary form must reproduce the above copyright
+   ;        notice, this list of conditions and the following disclaimer in the
+   ;        documentation and/or other materials provided with the distribution.
+   ;      * Neither the name of the copyright holder, nor the names of its
+   ;        contributors may be used to endorse or promote products derived
+   ;        from this software without specific prior written permission.
+   ;
+   ; THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+   ; AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+   ; IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+   ; ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+   ; LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+   ; CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+   ; SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+   ; INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+   ; CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+   ; ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+   ; POSSIBILITY OF SUCH DAMAGE.
+
+   ; Author: Pat Duda <pat.duda@kuka.com>
+   
+; Handle prog control operations in an auxiliary Submit
+; Call ProgCtrl_Do() to request operations
+; Note that program selection must be done with ProgCtrl_Select()
+
+LOOP
+   IF (nextState==#PS_Request) THEN
+      nextState = #PS_None
+      currentRequest = nextRequest
+      currentState = #PS_Active
+      cmdRet = 0
+      SWITCH (nextRequest)
+         CASE #PC_Select
+            CONFIRM 0
+            cmdRet = SelectProg(progRunName[], TRUE)
+         CASE #PC_Start
+            CONFIRM 0
+            ProgCtrl_Start()
+         CASE #PC_Stop
+            cmdRet = StopProg()
+         CASE #PC_Reset
+            CONFIRM 0
+            cmdRet = ResetProg(TRUE)
+         CASE #PC_Cancel
+            cmdRet = CancelProg(TRUE)
+         CASE #PC_DrivesON
+            $DRIVES_ENABLE = TRUE
+            CONFIRM 0
+         CASE #PC_DrivesOFF
+            $DRIVES_ENABLE = FALSE
+         ENDSWITCH
+      IF (cmdRet==0) THEN
+         currentState = #PS_Done
+      ELSE
+         currentState = #PS_Error
+      ENDIF
+   ENDIF
+ENDLOOP
+
+
+END
+
+
+
+; Call from main SPS to start the ProgCtrl_Handler() as aux submit
+GLOBAL DEF ProgCtrl_HandlerInit(interpreter:IN)
+INT interpreter
+DECL STATE_T StmtState
+DECL MODUS_T CmdMode 
+
+   runInSPS = 5
+   IF (VARSTATE("interpreter") == #INITIALIZED) THEN
+      IF ((2 <= interpreter) AND (interpreter <= 8)) THEN
+         runInSPS = interpreter
+      ELSE
+         MsgNotify("ProgCtrlExec bad interp, default to 5", "ProgCtrl", , , 100)
+      ENDIF
+   ENDIF
+
+   ProgCtrl_MakeRunCmd("ProgCtrlExec", progRunCmd[], runInSPS)
+   CmdMode = #SYNC
+   CWRITE($CMD,StmtState,CmdMode,progRunCmd[])
+
+END
+
+
+
+
+; Performs a blocking call to select the program if not selected
+; name[] is just the base name of the program. For example "main" to select the main.src program.
+GLOBAL DEF ProgCtrl_Select(name[]:IN, inBackground:IN)
+DECL CHAR name[]
+DECL BOOL inBackground
+
+DECL STATE_T StmtState
+DECL MODUS_T CmdMode 
+BOOL ChangeProg
+BOOL ret
+
+   CmdMode = #SYNC
+   ChangeProg = FALSE
+   ; Check if program is already selected
+   IF (VARSTATE("$PRO_NAME1[]") == #INITIALIZED) THEN
+      IF strComp($PRO_NAME1[], name[], #NOT_CASE_SENS) THEN
+         RETURN   
+      ELSE
+         ChangeProg = TRUE
+      ENDIF
+   ENDIF
+   ; Check if inBacground param was used
+   IF (VARSTATE("inBackground") <> #INITIALIZED) THEN
+      inBackground = FALSE
+   ENDIF
+
+   ret = StrClear(progName[])
+   ret = StrCopy(progName[], name[])
+   ProgCtrl_MakeRunProg(progName[], progRunName[])
+   IF (inBackground) THEN
+      ProgCtrl_Do(#PC_Select)
+   ELSE
+      currentRequest = #PC_Select
+      currentState = #PS_Active
+      cmdRet = SelectProg(progRunName[], TRUE)
+   
+      IF (cmdRet==0) THEN
+         currentState = #PS_Done
+      ELSE
+         currentState = #PS_Error
+      ENDIF
+   ENDIF
+   
+END
+
+; Performs a non-blocking call to start execution of the operation
+GLOBAL DEF ProgCtrl_Do(operation:IN)
+DECL ProgControlType operation
+   nextRequest = operation
+   nextState = #PS_Request
+END
+
+
+
+GLOBAL DEF ProgCtrl_Status(operation:OUT, state:OUT, err:OUT)
+DECL ProgControlType operation
+DECL ProgControlState state
+DECL INT err
+   operation = currentRequest
+   state = currentState
+   err = cmdRet
+END
+
+
+
+; Creates the name suitable for use in CWRITE RUN control command
+; Optionally specify interp number to indicate what interpreter to use: 
+; 1=main robot program, 3=first aux submit
+DEF ProgCtrl_MakeRunCmd(name[]:IN, runName[]:OUT, interp:IN)
+DECL CHAR name[]
+DECL CHAR runName[]
+DECL INT interp
+DECL STATE_T stat1
+DECL INT offset
+DECL BOOL ret
+
+   runName[] = " "
+   ret = StrClear(runName[])
+   offset = 0
+   IF (VARSTATE("interp") == #INITIALIZED) THEN
+      SWRITE(runName[], stat1, offset, "RUN /R1/%s() > %d", name[], interp)
+   ELSE
+      SWRITE(runName[], stat1, offset, "RUN /R1/%s()", name[])
+   ENDIF
+   
+END
+
+
+; Creates the name suitable for use in CWRITE RUN control command
+DEF ProgCtrl_MakeRunProg(name[]:IN, runName[]:OUT)
+DECL CHAR name[]
+DECL CHAR runName[]
+DECL STATE_T stat1
+DECL INT offset
+DECL BOOL ret
+
+   runName[] = " "
+   ret = StrClear(runName[])
+   offset = 0
+   SWRITE(runName[], stat1, offset, "/R1/%s()", name[])
+END
+
+
+
+DEF ProgCtrl_Start()
+   ; Turn drives ON
+   $DRIVES_ENABLE = TRUE
+   WAIT SEC 0.5
+   ; Clear error messages
+   CONFIRM 0
+   WAIT SEC 0.2
+   cmdRet=SelectProg(progRunName[], TRUE)
+END
+
+DEF ProgCtrl_Stop()
+DECL STATE_T StmtState
+DECL MODUS_T CmdMode 
+   CmdMode = #SYNC
+   IF ($PRO_STATE1 == #P_ACTIVE) THEN
+     CWRITE($CMD,StmtState,CmdMode,"STOP 1")
+   ENDIF
+END
+
+
+DEF ProgCtrl_Reset()
+DECL STATE_T StmtState
+DECL MODUS_T CmdMode 
+   CmdMode = #SYNC
+   CWRITE($CMD,StmtState,CmdMode,"RESET 1")
+END
+
+

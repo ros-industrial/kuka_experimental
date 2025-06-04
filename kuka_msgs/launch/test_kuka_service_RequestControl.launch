@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<launch>
+  
+  <arg name="rob_ns" default="rob1" />
+  <!-- command "reqCtrl" requires a type parameter "10", "20", "30"-->
+  <!-- see msg/ControlType.msg for definition and valid values -->
+  <arg name="type" default="10" />
+ 
+  <group ns="$(arg rob_ns)">
+	  <param name="kuka_msg_cmd" type="string" value="reqCtrl" />
+	  <param name="kuka_ctrl_val" type="int" value="$(arg type)" />
+	  
+	  <node name="test_kuka_service" pkg="kuka_msgs" type="kuka_msgs_node" 
+			respawn="false" 
+			output="screen"
+			args=""/>
+  </group>	
+</launch>

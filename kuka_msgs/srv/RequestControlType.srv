@@ -1,0 +1,5 @@
+# Service to request a different control type on the robot
+
+kuka_msgs/ControlType request_type
+---
+industrial_msgs/ServiceReturnCode code

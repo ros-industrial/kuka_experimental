@@ -1,0 +1,3 @@
+# Directly query the ControlState active on the robot
+---
+kuka_msgs/ControlState state

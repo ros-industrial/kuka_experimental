@@ -1,0 +1,204 @@
+<ETHERNETKRL>
+   <!-- ROS EKI Interface version 2003 -->
+   <CONFIGURATION>
+      <EXTERNAL>
+         <TYPE>Client</TYPE>                  <!-- Users connect as clients -->
+      </EXTERNAL>
+      <INTERNAL>
+         <ENVIRONMENT>Submit</ENVIRONMENT>   <!-- Server run via robot interpreter -->
+         <BUFFERING Limit="512" />            <!-- Allow buffering of up to 512 messages (system max) -->
+         <ALIVE Set_Flag="105" />               <!-- Use $flag[1] to indicate alive/good connection status -->
+         <IP>172.31.1.148</IP> <!-- IP address for EKI interface on robot controller (KRC) -->
+         <PORT>54600</PORT>                   <!-- Port of EKI interface on robot controller (in [54600, 54615]) -->
+         <PROTOCOL>TCP</PROTOCOL>             <!-- Use TCP protocol -->
+         <MESSAGES Logging="error" Display="disabled" />
+      </INTERNAL>
+   </CONFIGURATION>
+
+   <!-- Configured XML structure for data reception (external client to robot)
+        <RobotCommand>
+           <Pos A1="..." A2="..." A3="..." A4="..." A5="..." A6="...">
+           </Pos>
+        </RobotCommand>
+   -->
+   <RECEIVE>
+      <XML>
+         <!-- Data type: "CON"=Initial connect, "CMD"=position command, "CHANGE"=request state change  -->
+         <!--            "STOP"=Stop Program, "START"=Start Program, "RESET"=Reset Program  -->
+         <ELEMENT Tag="ROS/@REQTYPE" Type="STRING" Set_Flag="110" />
+         <ELEMENT Tag="ROS/@ID" Type="INT" />
+         <!-- Joint position command -->
+         <ELEMENT Tag="ROS/Command/@dt" Type="REAL" />
+         <ELEMENT Tag="ROS/Command/Pos/@A1" Type="REAL" />
+         <ELEMENT Tag="ROS/Command/Pos/@A2" Type="REAL" />
+         <ELEMENT Tag="ROS/Command/Pos/@A3" Type="REAL" />
+         <ELEMENT Tag="ROS/Command/Pos/@A4" Type="REAL" />
+         <ELEMENT Tag="ROS/Command/Pos/@A5" Type="REAL" />
+         <ELEMENT Tag="ROS/Command/Pos/@A6" Type="REAL" />
+         <ELEMENT Tag="ROS/Command/Pos/@E1" Type="REAL" />
+         <ELEMENT Tag="ROS/Command/Pos/@E2" Type="REAL" />
+         <ELEMENT Tag="ROS/Command/Pos/@E3" Type="REAL" />
+         <ELEMENT Tag="ROS/Command/Pos/@E4" Type="REAL" />
+         <ELEMENT Tag="ROS/Command/Pos/@E5" Type="REAL" />
+         <ELEMENT Tag="ROS/Command/Pos/@E6" Type="REAL" />
+         
+         <ELEMENT Tag="ROS/OpState/@Type" Type="STRING" />
+      </XML>
+   </RECEIVE>
+
+   <!-- Configured XML structure for data transmission (robot to external client)
+        <RobotState>
+           <Pos A1="..." A2="..." A3="..." A4="..." A5="..." A6="...">
+           </Pos>
+           <Vel A1="..." A2="..." A3="..." A4="..." A5="..." A6="...">
+           </Vel>
+           <Eff A1="..." A2="..." A3="..." A4="..." A5="..." A6="...">
+           </Eff>
+        </RobotState>
+   -->
+   <SEND>
+      <XML>
+         <!-- Data type: "INI"=Initial params, "STA"=Joint States,  -->
+         <ELEMENT Tag="Robot/@TYPE"/>
+         <!-- Command Acknowledge (TYPE=ACK) ========================================= -->
+         <ELEMENT Tag="Robot/Ack/@REQTYPE" />
+         <ELEMENT Tag="Robot/Ack/@ID" />
+
+         <!-- Joint States (TYPE=STA) ========================================= -->
+         <!-- Time stamp -->
+         <ELEMENT Tag="Robot/State/@IPOC"/>
+         <!-- Joint state positions -->
+         <ELEMENT Tag="Robot/State/Pos/@A1"/>
+         <ELEMENT Tag="Robot/State/Pos/@A2"/>
+         <ELEMENT Tag="Robot/State/Pos/@A3"/>
+         <ELEMENT Tag="Robot/State/Pos/@A4"/>
+         <ELEMENT Tag="Robot/State/Pos/@A5"/>
+         <ELEMENT Tag="Robot/State/Pos/@A6"/>
+         <ELEMENT Tag="Robot/State/Pos/@E1"/>
+         <ELEMENT Tag="Robot/State/Pos/@E2"/>
+         <ELEMENT Tag="Robot/State/Pos/@E3"/>
+         <ELEMENT Tag="Robot/State/Pos/@E4"/>
+         <ELEMENT Tag="Robot/State/Pos/@E5"/>
+         <ELEMENT Tag="Robot/State/Pos/@E6"/>
+         <!-- Joint state velocities -->
+         <ELEMENT Tag="Robot/State/Vel/@A1"/>
+         <ELEMENT Tag="Robot/State/Vel/@A2"/>
+         <ELEMENT Tag="Robot/State/Vel/@A3"/>
+         <ELEMENT Tag="Robot/State/Vel/@A4"/>
+         <ELEMENT Tag="Robot/State/Vel/@A5"/>
+         <ELEMENT Tag="Robot/State/Vel/@A6"/>
+         <ELEMENT Tag="Robot/State/Vel/@E1"/>
+         <ELEMENT Tag="Robot/State/Vel/@E2"/>
+         <ELEMENT Tag="Robot/State/Vel/@E3"/>
+         <ELEMENT Tag="Robot/State/Vel/@E4"/>
+         <ELEMENT Tag="Robot/State/Vel/@E5"/>
+         <ELEMENT Tag="Robot/State/Vel/@E6"/>
+         <!-- Joint state efforts (torques) -->
+         <ELEMENT Tag="Robot/State/Eff/@A1"/>
+         <ELEMENT Tag="Robot/State/Eff/@A2"/>
+         <ELEMENT Tag="Robot/State/Eff/@A3"/>
+         <ELEMENT Tag="Robot/State/Eff/@A4"/>
+         <ELEMENT Tag="Robot/State/Eff/@A5"/>
+         <ELEMENT Tag="Robot/State/Eff/@A6"/>
+         <ELEMENT Tag="Robot/State/Eff/@E1"/>
+         <ELEMENT Tag="Robot/State/Eff/@E2"/>
+         <ELEMENT Tag="Robot/State/Eff/@E3"/>
+         <ELEMENT Tag="Robot/State/Eff/@E4"/>
+         <ELEMENT Tag="Robot/State/Eff/@E5"/>
+         <ELEMENT Tag="Robot/State/Eff/@E6"/>
+         <!-- Interface state -->
+         <ELEMENT Tag="Robot/State/RobotCommand/@Size"/>  <!-- Number of elements currently in command buffer -->
+         
+         <!-- ROS Status Info  ========================================= -->
+         <ELEMENT Tag="Robot/Status/@Mode"/>
+         <ELEMENT Tag="Robot/Status/@OpState"/>
+         <ELEMENT Tag="Robot/Status/@EStop"/>
+         <ELEMENT Tag="Robot/Status/@GuardStop"/>
+         <ELEMENT Tag="Robot/Status/@DrivesPowered"/>
+         <ELEMENT Tag="Robot/Status/@MotionPossible"/>
+         <ELEMENT Tag="Robot/Status/@InMotion"/>
+         <ELEMENT Tag="Robot/Status/@InError"/>
+         <ELEMENT Tag="Robot/Status/@ErrorCode"/>
+         
+         <!-- Initial Params (TYPE=INI) ========================================= -->
+         <ELEMENT Tag="Robot/Init/@VER"/>
+         <ELEMENT Tag="Robot/Init/@IPOC"/>
+         <ELEMENT Tag="Robot/Init/@NumAx"/>
+         <ELEMENT Tag="Robot/Init/@NumExAx"/>
+         <ELEMENT Tag="Robot/Init/@Name"/>
+         <ELEMENT Tag="Robot/Init/@SerialNum"/>
+         <ELEMENT Tag="Robot/Init/@Model"/>
+         <ELEMENT Tag="Robot/Init/@RobVer"/>
+         <!-- Features: =============             -->
+         <ELEMENT Tag="Robot/Init/Features/@EKI"/>
+         <ELEMENT Tag="Robot/Init/Features/@RSI"/>
+         <ELEMENT Tag="Robot/Init/Features/@MXA"/>
+
+         <!-- Info for each axis: =============             -->
+         <!-- Type(1 = LINEAR, 3 = ROTATIONAL, 5 = ENDLESS) -->
+         <!-- RatioNum:Gear ratio numerator -->
+         <!-- RatioNum:Gear ratio denominator -->
+         <!-- MaxRPM:Motor RPM -->                                               
+         <ELEMENT Tag="Robot/Init/Axis/A1/@Type"/>
+         <ELEMENT Tag="Robot/Init/Axis/A1/@RatioNum"/>
+         <ELEMENT Tag="Robot/Init/Axis/A1/@RatioDen"/>
+         <ELEMENT Tag="Robot/Init/Axis/A1/@MaxRPM"/>
+ 
+         <ELEMENT Tag="Robot/Init/Axis/A2/@Type"/>
+         <ELEMENT Tag="Robot/Init/Axis/A2/@RatioNum"/>
+         <ELEMENT Tag="Robot/Init/Axis/A2/@RatioDen"/>
+         <ELEMENT Tag="Robot/Init/Axis/A2/@MaxRPM"/>
+
+         <ELEMENT Tag="Robot/Init/Axis/A3/@Type"/>
+         <ELEMENT Tag="Robot/Init/Axis/A3/@RatioNum"/>
+         <ELEMENT Tag="Robot/Init/Axis/A3/@RatioDen"/>
+         <ELEMENT Tag="Robot/Init/Axis/A3/@MaxRPM"/>
+         
+         <ELEMENT Tag="Robot/Init/Axis/A4/@Type"/>
+         <ELEMENT Tag="Robot/Init/Axis/A4/@RatioNum"/>
+         <ELEMENT Tag="Robot/Init/Axis/A4/@RatioDen"/>
+         <ELEMENT Tag="Robot/Init/Axis/A4/@MaxRPM"/>
+
+         <ELEMENT Tag="Robot/Init/Axis/A5/@Type"/>
+         <ELEMENT Tag="Robot/Init/Axis/A5/@RatioNum"/>
+         <ELEMENT Tag="Robot/Init/Axis/A5/@RatioDen"/>
+         <ELEMENT Tag="Robot/Init/Axis/A5/@MaxRPM"/>
+
+         <ELEMENT Tag="Robot/Init/Axis/A6/@Type"/>
+         <ELEMENT Tag="Robot/Init/Axis/A6/@RatioNum"/>
+         <ELEMENT Tag="Robot/Init/Axis/A6/@RatioDen"/>
+         <ELEMENT Tag="Robot/Init/Axis/A6/@MaxRPM"/>
+
+         <ELEMENT Tag="Robot/Init/Axis/E1/@Type"/>
+         <ELEMENT Tag="Robot/Init/Axis/E1/@RatioNum"/>
+         <ELEMENT Tag="Robot/Init/Axis/E1/@RatioDen"/>
+         <ELEMENT Tag="Robot/Init/Axis/E1/@MaxRPM"/>
+
+         <ELEMENT Tag="Robot/Init/Axis/E2/@Type"/>
+         <ELEMENT Tag="Robot/Init/Axis/E2/@RatioNum"/>
+         <ELEMENT Tag="Robot/Init/Axis/E2/@RatioDen"/>
+         <ELEMENT Tag="Robot/Init/Axis/E2/@MaxRPM"/>
+
+         <ELEMENT Tag="Robot/Init/Axis/E3/@Type"/>
+         <ELEMENT Tag="Robot/Init/Axis/E3/@RatioNum"/>
+         <ELEMENT Tag="Robot/Init/Axis/E3/@RatioDen"/>
+         <ELEMENT Tag="Robot/Init/Axis/E3/@MaxRPM"/>
+
+         <ELEMENT Tag="Robot/Init/Axis/E4/@Type"/>
+         <ELEMENT Tag="Robot/Init/Axis/E4/@RatioNum"/>
+         <ELEMENT Tag="Robot/Init/Axis/E4/@RatioDen"/>
+         <ELEMENT Tag="Robot/Init/Axis/E4/@MaxRPM"/>
+
+         <ELEMENT Tag="Robot/Init/Axis/E5/@Type"/>
+         <ELEMENT Tag="Robot/Init/Axis/E5/@RatioNum"/>
+         <ELEMENT Tag="Robot/Init/Axis/E5/@RatioDen"/>
+         <ELEMENT Tag="Robot/Init/Axis/E5/@MaxRPM"/>
+
+         <ELEMENT Tag="Robot/Init/Axis/E6/@Type"/>
+         <ELEMENT Tag="Robot/Init/Axis/E6/@RatioNum"/>
+         <ELEMENT Tag="Robot/Init/Axis/E6/@RatioDen"/>
+         <ELEMENT Tag="Robot/Init/Axis/E6/@MaxRPM"/>
+         
+      </XML>
+   </SEND>
+</ETHERNETKRL>

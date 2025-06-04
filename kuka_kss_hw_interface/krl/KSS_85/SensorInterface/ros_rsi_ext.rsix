@@ -1,0 +1,544 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- Do not change! The content of this file is generated. -->
+<!-- Generated with RSIVisual WorkVisual plugin. -->
+<!-- RobotSensorInterface 4.0 B3083 -->
+<RsiContext xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="0.1.0">
+  <RsiObjects>
+    <RsiObject ObjTypeId="32" ObjType="AxisAct" ObjId="AxisAct_1">
+      <Parameters>
+        <Parameter Name="Type" ParamId="0" ParamValue="0" />
+      </Parameters>
+    </RsiObject>
+    <RsiObject ObjTypeId="90" ObjType="AxisActExt" ObjId="AxisActExt_1">
+      <Parameters>
+        <Parameter Name="Type" ParamId="0" ParamValue="0" />
+      </Parameters>
+    </RsiObject>
+    <RsiObject ObjTypeId="67" ObjType="D" ObjId="Vel_A1">
+      <Inputs>
+        <Input InIdx="0" OutObjId="AxisAct_1" OutIdx="0" />
+      </Inputs>
+      <Parameters>
+        <Parameter Name="KD" ParamId="0" ParamValue="1" />
+      </Parameters>
+    </RsiObject>
+    <RsiObject ObjTypeId="64" ObjType="Ethernet" ObjId="Ethernet_1">
+      <Inputs>
+        <Input InIdx="0" OutObjId="Vel_A1" OutIdx="0" />
+        <Input InIdx="1" OutObjId="Vel_A2" OutIdx="0" />
+        <Input InIdx="2" OutObjId="Vel_A3" OutIdx="0" />
+        <Input InIdx="3" OutObjId="Vel_A4" OutIdx="0" />
+        <Input InIdx="4" OutObjId="Vel_A5" OutIdx="0" />
+        <Input InIdx="5" OutObjId="Vel_A6" OutIdx="0" />
+        <Input InIdx="6" OutObjId="Vel_E1" OutIdx="0" />
+        <Input InIdx="7" OutObjId="Vel_E2" OutIdx="0" />
+        <Input InIdx="8" OutObjId="Vel_E3" OutIdx="0" />
+        <Input InIdx="9" OutObjId="Vel_E4" OutIdx="0" />
+        <Input InIdx="10" OutObjId="Vel_E5" OutIdx="0" />
+        <Input InIdx="11" OutObjId="Vel_E6" OutIdx="0" />
+        <Input InIdx="12" OutObjId="GearTorque_1" OutIdx="0" />
+        <Input InIdx="13" OutObjId="GearTorque_1" OutIdx="1" />
+        <Input InIdx="14" OutObjId="GearTorque_1" OutIdx="2" />
+        <Input InIdx="15" OutObjId="GearTorque_1" OutIdx="3" />
+        <Input InIdx="16" OutObjId="GearTorque_1" OutIdx="4" />
+        <Input InIdx="17" OutObjId="GearTorque_1" OutIdx="5" />
+        <Input InIdx="18" OutObjId="GearTorqueExt_1" OutIdx="0" />
+        <Input InIdx="19" OutObjId="GearTorqueExt_1" OutIdx="1" />
+        <Input InIdx="20" OutObjId="GearTorqueExt_1" OutIdx="2" />
+        <Input InIdx="21" OutObjId="GearTorqueExt_1" OutIdx="3" />
+        <Input InIdx="22" OutObjId="GearTorqueExt_1" OutIdx="4" />
+        <Input InIdx="23" OutObjId="GearTorqueExt_1" OutIdx="5" />
+        <Input InIdx="24" OutObjId="Version" OutIdx="0" />
+      </Inputs>
+      <Parameters>
+        <Parameter IsRuntime="false" Name="ConfigFile" ParamId="0" ParamValue="ros_rsi_ext_ethernet.xml" />
+        <Parameter Name="Timeout" ParamId="0" ParamValue="100" />
+        <Parameter Name="Flag" ParamId="3" ParamValue="115" />
+        <Parameter Name="Precision" ParamId="7" ParamValue="4" />
+      </Parameters>
+    </RsiObject>
+    <RsiObject ObjTypeId="67" ObjType="D" ObjId="Vel_A2">
+      <Inputs>
+        <Input InIdx="0" OutObjId="AxisAct_1" OutIdx="1" />
+      </Inputs>
+      <Parameters>
+        <Parameter Name="KD" ParamId="0" ParamValue="1" />
+      </Parameters>
+    </RsiObject>
+    <RsiObject ObjTypeId="67" ObjType="D" ObjId="Vel_A3">
+      <Inputs>
+        <Input InIdx="0" OutObjId="AxisAct_1" OutIdx="2" />
+      </Inputs>
+      <Parameters>
+        <Parameter Name="KD" ParamId="0" ParamValue="1" />
+      </Parameters>
+    </RsiObject>
+    <RsiObject ObjTypeId="67" ObjType="D" ObjId="Vel_A4">
+      <Inputs>
+        <Input InIdx="0" OutObjId="AxisAct_1" OutIdx="3" />
+      </Inputs>
+      <Parameters>
+        <Parameter Name="KD" ParamId="0" ParamValue="1" />
+      </Parameters>
+    </RsiObject>
+    <RsiObject ObjTypeId="67" ObjType="D" ObjId="Vel_A5">
+      <Inputs>
+        <Input InIdx="0" OutObjId="AxisAct_1" OutIdx="4" />
+      </Inputs>
+      <Parameters>
+        <Parameter Name="KD" ParamId="0" ParamValue="1" />
+      </Parameters>
+    </RsiObject>
+    <RsiObject ObjTypeId="67" ObjType="D" ObjId="Vel_A6">
+      <Inputs>
+        <Input InIdx="0" OutObjId="AxisAct_1" OutIdx="5" />
+      </Inputs>
+      <Parameters>
+        <Parameter Name="KD" ParamId="0" ParamValue="1" />
+      </Parameters>
+    </RsiObject>
+    <RsiObject ObjTypeId="67" ObjType="D" ObjId="Vel_E1">
+      <Inputs>
+        <Input InIdx="0" OutObjId="AxisActExt_1" OutIdx="0" />
+      </Inputs>
+      <Parameters>
+        <Parameter Name="KD" ParamId="0" ParamValue="1" />
+      </Parameters>
+    </RsiObject>
+    <RsiObject ObjTypeId="67" ObjType="D" ObjId="Vel_E2">
+      <Inputs>
+        <Input InIdx="0" OutObjId="AxisActExt_1" OutIdx="1" />
+      </Inputs>
+      <Parameters>
+        <Parameter Name="KD" ParamId="0" ParamValue="1" />
+      </Parameters>
+    </RsiObject>
+    <RsiObject ObjTypeId="67" ObjType="D" ObjId="Vel_E3">
+      <Inputs>
+        <Input InIdx="0" OutObjId="AxisActExt_1" OutIdx="2" />
+      </Inputs>
+      <Parameters>
+        <Parameter Name="KD" ParamId="0" ParamValue="1" />
+      </Parameters>
+    </RsiObject>
+    <RsiObject ObjTypeId="67" ObjType="D" ObjId="Vel_E4">
+      <Inputs>
+        <Input InIdx="0" OutObjId="AxisActExt_1" OutIdx="3" />
+      </Inputs>
+      <Parameters>
+        <Parameter Name="KD" ParamId="0" ParamValue="1" />
+      </Parameters>
+    </RsiObject>
+    <RsiObject ObjTypeId="67" ObjType="D" ObjId="Vel_E5">
+      <Inputs>
+        <Input InIdx="0" OutObjId="AxisActExt_1" OutIdx="4" />
+      </Inputs>
+      <Parameters>
+        <Parameter Name="KD" ParamId="0" ParamValue="1" />
+      </Parameters>
+    </RsiObject>
+    <RsiObject ObjTypeId="67" ObjType="D" ObjId="Vel_E6">
+      <Inputs>
+        <Input InIdx="0" OutObjId="AxisActExt_1" OutIdx="5" />
+      </Inputs>
+      <Parameters>
+        <Parameter Name="KD" ParamId="0" ParamValue="1" />
+      </Parameters>
+    </RsiObject>
+    <RsiObject ObjTypeId="60" ObjType="IIRFilter" ObjId="IIRFilter_A1">
+      <Inputs>
+        <Input InIdx="0" OutObjId="Ethernet_1" OutIdx="0" />
+      </Inputs>
+      <Parameters>
+        <Parameter Name="Reset" ParamId="0" ParamValue="0" />
+        <Parameter IsRuntime="false" Name="Type" ParamId="0" ParamValue="0" />
+        <Parameter IsRuntime="false" Name="Name" ParamId="1" ParamValue="0" />
+        <Parameter IsRuntime="false" Name="Order" ParamId="2" ParamValue="0" />
+        <Parameter IsRuntime="false" Name="Cutoff" ParamId="3" ParamValue="50" />
+      </Parameters>
+    </RsiObject>
+    <RsiObject ObjTypeId="60" ObjType="IIRFilter" ObjId="IIRFilter_A2">
+      <Inputs>
+        <Input InIdx="0" OutObjId="Ethernet_1" OutIdx="1" />
+      </Inputs>
+      <Parameters>
+        <Parameter Name="Reset" ParamId="0" ParamValue="0" />
+        <Parameter IsRuntime="false" Name="Type" ParamId="0" ParamValue="0" />
+        <Parameter IsRuntime="false" Name="Name" ParamId="1" ParamValue="0" />
+        <Parameter IsRuntime="false" Name="Order" ParamId="2" ParamValue="0" />
+        <Parameter IsRuntime="false" Name="Cutoff" ParamId="3" ParamValue="50" />
+      </Parameters>
+    </RsiObject>
+    <RsiObject ObjTypeId="60" ObjType="IIRFilter" ObjId="IIRFilter_A3">
+      <Inputs>
+        <Input InIdx="0" OutObjId="Ethernet_1" OutIdx="2" />
+      </Inputs>
+      <Parameters>
+        <Parameter Name="Reset" ParamId="0" ParamValue="0" />
+        <Parameter IsRuntime="false" Name="Type" ParamId="0" ParamValue="0" />
+        <Parameter IsRuntime="false" Name="Name" ParamId="1" ParamValue="0" />
+        <Parameter IsRuntime="false" Name="Order" ParamId="2" ParamValue="0" />
+        <Parameter IsRuntime="false" Name="Cutoff" ParamId="3" ParamValue="50" />
+      </Parameters>
+    </RsiObject>
+    <RsiObject ObjTypeId="60" ObjType="IIRFilter" ObjId="IIRFilter_A4">
+      <Inputs>
+        <Input InIdx="0" OutObjId="Ethernet_1" OutIdx="3" />
+      </Inputs>
+      <Parameters>
+        <Parameter Name="Reset" ParamId="0" ParamValue="0" />
+        <Parameter IsRuntime="false" Name="Type" ParamId="0" ParamValue="0" />
+        <Parameter IsRuntime="false" Name="Name" ParamId="1" ParamValue="0" />
+        <Parameter IsRuntime="false" Name="Order" ParamId="2" ParamValue="0" />
+        <Parameter IsRuntime="false" Name="Cutoff" ParamId="3" ParamValue="50" />
+      </Parameters>
+    </RsiObject>
+    <RsiObject ObjTypeId="60" ObjType="IIRFilter" ObjId="IIRFilter_A5">
+      <Inputs>
+        <Input InIdx="0" OutObjId="Ethernet_1" OutIdx="4" />
+      </Inputs>
+      <Parameters>
+        <Parameter Name="Reset" ParamId="0" ParamValue="0" />
+        <Parameter IsRuntime="false" Name="Type" ParamId="0" ParamValue="0" />
+        <Parameter IsRuntime="false" Name="Name" ParamId="1" ParamValue="0" />
+        <Parameter IsRuntime="false" Name="Order" ParamId="2" ParamValue="0" />
+        <Parameter IsRuntime="false" Name="Cutoff" ParamId="3" ParamValue="50" />
+      </Parameters>
+    </RsiObject>
+    <RsiObject ObjTypeId="60" ObjType="IIRFilter" ObjId="IIRFilter_A6">
+      <Inputs>
+        <Input InIdx="0" OutObjId="Ethernet_1" OutIdx="5" />
+      </Inputs>
+      <Parameters>
+        <Parameter Name="Reset" ParamId="0" ParamValue="0" />
+        <Parameter IsRuntime="false" Name="Type" ParamId="0" ParamValue="0" />
+        <Parameter IsRuntime="false" Name="Name" ParamId="1" ParamValue="0" />
+        <Parameter IsRuntime="false" Name="Order" ParamId="2" ParamValue="0" />
+        <Parameter IsRuntime="false" Name="Cutoff" ParamId="3" ParamValue="50" />
+      </Parameters>
+    </RsiObject>
+    <RsiObject ObjTypeId="60" ObjType="IIRFilter" ObjId="IIRFilter_E1">
+      <Inputs>
+        <Input InIdx="0" OutObjId="Ethernet_1" OutIdx="6" />
+      </Inputs>
+      <Parameters>
+        <Parameter Name="Reset" ParamId="0" ParamValue="0" />
+        <Parameter IsRuntime="false" Name="Type" ParamId="0" ParamValue="0" />
+        <Parameter IsRuntime="false" Name="Name" ParamId="1" ParamValue="0" />
+        <Parameter IsRuntime="false" Name="Order" ParamId="2" ParamValue="0" />
+        <Parameter IsRuntime="false" Name="Cutoff" ParamId="3" ParamValue="50" />
+      </Parameters>
+    </RsiObject>
+    <RsiObject ObjTypeId="60" ObjType="IIRFilter" ObjId="IIRFilter_E2">
+      <Inputs>
+        <Input InIdx="0" OutObjId="Ethernet_1" OutIdx="7" />
+      </Inputs>
+      <Parameters>
+        <Parameter Name="Reset" ParamId="0" ParamValue="0" />
+        <Parameter IsRuntime="false" Name="Type" ParamId="0" ParamValue="0" />
+        <Parameter IsRuntime="false" Name="Name" ParamId="1" ParamValue="0" />
+        <Parameter IsRuntime="false" Name="Order" ParamId="2" ParamValue="0" />
+        <Parameter IsRuntime="false" Name="Cutoff" ParamId="3" ParamValue="50" />
+      </Parameters>
+    </RsiObject>
+    <RsiObject ObjTypeId="60" ObjType="IIRFilter" ObjId="IIRFilter_E3">
+      <Inputs>
+        <Input InIdx="0" OutObjId="Ethernet_1" OutIdx="8" />
+      </Inputs>
+      <Parameters>
+        <Parameter Name="Reset" ParamId="0" ParamValue="0" />
+        <Parameter IsRuntime="false" Name="Type" ParamId="0" ParamValue="0" />
+        <Parameter IsRuntime="false" Name="Name" ParamId="1" ParamValue="0" />
+        <Parameter IsRuntime="false" Name="Order" ParamId="2" ParamValue="0" />
+        <Parameter IsRuntime="false" Name="Cutoff" ParamId="3" ParamValue="50" />
+      </Parameters>
+    </RsiObject>
+    <RsiObject ObjTypeId="60" ObjType="IIRFilter" ObjId="IIRFilter_E4">
+      <Inputs>
+        <Input InIdx="0" OutObjId="Ethernet_1" OutIdx="9" />
+      </Inputs>
+      <Parameters>
+        <Parameter Name="Reset" ParamId="0" ParamValue="0" />
+        <Parameter IsRuntime="false" Name="Type" ParamId="0" ParamValue="0" />
+        <Parameter IsRuntime="false" Name="Name" ParamId="1" ParamValue="0" />
+        <Parameter IsRuntime="false" Name="Order" ParamId="2" ParamValue="0" />
+        <Parameter IsRuntime="false" Name="Cutoff" ParamId="3" ParamValue="50" />
+      </Parameters>
+    </RsiObject>
+    <RsiObject ObjTypeId="60" ObjType="IIRFilter" ObjId="IIRFilter_E5">
+      <Inputs>
+        <Input InIdx="0" OutObjId="Ethernet_1" OutIdx="10" />
+      </Inputs>
+      <Parameters>
+        <Parameter Name="Reset" ParamId="0" ParamValue="0" />
+        <Parameter IsRuntime="false" Name="Type" ParamId="0" ParamValue="0" />
+        <Parameter IsRuntime="false" Name="Name" ParamId="1" ParamValue="0" />
+        <Parameter IsRuntime="false" Name="Order" ParamId="2" ParamValue="0" />
+        <Parameter IsRuntime="false" Name="Cutoff" ParamId="3" ParamValue="50" />
+      </Parameters>
+    </RsiObject>
+    <RsiObject ObjTypeId="60" ObjType="IIRFilter" ObjId="IIRFilter_E6">
+      <Inputs>
+        <Input InIdx="0" OutObjId="Ethernet_1" OutIdx="11" />
+      </Inputs>
+      <Parameters>
+        <Parameter Name="Reset" ParamId="0" ParamValue="0" />
+        <Parameter IsRuntime="false" Name="Type" ParamId="0" ParamValue="0" />
+        <Parameter IsRuntime="false" Name="Name" ParamId="1" ParamValue="0" />
+        <Parameter IsRuntime="false" Name="Order" ParamId="2" ParamValue="0" />
+        <Parameter IsRuntime="false" Name="Cutoff" ParamId="3" ParamValue="50" />
+      </Parameters>
+    </RsiObject>
+    <RsiObject ObjTypeId="33" ObjType="AxisCorr" ObjId="AxisCorr_1">
+      <Inputs>
+        <Input InIdx="0" OutObjId="IIRFilter_A1" OutIdx="0" />
+        <Input InIdx="1" OutObjId="IIRFilter_A2" OutIdx="0" />
+        <Input InIdx="2" OutObjId="IIRFilter_A3" OutIdx="0" />
+        <Input InIdx="3" OutObjId="IIRFilter_A4" OutIdx="0" />
+        <Input InIdx="4" OutObjId="IIRFilter_A5" OutIdx="0" />
+        <Input InIdx="5" OutObjId="IIRFilter_A6" OutIdx="0" />
+      </Inputs>
+      <Parameters>
+        <Parameter Name="LowerLimA1" ParamId="0" ParamValue="-180" />
+        <Parameter Name="LowerLimA2" ParamId="1" ParamValue="-180" />
+        <Parameter Name="LowerLimA3" ParamId="2" ParamValue="-180" />
+        <Parameter Name="LowerLimA4" ParamId="3" ParamValue="-180" />
+        <Parameter Name="LowerLimA5" ParamId="4" ParamValue="-180" />
+        <Parameter Name="LowerLimA6" ParamId="5" ParamValue="-360" />
+        <Parameter Name="UpperLimA1" ParamId="6" ParamValue="180" />
+        <Parameter Name="UpperLimA2" ParamId="7" ParamValue="180" />
+        <Parameter Name="UpperLimA3" ParamId="8" ParamValue="180" />
+        <Parameter Name="UpperLimA4" ParamId="9" ParamValue="180" />
+        <Parameter Name="UpperLimA5" ParamId="10" ParamValue="180" />
+        <Parameter Name="UpperLimA6" ParamId="11" ParamValue="360" />
+      </Parameters>
+    </RsiObject>
+    <RsiObject ObjTypeId="87" ObjType="AxisCorrExt" ObjId="AxisCorrExt_1">
+      <Inputs>
+        <Input InIdx="0" OutObjId="IIRFilter_E1" OutIdx="0" />
+        <Input InIdx="1" OutObjId="IIRFilter_E2" OutIdx="0" />
+        <Input InIdx="2" OutObjId="IIRFilter_E3" OutIdx="0" />
+        <Input InIdx="3" OutObjId="IIRFilter_E4" OutIdx="0" />
+        <Input InIdx="4" OutObjId="IIRFilter_E5" OutIdx="0" />
+        <Input InIdx="5" OutObjId="IIRFilter_E6" OutIdx="0" />
+      </Inputs>
+      <Parameters>
+        <Parameter Name="LowerLimE1" ParamId="0" ParamValue="-10000" />
+        <Parameter Name="LowerLimE2" ParamId="1" ParamValue="-10000" />
+        <Parameter Name="LowerLimE3" ParamId="2" ParamValue="-10000" />
+        <Parameter Name="LowerLimE4" ParamId="3" ParamValue="-10000" />
+        <Parameter Name="LowerLimE5" ParamId="4" ParamValue="-10000" />
+        <Parameter Name="LowerLimE6" ParamId="5" ParamValue="-10000" />
+        <Parameter Name="UpperLimE1" ParamId="6" ParamValue="10000" />
+        <Parameter Name="UpperLimE2" ParamId="7" ParamValue="10000" />
+        <Parameter Name="UpperLimE3" ParamId="8" ParamValue="10000" />
+        <Parameter Name="UpperLimE4" ParamId="9" ParamValue="10000" />
+        <Parameter Name="UpperLimE5" ParamId="10" ParamValue="10000" />
+        <Parameter Name="UpperLimE6" ParamId="11" ParamValue="10000" />
+      </Parameters>
+    </RsiObject>
+    <RsiObject ObjTypeId="82" ObjType="AxisCorrMon" ObjId="AxisCorrMon_1">
+      <Parameters>
+        <Parameter Name="MaxA1" ParamId="0" ParamValue="180" />
+        <Parameter Name="MaxA2" ParamId="1" ParamValue="180" />
+        <Parameter Name="MaxA3" ParamId="2" ParamValue="180" />
+        <Parameter Name="MaxA4" ParamId="3" ParamValue="180" />
+        <Parameter Name="MaxA5" ParamId="4" ParamValue="180" />
+        <Parameter Name="MaxA6" ParamId="5" ParamValue="360" />
+        <Parameter Name="MaxE1" ParamId="6" ParamValue="10000" />
+        <Parameter Name="MaxE2" ParamId="7" ParamValue="10000" />
+        <Parameter Name="MaxE3" ParamId="8" ParamValue="10000" />
+        <Parameter Name="MaxE4" ParamId="9" ParamValue="10000" />
+        <Parameter Name="MaxE5" ParamId="10" ParamValue="10000" />
+        <Parameter Name="MaxE6" ParamId="11" ParamValue="10000" />
+      </Parameters>
+    </RsiObject>
+    <RsiObject ObjTypeId="7" ObjType="Equal" ObjId="Equal_1">
+      <Inputs>
+        <Input InIdx="0" OutObjId="Ethernet_1" OutIdx="12" />
+      </Inputs>
+      <Parameters>
+        <Parameter Name="CompVal" ParamId="0" ParamValue="0" />
+        <Parameter Name="Tolerance" ParamId="1" ParamValue="0.1" />
+      </Parameters>
+    </RsiObject>
+    <RsiObject ObjTypeId="55" ObjType="Monitor" ObjId="Monitor_1">
+      <Inputs>
+        <Input InIdx="0" OutObjId="IIRFilter_A1" OutIdx="0" />
+        <Input InIdx="1" OutObjId="IIRFilter_A2" OutIdx="0" />
+        <Input InIdx="2" OutObjId="IIRFilter_A3" OutIdx="0" />
+        <Input InIdx="3" OutObjId="IIRFilter_A4" OutIdx="0" />
+        <Input InIdx="4" OutObjId="IIRFilter_A5" OutIdx="0" />
+        <Input InIdx="5" OutObjId="IIRFilter_A6" OutIdx="0" />
+        <Input InIdx="6" OutObjId="IIRFilter_E1" OutIdx="0" />
+        <Input InIdx="7" OutObjId="IIRFilter_E2" OutIdx="0" />
+        <Input InIdx="8" OutObjId="IIRFilter_E3" OutIdx="0" />
+        <Input InIdx="9" OutObjId="IIRFilter_E4" OutIdx="0" />
+        <Input InIdx="10" OutObjId="IIRFilter_E4" OutIdx="0" />
+        <Input InIdx="11" OutObjId="IIRFilter_E5" OutIdx="0" />
+        <Input InIdx="12" OutObjId="Equal_1" OutIdx="0" />
+      </Inputs>
+      <Parameters>
+        <Parameter Name="Refresh" ParamId="0" ParamValue="1" />
+        <Parameter Name="Timeout" ParamId="1" ParamValue="50" />
+        <Parameter Name="ReqTimeZero" ParamId="2" ParamValue="1" />
+        <Parameter IsRuntime="false" Name="IP" ParamId="0" ParamValue="192.168.0.1" />
+        <Parameter IsRuntime="false" Name="Channel" ParamId="1" ParamValue="1" />
+      </Parameters>
+    </RsiObject>
+    <RsiObject ObjTypeId="46" ObjType="GearTorque" ObjId="GearTorque_1">
+      <Parameters>
+        <Parameter Name="TorqueSource" ParamId="0" ParamValue="0" />
+        <Parameter Name="LocationOnJoint" ParamId="0" ParamValue="1" />
+      </Parameters>
+    </RsiObject>
+    <RsiObject ObjTypeId="89" ObjType="GearTorqueExt" ObjId="GearTorqueExt_1">
+      <Parameters>
+        <Parameter Name="TorqueSource" ParamId="0" ParamValue="0" />
+        <Parameter Name="LocationOnJoint" ParamId="0" ParamValue="1" />
+      </Parameters>
+    </RsiObject>
+    <RsiObject ObjTypeId="94" ObjType="Constant" ObjId="Version">
+      <Parameters>
+        <Parameter IsPublic="true" Name="Value" ParamId="0" ParamValue="2001" />
+      </Parameters>
+    </RsiObject>
+    <RsiObject ObjTypeId="18" ObjType="Stop" ObjId="Stop_1">
+      <Inputs>
+        <Input InIdx="0" OutObjId="Ethernet_1" OutIdx="13" />
+      </Inputs>
+      <Parameters>
+        <Parameter Name="Mode" ParamId="0" ParamValue="4" />
+        <Parameter Name="Channel" ParamId="1" ParamValue="0" />
+      </Parameters>
+    </RsiObject>
+  </RsiObjects>
+  <Editor>
+    <Comments>
+      <Comment Location="-72,-366" Name="Comment_1" Text="Calculate Velocity - deg/sec or mm/sec" />
+      <Comment Location="852,1026" Name="Comment_2" Text="Version passed with HOLDON=0.  Missed packets will have value=0" />
+    </Comments>
+    <Connectors />
+    <FunctionBlocks />
+    <Groups />
+    <Links>
+      <Link From="Vel_A1" FromPort="Out1" Points="144.28,-292.5;152.28,-292.5;160.28,-292.5;160.28,-184.5;542,-184.5;558,-184.5" To="Ethernet_1" ToPort="In1" />
+      <Link From="Vel_A2" FromPort="Out1" Points="138.28,-184.5;146.28,-184.5;154.28,-184.5;154.28,-154.5;542,-154.5;558,-154.5" To="Ethernet_1" ToPort="In2" />
+      <Link From="Vel_A3" FromPort="Out1" Points="144.28,-88.5;156.28,-88.5;168.28,-88.5;168.28,-124.5;542,-124.5;558,-124.5" To="Ethernet_1" ToPort="In3" />
+      <Link From="Vel_A4" FromPort="Out1" Points="150.28,1.5;162.28,1.5;174.28,1.5;174.28,-94.5;542,-94.5;558,-94.5" To="Ethernet_1" ToPort="In4" />
+      <Link From="Vel_A5" FromPort="Out1" Points="156.28,97.5;168.28,97.5;180.28,97.5;180.28,-64.5;542,-64.5;558,-64.5" To="Ethernet_1" ToPort="In5" />
+      <Link From="Vel_A6" FromPort="Out1" Points="168.28,187.5;180.28,187.5;192.28,187.5;192.28,-34.5;542,-34.5;558,-34.5" To="Ethernet_1" ToPort="In6" />
+      <Link From="AxisAct_1" FromPort="A1" Points="-178.69,-196.5;-166.69,-196.5;-154.69,-196.5;-154.69,-292.5;-34,-292.5;-18,-292.5" To="Vel_A1" ToPort="In1" />
+      <Link From="AxisAct_1" FromPort="A2" Points="-178.69,-166.5;-158.69,-166.5;-138.69,-166.5;-138.69,-184.5;-40,-184.5;-24,-184.5" To="Vel_A2" ToPort="In1" />
+      <Link From="AxisAct_1" FromPort="A3" Points="-178.69,-136.5;-146.69,-136.5;-114.69,-136.5;-114.69,-88.5;-34,-88.5;-18,-88.5" To="Vel_A3" ToPort="In1" />
+      <Link From="AxisAct_1" FromPort="A4" Points="-178.69,-106.5;-154.69,-106.5;-130.69,-106.5;-130.69,1.5;-28,1.5;-12,1.5" To="Vel_A4" ToPort="In1" />
+      <Link From="AxisAct_1" FromPort="A5" Points="-178.69,-76.5;-162.69,-76.5;-146.69,-76.5;-146.69,97.5;-22,97.5;-6,97.5" To="Vel_A5" ToPort="In1" />
+      <Link From="AxisAct_1" FromPort="A6" Points="-178.69,-46.5;-170.69,-46.5;-162.69,-46.5;-162.69,187.5;-10,187.5;6,187.5" To="Vel_A6" ToPort="In1" />
+      <Link From="Vel_E1" FromPort="Out1" Points="174.28,307.5;186.28,307.5;198.28,307.5;198.28,-4.5;542,-4.5;558,-4.5" To="Ethernet_1" ToPort="In7" />
+      <Link From="Vel_E2" FromPort="Out1" Points="186.28,403.5;198.28,403.5;210.28,403.5;210.28,25.5;542,25.5;558,25.5" To="Ethernet_1" ToPort="In8" />
+      <Link From="Vel_E3" FromPort="Out1" Points="192.28,493.5;204.28,493.5;216.28,493.5;216.28,55.5;542,55.5;558,55.5" To="Ethernet_1" ToPort="In9" />
+      <Link From="Vel_E4" FromPort="Out1" Points="198.28,583.5;210.28,583.5;222.28,583.5;222.28,85.5;542,85.5;558,85.5" To="Ethernet_1" ToPort="In10" />
+      <Link From="Vel_E5" FromPort="Out1" Points="210.28,679.5;222.28,679.5;234.28,679.5;234.28,115.5;542,115.5;558,115.5" To="Ethernet_1" ToPort="In11" />
+      <Link From="Vel_E6" FromPort="Out1" Points="210.28,769.5;222.28,769.5;250.28,769.5;250.28,145.5;542,145.5;558,145.5" To="Ethernet_1" ToPort="In12" />
+      <Link From="AxisActExt_1" FromPort="E1" Points="-244.69,313.5;-232.69,313.5;-220.69,313.5;-220.69,307.5;-4,307.5;12,307.5" To="Vel_E1" ToPort="In1" />
+      <Link From="AxisActExt_1" FromPort="E2" Points="-244.69,343.5;-204.69,343.5;-164.69,343.5;-164.69,403.5;8,403.5;24,403.5" To="Vel_E2" ToPort="In1" />
+      <Link From="AxisActExt_1" FromPort="E3" Points="-244.69,373.5;-212.69,373.5;-180.69,373.5;-180.69,493.5;14,493.5;30,493.5" To="Vel_E3" ToPort="In1" />
+      <Link From="AxisActExt_1" FromPort="E4" Points="-244.69,403.5;-220.69,403.5;-196.69,403.5;-196.69,583.5;20,583.5;36,583.5" To="Vel_E4" ToPort="In1" />
+      <Link From="AxisActExt_1" FromPort="E5" Points="-244.69,433.5;-228.69,433.5;-212.69,433.5;-212.69,679.5;32,679.5;48,679.5" To="Vel_E5" ToPort="In1" />
+      <Link From="AxisActExt_1" FromPort="E6" Points="-244.69,463.5;-236.69,463.5;-228.69,463.5;-228.69,769.5;32,769.5;48,769.5" To="Vel_E6" ToPort="In1" />
+      <Link From="Ethernet_1" FromPort="Out1" Points="754.52,-184.5;766.52,-184.5;778.52,-184.5;778.52,-1294.5;1226,-1294.5;1242,-1294.5" To="IIRFilter_A1" ToPort="In1" />
+      <Link From="Ethernet_1" FromPort="Out2" Points="754.52,-154.5;774.52,-154.5;794.52,-154.5;794.52,-1108.5;1238,-1108.5;1254,-1108.5" To="IIRFilter_A2" ToPort="In1" />
+      <Link From="Ethernet_1" FromPort="Out3" Points="754.52,-124.5;782.52,-124.5;810.52,-124.5;810.52,-916.5;1256,-916.5;1272,-916.5" To="IIRFilter_A3" ToPort="In1" />
+      <Link From="Ethernet_1" FromPort="Out4" Points="754.52,-94.5;790.52,-94.5;826.52,-94.5;826.52,-730.5;1274,-730.5;1290,-730.5" To="IIRFilter_A4" ToPort="In1" />
+      <Link From="Ethernet_1" FromPort="Out5" Points="754.52,-64.5;798.52,-64.5;842.52,-64.5;842.52,-550.5;1304,-550.5;1320,-550.5" To="IIRFilter_A5" ToPort="In1" />
+      <Link From="Ethernet_1" FromPort="Out6" Points="754.52,-34.5;806.52,-34.5;858.52,-34.5;858.52,-364.5;1322,-364.5;1338,-364.5" To="IIRFilter_A6" ToPort="In1" />
+      <Link From="Ethernet_1" FromPort="Out7" Points="754.52,-4.5;814.52,-4.5;874.52,-4.5;874.52,-160.5;1208,-160.5;1224,-160.5" To="IIRFilter_E1" ToPort="In1" />
+      <Link From="Ethernet_1" FromPort="Out8" Points="754.52,25.5;822.52,25.5;890.52,25.5;890.52,19.5;1226,19.5;1242,19.5" To="IIRFilter_E2" ToPort="In1" />
+      <Link From="Ethernet_1" FromPort="Out9" Points="754.52,55.5;802.52,55.5;850.52,55.5;850.52,211.5;1238,211.5;1254,211.5" To="IIRFilter_E3" ToPort="In1" />
+      <Link From="Ethernet_1" FromPort="Out10" Points="754.52,85.5;794.52,85.5;834.52,85.5;834.52,403.5;1256,403.5;1272,403.5" To="IIRFilter_E4" ToPort="In1" />
+      <Link From="Ethernet_1" FromPort="Out11" Points="754.52,115.5;786.52,115.5;818.52,115.5;818.52,595.5;1268,595.5;1284,595.5" To="IIRFilter_E5" ToPort="In1" />
+      <Link From="Ethernet_1" FromPort="Out12" Points="754.52,145.5;778.52,145.5;802.52,145.5;802.52,793.5;1286,793.5;1302,793.5" To="IIRFilter_E6" ToPort="In1" />
+      <Link From="IIRFilter_A1" FromPort="Out1" Points="1474.87,-1294.5;1486.87,-1294.5;1498.87,-1294.5;1498.87,-1414.5;2138,-1414.5;2154,-1414.5" To="AxisCorr_1" ToPort="CorrA1" />
+      <Link From="IIRFilter_A2" FromPort="Out1" Points="1486.87,-1108.5;1498.87,-1108.5;1510.87,-1108.5;1510.87,-1384.5;2138,-1384.5;2154,-1384.5" To="AxisCorr_1" ToPort="CorrA2" />
+      <Link From="IIRFilter_A3" FromPort="Out1" Points="1504.87,-916.5;1516.87,-916.5;1544.87,-916.5;1544.87,-1354.5;2138,-1354.5;2154,-1354.5" To="AxisCorr_1" ToPort="CorrA3" />
+      <Link From="IIRFilter_A4" FromPort="Out1" Points="1522.87,-730.5;1534.87,-730.5;1562.87,-730.5;1562.87,-1324.5;2138,-1324.5;2154,-1324.5" To="AxisCorr_1" ToPort="CorrA4" />
+      <Link From="IIRFilter_A5" FromPort="Out1" Points="1552.87,-550.5;1564.87,-550.5;1608.87,-550.5;1608.87,-1294.5;2138,-1294.5;2154,-1294.5" To="AxisCorr_1" ToPort="CorrA5" />
+      <Link From="IIRFilter_A6" FromPort="Out1" Points="1570.87,-364.5;1582.87,-364.5;1594.87,-364.5;1594.87,-1264.5;2138,-1264.5;2154,-1264.5" To="AxisCorr_1" ToPort="CorrA6" />
+      <Link From="IIRFilter_E1" FromPort="Out1" Points="1456.87,-160.5;1464.87,-160.5;1472.87,-160.5;1472.87,268;2457.83,268;2457.83,-100.5;2390,-100.5;2406,-100.5" To="AxisCorrExt_1" ToPort="CorrE1" />
+      <Link From="IIRFilter_E2" FromPort="Out1" Points="1474.87,19.5;1486.87,19.5;1498.87,19.5;1498.87,-154;2457.83,-154;2457.83,-70.5;2390,-70.5;2406,-70.5" To="AxisCorrExt_1" ToPort="CorrE2" />
+      <Link From="IIRFilter_E3" FromPort="Out1" Points="1486.87,211.5;1498.87,211.5;1526.87,211.5;1526.87,-154;2473.83,-154;2473.83,-40.5;2390,-40.5;2406,-40.5" To="AxisCorrExt_1" ToPort="CorrE3" />
+      <Link From="IIRFilter_E4" FromPort="Out1" Points="1504.87,403.5;1516.87,403.5;1544.87,403.5;1544.87,-154;2473.83,-154;2473.83,-10.5;2390,-10.5;2406,-10.5" To="AxisCorrExt_1" ToPort="CorrE4" />
+      <Link From="IIRFilter_E5" FromPort="Out1" Points="1516.87,595.5;1528.87,595.5;1556.87,595.5;1556.87,-154;2473.83,-154;2473.83,19.5;2390,19.5;2406,19.5" To="AxisCorrExt_1" ToPort="CorrE5" />
+      <Link From="IIRFilter_E6" FromPort="Out1" Points="1534.87,793.5;1546.87,793.5;1574.87,793.5;1574.87,-154;2473.83,-154;2473.83,49.5;2390,49.5;2406,49.5" To="AxisCorrExt_1" ToPort="CorrE6" />
+      <Link From="Ethernet_1" FromPort="Out13" Points="754.52,175.5;770.52,175.5;786.52,175.5;786.52,1087.5;818,1087.5;834,1087.5" To="Equal_1" ToPort="In1" />
+      <Link From="IIRFilter_A1" FromPort="Out1" Points="1474.87,-1294.5;1486.87,-1294.5;1498.87,-1294.5;1498.87,-2260.5;3014,-2260.5;3030,-2260.5" To="Monitor_1" ToPort="In1" />
+      <Link From="IIRFilter_A2" FromPort="Out1" Points="1486.87,-1108.5;1498.87,-1108.5;1510.87,-1108.5;1510.87,-2230.5;3014,-2230.5;3030,-2230.5" To="Monitor_1" ToPort="In2" />
+      <Link From="IIRFilter_A3" FromPort="Out1" Points="1504.87,-916.5;1516.87,-916.5;1528.87,-916.5;1528.87,-2200.5;3014,-2200.5;3030,-2200.5" To="Monitor_1" ToPort="In3" />
+      <Link From="IIRFilter_A4" FromPort="Out1" Points="1522.87,-730.5;1534.87,-730.5;1562.87,-730.5;1562.87,-2170.5;3014,-2170.5;3030,-2170.5" To="Monitor_1" ToPort="In4" />
+      <Link From="IIRFilter_A5" FromPort="Out1" Points="1552.87,-550.5;1564.87,-550.5;1576.87,-550.5;1576.87,-2140.5;3014,-2140.5;3030,-2140.5" To="Monitor_1" ToPort="In5" />
+      <Link From="IIRFilter_A6" FromPort="Out1" Points="1570.87,-364.5;1582.87,-364.5;1594.87,-364.5;1594.87,-2110.5;3014,-2110.5;3030,-2110.5" To="Monitor_1" ToPort="In6" />
+      <Link From="IIRFilter_E1" FromPort="Out1" Points="1456.87,-160.5;1468.87,-160.5;1480.87,-160.5;1480.87,-2080.5;3014,-2080.5;3030,-2080.5" To="Monitor_1" ToPort="In7" />
+      <Link From="IIRFilter_E2" FromPort="Out1" Points="1474.87,19.5;1486.87,19.5;1514.87,19.5;1514.87,-2050.5;3014,-2050.5;3030,-2050.5" To="Monitor_1" ToPort="In8" />
+      <Link From="IIRFilter_E3" FromPort="Out1" Points="1486.87,211.5;1498.87,211.5;1542.87,211.5;1542.87,-2020.5;3014,-2020.5;3030,-2020.5" To="Monitor_1" ToPort="In9" />
+      <Link From="IIRFilter_E4" FromPort="Out1" Points="1504.87,403.5;1516.87,403.5;1624.87,403.5;1624.87,-1990.5;3014,-1990.5;3030,-1990.5" To="Monitor_1" ToPort="In10" />
+      <Link From="IIRFilter_E4" FromPort="Out1" Points="1504.87,403.5;1516.87,403.5;1624.87,403.5;1624.87,-1960.5;3014,-1960.5;3030,-1960.5" To="Monitor_1" ToPort="In11" />
+      <Link From="IIRFilter_E5" FromPort="Out1" Points="1516.87,595.5;1528.87,595.5;1556.87,595.5;1556.87,-1930.5;3014,-1930.5;3030,-1930.5" To="Monitor_1" ToPort="In12" />
+      <Link From="Equal_1" FromPort="Out1" Points="1028.69,1087.5;1040.69,1087.5;1052.69,1087.5;1052.69,-1900.5;3014,-1900.5;3030,-1900.5" To="Monitor_1" ToPort="In13" />
+      <Link From="GearTorque_1" FromPort="A1" Points="248.95,913.5;260.95,913.5;272.95,913.5;272.95,175.5;542,175.5;558,175.5" To="Ethernet_1" ToPort="In13" />
+      <Link From="GearTorque_1" FromPort="A2" Points="248.95,943.5;268.95,943.5;288.95,943.5;288.95,205.5;542,205.5;558,205.5" To="Ethernet_1" ToPort="In14" />
+      <Link From="GearTorque_1" FromPort="A3" Points="248.95,973.5;276.95,973.5;304.95,973.5;304.95,235.5;542,235.5;558,235.5" To="Ethernet_1" ToPort="In15" />
+      <Link From="GearTorque_1" FromPort="A4" Points="248.95,1003.5;284.95,1003.5;320.95,1003.5;320.95,265.5;542,265.5;558,265.5" To="Ethernet_1" ToPort="In16" />
+      <Link From="GearTorque_1" FromPort="A5" Points="248.95,1033.5;292.95,1033.5;336.95,1033.5;336.95,295.5;542,295.5;558,295.5" To="Ethernet_1" ToPort="In17" />
+      <Link From="GearTorque_1" FromPort="A6" Points="248.95,1063.5;300.95,1063.5;352.95,1063.5;352.95,325.5;542,325.5;558,325.5" To="Ethernet_1" ToPort="In18" />
+      <Link From="GearTorqueExt_1" FromPort="E1" Points="344.95,1129.5;356.95,1129.5;368.95,1129.5;368.95,355.5;542,355.5;558,355.5" To="Ethernet_1" ToPort="In19" />
+      <Link From="GearTorqueExt_1" FromPort="E2" Points="344.95,1159.5;364.95,1159.5;384.95,1159.5;384.95,385.5;542,385.5;558,385.5" To="Ethernet_1" ToPort="In20" />
+      <Link From="GearTorqueExt_1" FromPort="E3" Points="344.95,1189.5;372.95,1189.5;400.95,1189.5;400.95,415.5;542,415.5;558,415.5" To="Ethernet_1" ToPort="In21" />
+      <Link From="GearTorqueExt_1" FromPort="E4" Points="344.95,1219.5;380.95,1219.5;416.95,1219.5;416.95,445.5;542,445.5;558,445.5" To="Ethernet_1" ToPort="In22" />
+      <Link From="GearTorqueExt_1" FromPort="E5" Points="344.95,1249.5;388.95,1249.5;432.95,1249.5;432.95,475.5;542,475.5;558,475.5" To="Ethernet_1" ToPort="In23" />
+      <Link From="GearTorqueExt_1" FromPort="E6" Points="344.95,1279.5;396.95,1279.5;448.95,1279.5;448.95,505.5;542,505.5;558,505.5" To="Ethernet_1" ToPort="In24" />
+      <Link From="Version" FromPort="Out1" Points="264.31,1399.5;276.31,1399.5;464.31,1399.5;464.31,535.5;542,535.5;558,535.5" To="Ethernet_1" ToPort="In25" />
+      <Link From="Ethernet_1" FromPort="Out14" Points="754.52,205.5;762.52,205.5;770.52,205.5;770.52,1297.5;962,1297.5;978,1297.5" To="Stop_1" ToPort="In1" />
+    </Links>
+    <Nodes>
+      <Node Location="-336,-216" Name="AxisAct_1" Type="AxisAct" />
+      <Node Location="-402,294" Name="AxisActExt_1" Type="AxisActExt" />
+      <Node Location="0,-312" Name="Vel_A1" Type="D" />
+      <Node Location="576,-204" Name="Ethernet_1" NumberOfInputs="26" NumberOfOutputs="15" Type="Ethernet" />
+      <Node Location="-6,-204" Name="Vel_A2" Type="D" />
+      <Node Location="0,-108" Name="Vel_A3" Type="D" />
+      <Node Location="6,-18" Name="Vel_A4" Type="D" />
+      <Node Location="12,78" Name="Vel_A5" Type="D" />
+      <Node Location="24,168" Name="Vel_A6" Type="D" />
+      <Node Location="30,288" Name="Vel_E1" Type="D" />
+      <Node Location="42,384" Name="Vel_E2" Type="D" />
+      <Node Location="48,474" Name="Vel_E3" Type="D" />
+      <Node Location="54,564" Name="Vel_E4" Type="D" />
+      <Node Location="66,660" Name="Vel_E5" Type="D" />
+      <Node Location="66,750" Name="Vel_E6" Type="D" />
+      <Node Location="1260,-1314" Name="IIRFilter_A1" Type="IIRFilter" />
+      <Node Location="1272,-1128" Name="IIRFilter_A2" Type="IIRFilter" />
+      <Node Location="1290,-936" Name="IIRFilter_A3" Type="IIRFilter" />
+      <Node Location="1308,-750" Name="IIRFilter_A4" Type="IIRFilter" />
+      <Node Location="1338,-570" Name="IIRFilter_A5" Type="IIRFilter" />
+      <Node Location="1356,-384" Name="IIRFilter_A6" Type="IIRFilter" />
+      <Node Location="1242,-180" Name="IIRFilter_E1" Type="IIRFilter" />
+      <Node Location="1260,0" Name="IIRFilter_E2" Type="IIRFilter" />
+      <Node Location="1272,192" Name="IIRFilter_E3" Type="IIRFilter" />
+      <Node Location="1290,384" Name="IIRFilter_E4" Type="IIRFilter" />
+      <Node Location="1302,576" Name="IIRFilter_E5" Type="IIRFilter" />
+      <Node Location="1320,774" Name="IIRFilter_E6" Type="IIRFilter" />
+      <Node Location="2172,-1434" Name="AxisCorr_1" Type="AxisCorr" />
+      <Node Location="2424,-120" Name="AxisCorrExt_1" Type="AxisCorrExt" />
+      <Node Location="2178,-906" Name="AxisCorrMon_1" Type="AxisCorrMon" />
+      <Node Location="852,1068" Name="Equal_1" Type="Equal" />
+      <Node Location="3048,-2280" Name="Monitor_1" NumberOfInputs="14" Type="Monitor" />
+      <Node Location="36,894" Name="GearTorque_1" Type="GearTorque" />
+      <Node Location="132,1110" Name="GearTorqueExt_1" Type="GearTorqueExt" />
+      <Node Location="108,1380" Name="Version" Type="Constant" />
+      <Node Location="996,1278" Name="Stop_1" Type="Stop" />
+    </Nodes>
+    <Toolboxes>
+      <Toolbox Name="RSI" Version="1.3.0" />
+    </Toolboxes>
+  </Editor>
+</RsiContext>

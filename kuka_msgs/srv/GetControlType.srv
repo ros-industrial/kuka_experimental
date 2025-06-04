@@ -1,0 +1,3 @@
+# Directly query the ControlType active on the robot
+---
+kuka_msgs/ControlType control_type

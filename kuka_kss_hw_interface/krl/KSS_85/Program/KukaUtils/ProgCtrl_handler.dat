@@ -1,0 +1,26 @@
+&ACCESS RV3
+DEFDAT  PROGCTRL_HANDLER PUBLIC
+
+GLOBAL ENUM ProgControlType PC_Select,PC_Start,PC_Stop,PC_Reset,PC_Cancel,PC_DrivesON,PC_DrivesOFF
+GLOBAL ENUM ProgControlState PS_None,PS_Request,PS_Active,PS_Done,PS_Error
+
+DECL ProgControlType currentRequest=#PC_Stop
+DECL ProgControlState currentState=#PS_Done
+
+DECL ProgControlType nextRequest=#PC_Stop
+DECL ProgControlState nextState=#PS_None
+
+CHAR progName[128]
+progName[]="kuka_ros_run"
+
+CHAR progRunName[128]
+progRunName[]="/R1/kuka_ros_run()"
+
+CHAR progRunCmd[128]
+progRunCmd[]="RUN /R1/ProgCtrlExec() > 5"
+INT runInSPS=5
+
+INT cmdRet=0
+
+
+ENDDAT

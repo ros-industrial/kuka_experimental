@@ -1,0 +1,23 @@
+<ETHERNETKRL>
+   <!-- ROS EKI Interface version 2003 -->
+   <CONFIGURATION>
+      <EXTERNAL>
+         <TYPE>Client</TYPE>                  <!-- Users connect as clients -->
+      </EXTERNAL>
+      <INTERNAL>
+         <ENVIRONMENT>Submit</ENVIRONMENT>   <!-- Server run via robot interpreter -->
+         <BUFFERING Limit="512" />            <!-- Allow buffering of up to 512 messages (system max) -->
+         <ALIVE Set_Flag="105" />               <!-- Use $flag[1] to indicate alive/good connection status -->
+         <IP>172.32.1.10</IP> <!-- IP address for EKI interface on robot controller (KRC) -->
+         <PORT>54600</PORT>                   <!-- Port of EKI interface on robot controller (in [54600, 54615]) -->
+         <PROTOCOL>TCP</PROTOCOL>             <!-- Use TCP protocol -->
+         <MESSAGES Logging="error" Display="disabled" />
+      </INTERNAL>
+   </CONFIGURATION>
+   <RECEIVE>
+      <RAW>
+        <ELEMENT Tag="Buffer" Type="BYTE" Set_Flag="110" Size="256"/>
+      </RAW>
+   </RECEIVE>
+   <SEND/>
+</ETHERNETKRL>
