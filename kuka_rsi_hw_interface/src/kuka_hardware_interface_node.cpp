@@ -1,5 +1,15 @@
 /*********************************************************************
- * Software License Agreement (BSD License)
+ * Software License Agreement (BSD License & Apache-2.0)
+ *
+ *  The function "kuka_rsi_hw_interface::assign_max_rt_priority" is
+ *  subject to the Apache License, Version 2.0 with the copyright 
+ *  information below.
+ *
+ *  Copyright 2019 FZI Forschungszentrum Informatik
+ *  Created on behalf of Universal Robots A/S
+ *  SPDX-License-Identifier: Apache-2.0
+ *
+ *  To all other parts of this software, the following terms apply.
  *
  *  Copyright (c) 2014 Norwegian University of Science and Technology
  *  All rights reserved.
@@ -49,6 +59,12 @@ int main(int argc, char** argv)
   spinner.start();
 
   ros::NodeHandle nh;
+
+  // Assign the highest realtime priority to the currently running thread.
+  /* The function is subject to the Apache License, Version 2.0. See the
+     copyright information in the Software License Agreement at the top
+     of this file. */
+  kuka_rsi_hw_interface::assign_max_rt_priority();
 
   kuka_rsi_hw_interface::KukaHardwareInterface kuka_rsi_hw_interface;
   kuka_rsi_hw_interface.configure();

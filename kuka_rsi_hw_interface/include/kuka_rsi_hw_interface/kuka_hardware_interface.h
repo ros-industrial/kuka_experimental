@@ -1,5 +1,14 @@
 /*********************************************************************
- * Software License Agreement (BSD License)
+ * Software License Agreement (BSD License & Apache-2.0)
+ *
+ *  The header "kuka_rsi_hw_interface/assign_rt_priority.h" is subject to
+ *  the Apache License, Version 2.0 with the copyright information below.
+ *
+ *  Copyright 2019 FZI Forschungszentrum Informatik
+ *  Created on behalf of Universal Robots A/S
+ *  SPDX-License-Identifier: Apache-2.0
+ *
+ *  To all other parts of this software, the following terms apply.
  *
  *  Copyright (c) 2014 Norwegian University of Science and Technology
  *  All rights reserved.
@@ -65,6 +74,9 @@
 // RSI
 #include <kuka_rsi_hw_interface/rsi_state.h>
 #include <kuka_rsi_hw_interface/rsi_command.h>
+
+// RT priority
+#include <kuka_rsi_hw_interface/assign_rt_priority.h>
 
 namespace kuka_rsi_hw_interface
 {
