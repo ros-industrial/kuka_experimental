@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<package>
+  <name>kuka_kr16_gazebo</name>
+  <version>0.0.1</version>
+  <description>
+    Gazebo wrapper for the KUKA KR16 manipulators. Currently only the KR16-2 manipulator is supported
+  </description>
+  <author>Lars Tingelstad</author>
+  <maintainer email="lars.tingelstad@ntnu.no">Lars Tingelstad</maintainer>
+  <license>BSD</license>
+
+  <url type="website">http://ros.org/wiki/kuka_kr16_gazebo</url>
+  <url type="bugtracker">https://github.com/ros-industrial/kuka_experimental/issues</url>
+  <url type="repository">https://github.com/ros-industrial/kuka_experimental</url>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <run_depend>kuka_kr16_support</run_depend>
+  <run_depend>gazebo_ros_pkgs</run_depend>
+  <run_depend>gazebo_ros</run_depend>
+  <run_depend>gazebo_ros_control</run_depend>
+  <run_depend>ros_controllers</run_depend>
+  <run_depend>joint_state_controller</run_depend>
+  <run_depend>joint_trajectory_controller</run_depend>
+  <run_depend>position_controllers</run_depend>
+  <run_depend>robot_state_publisher</run_depend>
+
+  <export>
+  </export>
+</package>
