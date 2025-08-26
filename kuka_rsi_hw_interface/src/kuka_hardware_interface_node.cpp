@@ -56,8 +56,6 @@ int main(int argc, char** argv)
   // Set up timers
   ros::Time timestamp;
   ros::Duration period;
-  auto stopwatch_last = std::chrono::steady_clock::now();
-  auto stopwatch_now = stopwatch_last;
 
   controller_manager::ControllerManager controller_manager(&kuka_rsi_hw_interface, nh);
 
@@ -65,9 +63,6 @@ int main(int argc, char** argv)
 
   // Get current time and elapsed time since last read
   timestamp = ros::Time::now();
-  stopwatch_now = std::chrono::steady_clock::now();
-  period.fromSec(std::chrono::duration_cast<std::chrono::duration<double>>(stopwatch_now - stopwatch_last).count());
-  stopwatch_last = stopwatch_now;
 
   // Run as fast as possible
   while (ros::ok())
@@ -82,9 +77,7 @@ int main(int argc, char** argv)
 
     // Get current time and elapsed time since last read
     timestamp = ros::Time::now();
-    stopwatch_now = std::chrono::steady_clock::now();
-    period.fromSec(std::chrono::duration_cast<std::chrono::duration<double>>(stopwatch_now - stopwatch_last).count());
-    stopwatch_last = stopwatch_now;
+    period = kuka_rsi_hw_interface.getPeriod();
 
     // Update the controllers
     controller_manager.update(timestamp, period);
