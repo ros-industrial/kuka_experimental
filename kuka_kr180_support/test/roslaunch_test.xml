@@ -1,0 +1,9 @@
+<launch>
+  <group ns="load_kr180r3500_ultra_k__">
+    <include file="$(find kuka_kr180_support)/launch/load_kr180r3500_ultra_k.launch"/>
+  </group>
+
+  <group ns="test_kr180r3500_ultra_k__">
+    <include file="$(find kuka_kr180_support)/launch/test_kr180r3500_ultra_k.launch"/>
+  </group>
+</launch>
